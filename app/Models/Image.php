@@ -11,4 +11,9 @@ class Image extends Model
 
     protected $table = "images";
     protected $fillable = ["img_name","img_path", "likes_count"];
+
+    public function likes()
+    {
+      return $this->hasMany(Like::class, 'image_id');
+    }
 }

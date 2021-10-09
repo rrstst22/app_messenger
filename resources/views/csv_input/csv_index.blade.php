@@ -10,8 +10,8 @@
       <div class="row">
           <div class="col-11">
               <div>
-                <label for="csv">ファイル選択...</label><br>
-                <input type="file" name="csv"><br>
+                <label for="csv"></label>
+                  <input type="file" name="csv">
               </div>
           </div>
       </div>
@@ -19,10 +19,6 @@
         <button type="submit" class="btn btn-success">送信</button>
       </div>
   </form>
-
-  <div class="my-4">
-    <button onclick="clickEvent()">ボタン</button>
-  </div>
 
   @if ($errors->any())
     <div class="alert alert-danger my-4">

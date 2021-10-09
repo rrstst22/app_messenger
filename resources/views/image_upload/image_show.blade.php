@@ -19,7 +19,8 @@
                   @csrf
                   <input type="hidden" name="image_id" value="{{ $image->id }}" />
                   <button type="submit" class="heart heart-button" id='heart-button'>
-                    <!-- <i class="far fa-heart fa-2x"></i> -->1
+                    <!-- <i class="far fa-heart fa-2x"></i> -->
+                    {{ $image->likes_count }}
                   </button>
                 </form>
               @else
@@ -27,7 +28,8 @@
                   @csrf
                   <input type="hidden" name="image_id" value="{{ $image->id }}" />
                   <button type="submit" class="heart heart-liked-button" id='heart-liked-button'>
-                    <!-- <i class="fas fa-heart fa-2x" style="color:red;"></i> -->1
+                    <!-- <i class="fas fa-heart fa-2x" style="color:red;"></i> -->
+                    {{ $image->likes_count }}
                   </button>
                 </form>
               @endif
