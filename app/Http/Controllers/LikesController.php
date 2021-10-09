@@ -23,7 +23,7 @@ class LikesController extends Controller
       )
     );
 
-    Image::findOrFail($request->$image_id)->increment('likes_count');
+    Image::findOrFail($request->image_id)->increment('likes_count');
 
     return redirect()->route('image_show');
   }
@@ -32,7 +32,7 @@ class LikesController extends Controller
   {
     $user_id = Auth::id();
     Like::where('user_id', $user_id)->where('image_id', $request->image_id)->delete();
-    Image::findOrFail($request->$image_id)->decrement('likes_count');
+    Image::findOrFail($request->image_id)->decrement('likes_count');
 
     return redirect()->route('image_show');
   }
