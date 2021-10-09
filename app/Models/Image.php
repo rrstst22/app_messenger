@@ -10,5 +10,10 @@ class Image extends Model
     use HasFactory;
 
     protected $table = "images";
-    protected $fillable = ["img_name","img_path"];
+    protected $fillable = ["img_name","img_path", "likes_count"];
+
+    public function likes()
+    {
+      return $this->hasMany(Like::class, 'image_id');
+    }
 }

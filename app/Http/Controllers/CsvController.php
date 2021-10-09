@@ -15,16 +15,20 @@ class CsvController extends Controller
       return view('csv_input/csv_index');
   }
 
-  public function upload_regist(Request $rq)
+  public function upload_regist(Request $request)
   {
-      $rq->validate([
+      $request->validate([
         'csv' => 'required|max:1024|file|mimes:csv,txt'
+      ],
+      [
+        'csv.required' => 'CSVファイルは必須です。',
+        'csv.mimes'  => 'csvまたはtxtのみです。',
       ]);
 
-      if($rq->hasFile('csv') && $rq->file('csv')->isValid()) {
+      if($request->hasFile('csv') && $request->file('csv')->isValid()) {
           // CSV ファイル保存
-          $tmpname = uniqid("CSVUP_").".".$rq->file('csv')->guessExtension(); //TMPファイル名
-          $rq->file('csv')->move(public_path()."/csv/tmp",$tmpname);
+          $tmpname = uniqid("CSVUP_").".".$request->file('csv')->guessExtension(); //TMPファイル名
+          $request->file('csv')->move(public_path()."/csv/tmp",$tmpname);
           $tmppath = public_path()."/csv/tmp/".$tmpname;
 
           // Goodby CSVの設定
