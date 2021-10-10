@@ -28,3 +28,7 @@ Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_reg
 
 Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
 Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
+
+Route::get('sample', function () {
+    return view('basic_vue/sample');
+})->name('vue.sample');

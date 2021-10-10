@@ -14,27 +14,4 @@ $(function () {
     $('#sticky-button').on('click', function() {
       $('html,body').animate({scrollTop:0}, 500);
     });
-
-
-    $('.heart-button').hover(function() {
-      $(this).addClass('heart-liked-button');
-      $(this).removeClass('heart-button');
-      $(this).append('<span id="plus">+1</span>');
-    }, function() {
-      $(this).addClass('heart-button');
-      $(this).removeClass('heart-liked-button');
-      $('#plus').remove();
-    });
-
-    $('.heart-liked-button').hover(function() {
-      $(this).addClass('heart-button');
-      $(this).removeClass('heart-liked-button');
-      $(this).append('<span id="plus">-1</span>');
-    }, function() {
-      $(this).addClass('heart-liked-button');
-      $(this).removeClass('heart-button');
-      $('#plus').remove();
-    });
-
-
 });
