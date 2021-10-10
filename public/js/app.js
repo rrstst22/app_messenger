@@ -2122,6 +2122,33 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    changeCheckbox: function changeCheckbox() {
+      if (this.isChecked) {
+        var self = this;
+        self.isHB = false;
+        self.isHLB = true;
+        self.image.likes_count += 1;
+        axios.post('likes_index_store', {
+          image_id: this.image.id
+        }).then(function (response) {// 成功したとき
+        })["catch"](function (error) {
+          // 失敗したとき（成功ルートでもエラーが発生すればerror）
+          alert(error);
+        });
+      } else {
+        var self = this; // 成功したとき
+
+        self.isHB = true;
+        self.isHLB = false;
+        self.image.likes_count -= 1;
+        axios.post('likes_index_destroy', {
+          image_id: this.image.id
+        }).then(function (response) {})["catch"](function (error) {
+          // 失敗したとき（成功ルートでもエラーが発生すればerror）
+          alert(error);
+        });
+      }
+    },
     onClick: function onClick() {
       var self = this;
       axios.post('likes_index_store', {
@@ -2188,6 +2215,33 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    changeCheckbox: function changeCheckbox() {
+      if (this.isChecked) {
+        var self = this;
+        self.isHB = false;
+        self.isHLB = true;
+        self.image.likes_count += 1;
+        axios.post('likes_index_store', {
+          image_id: this.image.id
+        }).then(function (response) {// 成功したとき
+        })["catch"](function (error) {
+          // 失敗したとき（成功ルートでもエラーが発生すればerror）
+          alert(error);
+        });
+      } else {
+        var self = this;
+        self.isHB = true;
+        self.isHLB = false;
+        self.image.likes_count -= 1;
+        axios.post('likes_index_destroy', {
+          image_id: this.image.id
+        }).then(function (response) {// 成功したとき
+        })["catch"](function (error) {
+          // 失敗したとき（成功ルートでもエラーが発生すればerror）
+          alert(error);
+        });
+      }
+    },
     onClick: function onClick() {
       var self = this;
       axios.post('likes_index_destroy', {
@@ -38651,29 +38705,60 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.isHB
-      ? _c(
-          "button",
-          {
-            staticClass: "heart heart-button",
-            attrs: { id: "heart-button" },
-            on: { click: _vm.onClick }
+    _c(
+      "label",
+      {
+        class: {
+          heart: _vm.isHeart,
+          "heart-button": _vm.isHB,
+          "heart-liked-button": _vm.isHLB
+        }
+      },
+      [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.isChecked,
+              expression: "isChecked"
+            }
+          ],
+          staticStyle: { display: "none" },
+          attrs: { type: "checkbox" },
+          domProps: {
+            checked: Array.isArray(_vm.isChecked)
+              ? _vm._i(_vm.isChecked, null) > -1
+              : _vm.isChecked
           },
-          [_vm._v(_vm._s(_vm.image.likes_count))]
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.isHLB
-      ? _c(
-          "button",
-          {
-            staticClass: "heart heart-liked-button",
-            attrs: { id: "heart-button" },
-            on: { click: _vm.onlClick }
-          },
-          [_vm._v(_vm._s(_vm.image.likes_count))]
-        )
-      : _vm._e()
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.isChecked,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.isChecked = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.isChecked = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.isChecked = $$c
+                }
+              },
+              _vm.changeCheckbox
+            ]
+          }
+        }),
+        _vm._v(_vm._s(_vm.image.likes_count))
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -38700,29 +38785,65 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.isHB
-      ? _c(
-          "button",
-          {
-            staticClass: "heart heart-button",
-            attrs: { id: "heart-button" },
-            on: { click: _vm.onClick }
+    _c(
+      "label",
+      {
+        class: {
+          heart: _vm.isHeart,
+          "heart-button": _vm.isHB,
+          "heart-liked-button": _vm.isHLB
+        }
+      },
+      [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.isChecked,
+              expression: "isChecked"
+            }
+          ],
+          class: {
+            heart: _vm.isHeart,
+            "heart-button": _vm.isHB,
+            "heart-liked-button": _vm.isHLB
           },
-          [_vm._v(_vm._s(_vm.image.likes_count))]
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.isHLB
-      ? _c(
-          "button",
-          {
-            staticClass: "heart heart-liked-button",
-            attrs: { id: "heart-button" },
-            on: { click: _vm.onlClick }
+          staticStyle: { display: "none" },
+          attrs: { type: "checkbox", checked: "" },
+          domProps: {
+            checked: Array.isArray(_vm.isChecked)
+              ? _vm._i(_vm.isChecked, null) > -1
+              : _vm.isChecked
           },
-          [_vm._v(_vm._s(_vm.image.likes_count))]
-        )
-      : _vm._e()
+          on: {
+            change: [
+              function($event) {
+                var $$a = _vm.isChecked,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.isChecked = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.isChecked = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.isChecked = $$c
+                }
+              },
+              _vm.changeCheckbox
+            ]
+          }
+        }),
+        _vm._v(_vm._s(_vm.image.likes_count))
+      ]
+    )
   ])
 }
 var staticRenderFns = []
