@@ -10,8 +10,8 @@
       </ol>
     </div>
 
-    <div class="form my-4">
-        <input type="text" placeholder="text" v-model="s_message">
+    <div class="form m-4 border">
+        <input type="text" placeholder="text" v-model="s_message" autofocus>
         <button type="submit" name="button" v-on:click="sendMessage">送信</button>
     </div>
 
@@ -39,20 +39,17 @@ export default {
       sendMessage: function () {
         var self = this;
         var obj = document.getElementById('screen');
-        axios.post('message_send', {message: this.s_message})
+        var s_message_tmp = self.s_message;
+        self.s_message = "";
+        axios.post('message_send', {message: s_message_tmp})
             .then(function(response){
                 // 成功したとき
-                self.s_message = "";
             }).catch(function(error){
-                // 失敗したとき（成功ルートでもエラーが発生すればerror）
-                alert(error);
             });
         axios.get('message_update').then(function(response){
                 // 成功したとき
                 self.messages = response.data;
             }).catch(function(error){
-                // 失敗したとき（成功ルートでもエラーが発生すればerror）
-                alert(error);
             });
       },
       scrollToEnd() {

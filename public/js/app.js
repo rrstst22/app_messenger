@@ -2326,22 +2326,16 @@ __webpack_require__.r(__webpack_exports__);
     sendMessage: function sendMessage() {
       var self = this;
       var obj = document.getElementById('screen');
+      var s_message_tmp = self.s_message;
+      self.s_message = "";
       axios.post('message_send', {
-        message: this.s_message
-      }).then(function (response) {
-        // 成功したとき
-        self.s_message = "";
-      })["catch"](function (error) {
-        // 失敗したとき（成功ルートでもエラーが発生すればerror）
-        alert(error);
-      });
+        message: s_message_tmp
+      }).then(function (response) {// 成功したとき
+      })["catch"](function (error) {});
       axios.get('message_update').then(function (response) {
         // 成功したとき
         self.messages = response.data;
-      })["catch"](function (error) {
-        // 失敗したとき（成功ルートでもエラーが発生すればerror）
-        alert(error);
-      });
+      })["catch"](function (error) {});
     },
     scrollToEnd: function scrollToEnd() {
       var obj = document.getElementById('screen');
@@ -39033,7 +39027,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "form my-4" }, [
+    _c("div", { staticClass: "form m-4 border" }, [
       _c("input", {
         directives: [
           {
@@ -39043,7 +39037,7 @@ var render = function() {
             expression: "s_message"
           }
         ],
-        attrs: { type: "text", placeholder: "text" },
+        attrs: { type: "text", placeholder: "text", autofocus: "" },
         domProps: { value: _vm.s_message },
         on: {
           input: function($event) {
