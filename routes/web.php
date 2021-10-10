@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('sample', function () {
+    return view('basic_vue/sample');
+})->name('vue.sample');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -31,6 +35,6 @@ Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_reg
 Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
 Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
 
-Route::get('sample', function () {
-    return view('basic_vue/sample');
-})->name('vue.sample');
+Route::get('message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
+Route::post('message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
+Route::get('message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
