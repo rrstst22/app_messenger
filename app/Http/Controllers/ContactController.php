@@ -32,4 +32,9 @@ class ContactController extends Controller
 
     return $contacts;
   }
+
+  public function remove(Request $request)
+  {
+    Contact::findOrFail($request->id)->delete();
+  }
 }

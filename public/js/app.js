@@ -2112,6 +2112,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ContactComponent",
@@ -2129,8 +2131,16 @@ __webpack_require__.r(__webpack_exports__);
     TestComponent: _TestComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
-    updateContact: function updateContact() {
+    screenUpdate: function screenUpdate() {
       var self = this;
+      axios.get('contact_show').then(function (response) {
+        // 成功したとき
+        self.contacts = response.data;
+      })["catch"](function (error) {
+        alert(error);
+      });
+    },
+    updateContact: function updateContact() {
       axios.post('contact_update', {
         email: this.s_contact.email,
         name: this.s_contact.name,
@@ -2139,16 +2149,22 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert(error);
       });
-      axios.get('contact_show').then(function (response) {
-        // 成功したとき
-        self.contacts = response.data;
-      })["catch"](function (error) {
-        alert(error);
-      });
+      this.screenUpdate();
     },
     selectedEmail: function selectedEmail(index) {
       this.s_contact.email = this.contacts[index].email;
       this.$refs.child.screenUpdate(this.contacts[index].email);
+    },
+    deleteContact: function deleteContact(index) {
+      this.s_contact.id = this.contacts[index].id;
+      axios["delete"]('contact_remove', {
+        data: {
+          id: this.s_contact.id
+        }
+      }).then(function (response) {})["catch"](function (error) {
+        alert(error);
+      });
+      this.screenUpdate();
     }
   }
 });
@@ -2532,6 +2548,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TestComponent",
   props: ["email", "messages"],
@@ -2565,9 +2582,11 @@ __webpack_require__.r(__webpack_exports__);
       var s_message_tmp = self.s_message;
       self.s_message = "";
       axios.post('message_send', {
-        message: s_message_tmp
+        message: s_message_tmp,
+        email: this.email
       }).then(function (response) {// 成功したとき
       })["catch"](function (error) {});
+      this.screenUpdate(this.email);
     },
     scrollToEnd: function scrollToEnd() {
       var obj = document.getElementById('screen');
@@ -39132,7 +39151,7 @@ var render = function() {
   return _c("div", { staticClass: "row" }, [
     _c(
       "div",
-      { staticClass: "col-md-6" },
+      { staticClass: "col-md-8" },
       [
         _c("TestComponent", {
           ref: "child",
@@ -39142,21 +39161,22 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "col-md-6" }, [
+    _c("div", { staticClass: "col-md-4" }, [
       _c("h1", { staticClass: "my-4" }, [_vm._v("電話帳")]),
       _vm._v(" "),
-      _c("div", { staticClass: "border rounded" }, [
-        _c("div", { staticClass: "my-4" }, [
+      _c("div", { staticClass: "m-screen" }, [
+        _c("div", { staticClass: "mx-2 my-4" }, [
           _c(
             "ol",
-            { staticStyle: { "list-style": "none" } },
+            { staticStyle: { "list-style": "none", "padding-left": "0" } },
             _vm._l(_vm.contacts, function(contact, index) {
-              return _c("li", { staticClass: "border" }, [
+              return _c("li", { staticClass: "input-group border my-2" }, [
                 _c(
                   "button",
                   {
-                    staticClass: "mp-4",
-                    attrs: { type: "button" },
+                    staticClass:
+                      "form-control rounded btn btn-secondary btn-lg",
+                    attrs: { type: "button", name: "button" },
                     on: {
                       click: function($event) {
                         return _vm.selectedEmail(index)
@@ -39165,15 +39185,24 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n              " +
-                        _vm._s(contact.name) +
-                        "\n              " +
+                      "\n                " +
                         _vm._s(contact.email) +
-                        "\n              " +
-                        _vm._s(contact.note) +
-                        "\n            "
+                        "\n              "
                     )
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-primary",
+                    on: {
+                      click: function($event) {
+                        return _vm.deleteContact(index)
+                      }
+                    }
+                  },
+                  [_vm._v("\n                削除\n              ")]
                 )
               ])
             }),
@@ -39182,7 +39211,9 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form m-4 border" }, [
-          _c("div", [
+          _c("h3", { staticClass: "m-2" }, [_vm._v("電話帳追加")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "name" } }, [_vm._v("名前")]),
             _vm._v(" "),
             _c("input", {
@@ -39194,6 +39225,7 @@ var render = function() {
                   expression: "s_contact.name"
                 }
               ],
+              staticClass: "form-control",
               attrs: { type: "text", name: "name", placeholder: "text" },
               domProps: { value: _vm.s_contact.name },
               on: {
@@ -39207,7 +39239,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", [
+          _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "email" } }, [
               _vm._v("メールアドレス")
             ]),
@@ -39221,6 +39253,7 @@ var render = function() {
                   expression: "s_contact.email"
                 }
               ],
+              staticClass: "form-control",
               attrs: { type: "text", name: "email", placeholder: "text" },
               domProps: { value: _vm.s_contact.email },
               on: {
@@ -39234,7 +39267,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", [
+          _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "note" } }, [_vm._v("メモ")]),
             _vm._v(" "),
             _c("input", {
@@ -39246,6 +39279,7 @@ var render = function() {
                   expression: "s_contact.note"
                 }
               ],
+              staticClass: "form-control",
               attrs: { type: "text", name: "note", placeholder: "text" },
               domProps: { value: _vm.s_contact.note },
               on: {
@@ -39268,7 +39302,8 @@ var render = function() {
             [_vm._v("送信")]
           )
         ])
-      ])
+      ]),
+      _vm._v("\n" + _vm._s(_vm.s_contact.id) + "\n    ")
     ])
   ])
 }
@@ -39522,7 +39557,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "form m-4 border" }, [
+    _c("div", { staticClass: "form-group m-4 border" }, [
       _c("input", {
         directives: [
           {
@@ -39532,6 +39567,7 @@ var render = function() {
             expression: "s_message"
           }
         ],
+        staticClass: "form-control",
         attrs: { type: "text", placeholder: "text", autofocus: "" },
         domProps: { value: _vm.s_message },
         on: {
@@ -39618,17 +39654,24 @@ var render = function() {
     _c("div", { staticClass: "my-4 m-screen", attrs: { id: "screen" } }, [
       _c(
         "ol",
-        { staticStyle: { "list-style": "none" } },
+        { staticStyle: { "list-style": "none", "padding-left": "0" } },
         _vm._l(_vm.messages, function(message) {
-          return _c("li", { staticClass: "m-4 py-4 border" }, [
-            _vm._v("\n        " + _vm._s(message.message) + "\n      ")
+          return _c("li", { staticClass: "m-4" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary btn-lg btn-block p-4",
+                attrs: { type: "button" }
+              },
+              [_vm._v("\n          " + _vm._s(message.message) + "\n        ")]
+            )
           ])
         }),
         0
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "form m-4 border" }, [
+    _c("div", { staticClass: "input-group m-auto" }, [
       _c("input", {
         directives: [
           {
@@ -39638,6 +39681,7 @@ var render = function() {
             expression: "s_message"
           }
         ],
+        staticClass: "form-control rounded",
         attrs: { type: "text", placeholder: "text", autofocus: "" },
         domProps: { value: _vm.s_message },
         on: {
@@ -39653,13 +39697,13 @@ var render = function() {
       _c(
         "button",
         {
-          attrs: { type: "submit", name: "button" },
+          staticClass: "btn btn-outline-primary",
+          attrs: { type: "submit" },
           on: { click: _vm.sendMessage }
         },
         [_vm._v("送信")]
       )
-    ]),
-    _vm._v("\n  " + _vm._s(_vm.email) + "\n\n")
+    ])
   ])
 }
 var staticRenderFns = []

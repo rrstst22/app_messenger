@@ -35,10 +35,11 @@ class MessageController extends Controller
 
   public function send(Request $request)
   {
+    $receiver_id = User::where('email', $request->email)->first()->id;
     Message::create(
       array(
         'sender_id' => Auth::id(),
-        'receiver_id' => Auth::id(),
+        'receiver_id' => $receiver_id,
         'message' => $request->message,
         'sent_at' => Carbon::now()
       )

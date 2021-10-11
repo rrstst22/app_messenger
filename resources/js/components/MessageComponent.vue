@@ -10,8 +10,8 @@
       </ol>
     </div>
 
-    <div class="form m-4 border">
-        <input type="text" placeholder="text" v-model="s_message" autofocus>
+    <div class="form-group m-4 border">
+        <input type="text" class="form-control" placeholder="text" v-model="s_message" autofocus>
         <button type="submit" name="button" v-on:click="sendMessage">送信</button>
     </div>
 

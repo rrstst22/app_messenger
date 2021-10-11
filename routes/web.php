@@ -41,3 +41,4 @@ Route::post('message_update', [App\Http\Controllers\MessageController::class, 'u
 
 Route::get('contact_show', [App\Http\Controllers\ContactController::class, 'show'])->name('contact.show');
 Route::post('contact_update', [App\Http\Controllers\ContactController::class, 'update'])->name('contact.update');
+Route::delete('contact_remove', [App\Http\Controllers\ContactController::class, 'remove'])->name('contact.remove');
