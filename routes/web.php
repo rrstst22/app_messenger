@@ -38,3 +38,6 @@ Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class,
 Route::get('message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
 Route::post('message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
 Route::get('message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
+
+Route::get('contact_show', [App\Http\Controllers\ContactController::class, 'show'])->name('contact.show');
+Route::post('contact_update', [App\Http\Controllers\ContactController::class, 'update'])->name('contact.update');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Message;
+use App\Models\Contact;
 use Auth;
 
 class MessageController extends Controller
@@ -16,14 +17,17 @@ class MessageController extends Controller
 
   public function show()
   {
-    $messages = Message::all();
+    $user_id = Auth::id();
+    $messages = Message::where('sender_id', $user_id)->get();
+    $contacts = Contact::where('user_id', $user_id)->get();
 
-    return view('message/message', compact('messages'));
+    return view('message/message', compact('messages', 'contacts'));
   }
 
   public function update()
   {
-    $messages = Message::all();
+    $user_id = Auth::id();
+    $messages = Message::where('sender_id', $user_id)->get();
 
     return $messages;
   }

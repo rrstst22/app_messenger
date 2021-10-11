@@ -45,11 +45,13 @@ export default {
             .then(function(response){
                 // 成功したとき
             }).catch(function(error){
+              alert("インターネット接続を確認してください。");
             });
         axios.get('message_update').then(function(response){
                 // 成功したとき
                 self.messages = response.data;
             }).catch(function(error){
+              alert(error);
             });
       },
       scrollToEnd() {
