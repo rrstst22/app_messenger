@@ -9,15 +9,23 @@ use Auth;
 
 class RoomController extends Controller
 {
-  public function update(Request $request)
+  public function create(Request $request)
   {
-    Contact::create(
+    $room = Room::create(
+      array(
+        'room_name' => $request->name
+      )
+    );
+    User_room::create(
       array(
         'user_id' => Auth::id(),
-        //'receiver_id' => $receiver_id,
-        'name' => $request->name,
-        'email' => $request->email,
-        'note' => $request->note
+        'room_id' => $room->id
+      )
+    );
+    User_room::create(
+      array(
+        'user_id' => $request->id,
+        'room_id' => $room->id
       )
     );
     return redirect()->back();

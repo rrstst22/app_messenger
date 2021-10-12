@@ -26,6 +26,7 @@ Vue.component('liked-component', require('./components/LikedComponent.vue').defa
 Vue.component('message-component', require('./components/MessageComponent.vue').default);
 Vue.component('contact-component', require('./components/ContactComponent.vue').default);
 Vue.component('room-component', require('./components/RoomComponent.vue').default);
+Vue.component('user-component', require('./components/UserComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

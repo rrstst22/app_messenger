@@ -1,15 +1,14 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-  <form class="" action="{{ route('message.send') }}" method="post">
+  <form class="" action="{{ route('room.create') }}" method="post">
     @csrf
-    <input type="text" name="room_id" value=3>
-    <input type="text" name="message" value="aa">
+    <input type="text" name="id" value=1>
+    <input type="text" name="name" value="riu">
     <button type="submit" name="button">送信</button>
   </form>
 
   <!-- <contact-component v-bind:contacts='{{$contacts}}'></contact-component> -->
-
   <room-component></room-component>
 </div>
 @endsection

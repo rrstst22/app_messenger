@@ -5,8 +5,11 @@
     <div class="my-4 m-screen" id="screen">
       <ol style="list-style: none; padding-left: 0;">
         <li v-for="message in messages" class="m-4">
-          <button type="button" class="btn btn-primary btn-lg btn-block p-4">
-            {{ message.message }}
+          <button type="button" class="btn btn-primary btn-lg btn-block" style="height:100px; position:relative;">
+            <div class="m-1" style="">
+              {{ message.message }}
+            </div>
+            <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">{{ message.name}}</div>
           </button>
         </li>
       </ol>

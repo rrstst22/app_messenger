@@ -29,7 +29,12 @@ class MessageController extends Controller
   public function update(Request $request)
   {
     $user_id = Auth::id();
-    $messages = Message::where('sender_id', $user_id)->where('room_id', $request->room_id)->get();
+
+    $messages = \DB::table('messages')
+    ->join('users','messages.sender_id','=','users.id')
+    ->where('room_id', $request->room_id)->get();
+
+    //$messages = Message::where('sender_id', $user_id)->where('room_id', $request->room_id)->get();
 
         // Room::create(
         //   array(
