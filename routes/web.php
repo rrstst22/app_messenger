@@ -42,3 +42,7 @@ Route::post('message_update', [App\Http\Controllers\MessageController::class, 'u
 Route::get('contact_show', [App\Http\Controllers\ContactController::class, 'show'])->name('contact.show');
 Route::post('contact_update', [App\Http\Controllers\ContactController::class, 'update'])->name('contact.update');
 Route::delete('contact_remove', [App\Http\Controllers\ContactController::class, 'remove'])->name('contact.remove');
+
+Route::get('room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
+Route::post('room_update', [App\Http\Controllers\RoomController::class, 'update'])->name('room.update');
+Route::delete('room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');

@@ -16,7 +16,6 @@
       <input type="text" class="form-control rounded" placeholder="text" v-model="s_message" autofocus>
       <button type="submit" class="btn btn-outline-primary" v-on:click="sendMessage">送信</button>
     </div>
-
   </div>
 
 </template>
@@ -24,7 +23,7 @@
 <script>
 export default {
     name: "TestComponent",
-    props:["email", "messages"],
+    props:["room_id", "messages", "error"],
     data () {
         return {
           s_message: ""
@@ -40,13 +39,19 @@ export default {
         var obj = document.getElementById('screen');
         obj.scrollTop = obj.scrollHeight;
       },
-      screenUpdate: function (email) {
+      screenUpdate: function (room_id) {
         var self = this;
-        axios.post('message_update', {email: email})
+        axios.post('message_update', {room_id: room_id})
             .then(function(response){
                 self.messages = response.data;
+                if(!self.messages.length){
+                  alert("メッセージがありません。");
+                }
             }).catch(function(error){
-              alert("履歴がありません");
+              console.log(error.reponse.data);
+              console.log(error.reponse.status);
+              console.log(error.reponse.header);
+              alert(error);
             });
       },
       sendMessage: function () {
@@ -56,13 +61,14 @@ export default {
         self.s_message = "";
         axios.post('message_send', {
           message: s_message_tmp,
-          email: this.email
+          room_id: this.room_id
         })
             .then(function(response){
                 // 成功したとき
             }).catch(function(error){
+              alert(error);
             });
-        this.screenUpdate(this.email);
+        this.screenUpdate(this.room_id);
       },
       scrollToEnd() {
         var obj = document.getElementById('screen');

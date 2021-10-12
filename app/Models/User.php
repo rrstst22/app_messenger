@@ -47,13 +47,13 @@ class User extends Authenticatable
       return $this->hasMany(Like::class, 'user_id');
     }
 
-    public function messages_sender()
+    public function messages()
     {
       return $this->hasMany(Message::class, 'sender_id');
     }
 
-    public function messages_receiver()
+    public function user_rooms()
     {
-      return $this->hasMany(Message::class, 'receiver_id');
+      return $this->hasMany(User_room::class, 'user_id');
     }
 }

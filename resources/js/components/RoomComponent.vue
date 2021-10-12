@@ -3,17 +3,17 @@
   <div class="row">
 
     <div class="col-md-8">
-        <TestComponent v-bind:email="s_contact.email" ref="child"></TestComponent>
+        <TestComponent v-bind:room_id="room_id" ref="child"></TestComponent>
     </div>
-
+    
     <div class="col-md-4">
-      <h1 class="my-4">電話帳</h1>
+      <h1 class="my-4">ルーム</h1>
       <div class="m-screen">
         <div class="mx-2 my-4">
           <ol style="list-style: none; padding-left: 0;">
-            <li class="input-group border my-2" v-for="(contact, index) in contacts">
-              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="selectedEmail(index)">
-                {{ contact.email }}
+            <li class="input-group border my-2" v-for="(room, index) in rooms">
+              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="selectedRoom(index)">
+                {{ room.room_name }}
               </button>
               <button class="btn btn-outline-primary" v-on:click="deleteContact(index)">
                 削除
@@ -21,25 +21,7 @@
             </li>
           </ol>
         </div>
-
-        <div class="form m-4 border">
-          <h3 class="m-2">電話帳追加</h3>
-          <div class="form-group">
-            <label for="name">名前</label>
-            <input type="text" class="form-control" name="name" placeholder="text" v-model="s_contact.name">
-          </div>
-          <div class="form-group">
-            <label for="email">メールアドレス</label>
-            <input type="text" class="form-control" name="email" placeholder="text" v-model="s_contact.email">
-          </div>
-          <div class="form-group">
-            <label for="note">メモ</label>
-            <input type="text" class="form-control" name="note" placeholder="text" v-model="s_contact.note">
-          </div>
-          <button type="submit" name="button" v-on:click="updateContact">送信</button>
-        </div>
       </div>
-{{s_contact.id}}
     </div>
 
   </div>
@@ -49,22 +31,26 @@
 <script>
 import TestComponent from './TestComponent.vue'
 export default {
-    name: "ContactComponent",
-    props:["contacts"],
+    name: "RoomComponent",
+    props:["rooms"],
     data () {
         return {
           s_contact : {email : 'test2@test2', name : 'test2', note : '111'},
+          room_id : 0
         }
     },
     components: {
       TestComponent
     },
+    created: function () {
+      this.screenUpdate();
+    },
     methods: {
       screenUpdate: function () {
         var self = this;
-        axios.get('contact_show').then(function(response){
+        axios.get('room_show').then(function(response){
                 // 成功したとき
-                self.contacts = response.data;
+                self.rooms = response.data;
             }).catch(function(error){
                 alert(error);
             });
@@ -83,9 +69,9 @@ export default {
             });
         this.screenUpdate();
       },
-      selectedEmail: function (index) {
-        this.s_contact.email = this.contacts[index].email;
-        this.$refs.child.screenUpdate(this.contacts[index].email);
+      selectedRoom: function (index) {
+        this.room_id = this.rooms[index].id
+        this.$refs.child.screenUpdate(this.rooms[index].id);
       },
       deleteContact: function(index){
         this.s_contact.id = this.contacts[index].id;

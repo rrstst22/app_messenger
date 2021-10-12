@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\Contact;
+use App\Models\Room;
+use App\Models\User_room;
 use Auth;
 
 class MessageController extends Controller
@@ -26,20 +28,36 @@ class MessageController extends Controller
 
   public function update(Request $request)
   {
-    $receiver_id = User::where('email', $request->email)->first()->id;
     $user_id = Auth::id();
-    $messages = Message::where('sender_id', $user_id)->where('receiver_id', $receiver_id)->get();
+    $messages = Message::where('sender_id', $user_id)->where('room_id', $request->room_id)->get();
+
+        // Room::create(
+        //   array(
+        //     'room_name' => $request->email
+        //   )
+        // );
+        // User_room::create(
+        //   array(
+        //     'user_id' => Auth::id(),
+        //     'room_id' => Room::where('room_name', $request->email)->first()->id
+        //   )
+        // );
+        // User_room::create(
+        //   array(
+        //     'user_id' => $receiver_id,
+        //     'room_id' => Room::where('room_name', $request->email)->first()->id
+        //   )
+        // );
 
     return $messages;
   }
 
   public function send(Request $request)
   {
-    $receiver_id = User::where('email', $request->email)->first()->id;
     Message::create(
       array(
         'sender_id' => Auth::id(),
-        'receiver_id' => $receiver_id,
+        'room_id' => $request->room_id,
         'message' => $request->message,
         'sent_at' => Carbon::now()
       )
