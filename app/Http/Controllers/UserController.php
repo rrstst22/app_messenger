@@ -31,9 +31,9 @@ class UserController extends Controller
 
   public function show()
   {
-    $names = User::get(['id', 'name']);
+    $users = User::get(['id', 'name']);
 
-    return $names;
+    return $users;
   }
 
   public function remove(Request $request)

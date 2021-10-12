@@ -28,7 +28,6 @@ class RoomController extends Controller
         'room_id' => $room->id
       )
     );
-    return redirect()->back();
   }
 
   public function show()

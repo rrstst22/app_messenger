@@ -38,7 +38,7 @@ export default {
     data () {
         return {
           s_contact : {email : 'test2@test2', name : 'test2', note : '111'},
-          room_id : 0
+          room_id : null
         }
     },
     components: {
@@ -51,10 +51,9 @@ export default {
       screenUpdate: function () {
         var self = this;
         axios.get('room_show').then(function(response){
-                // 成功したとき
                 self.rooms = response.data;
             }).catch(function(error){
-                alert(error);
+                alert(value);
             });
       },
       updateContact: function () {

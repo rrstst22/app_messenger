@@ -48,7 +48,7 @@ export default {
     props:["users"],
     data () {
         return {
-          showContent: false
+          showContent: false,
         }
     },
     methods: {
@@ -74,7 +74,6 @@ export default {
           name : this.users[index].name
         })
             .then(function(response){
-                // 成功したとき
             }).catch(function(error){
                 alert(error);
             });

@@ -48,7 +48,6 @@ export default {
             .then(function(response){
                 self.messages = response.data;
                 if(!self.messages.length){
-                  alert("メッセージがありません。");
                 }
             }).catch(function(error){
               console.log(error.reponse.data);
@@ -69,7 +68,7 @@ export default {
             .then(function(response){
                 // 成功したとき
             }).catch(function(error){
-              alert(error);
+              alert("ルームを選択してください。");
             });
         this.screenUpdate(this.room_id);
       },

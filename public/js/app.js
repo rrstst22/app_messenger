@@ -2523,7 +2523,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'test2',
         note: '111'
       },
-      room_id: 0
+      room_id: null
     };
   },
   components: {
@@ -2537,10 +2537,9 @@ __webpack_require__.r(__webpack_exports__);
     screenUpdate: function screenUpdate() {
       var self = this;
       axios.get('room_show').then(function (response) {
-        // 成功したとき
         self.rooms = response.data;
       })["catch"](function (error) {
-        alert(error);
+        alert(value);
       });
     },
     updateContact: function updateContact() {
@@ -2681,9 +2680,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         self.messages = response.data;
 
-        if (!self.messages.length) {
-          alert("メッセージがありません。");
-        }
+        if (!self.messages.length) {}
       })["catch"](function (error) {
         console.log(error.reponse.data);
         console.log(error.reponse.status);
@@ -2701,7 +2698,7 @@ __webpack_require__.r(__webpack_exports__);
         room_id: this.room_id
       }).then(function (response) {// 成功したとき
       })["catch"](function (error) {
-        alert(error);
+        alert("ルームを選択してください。");
       });
       this.screenUpdate(this.room_id);
     },
@@ -2798,8 +2795,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('room_create', {
         id: this.users[index].id,
         name: this.users[index].name
-      }).then(function (response) {// 成功したとき
-      })["catch"](function (error) {
+      }).then(function (response) {})["catch"](function (error) {
         alert(error);
       });
       this.closeModal();
