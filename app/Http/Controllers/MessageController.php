@@ -22,8 +22,9 @@ class MessageController extends Controller
     $user_id = Auth::id();
     $messages = Message::where('sender_id', $user_id)->get();
     $contacts = Contact::where('user_id', $user_id)->get();
+    $users = User::where('id', '!=', $user_id)->get(['id', 'name']);
 
-    return view('message/message', compact('messages', 'contacts'));
+    return view('message/message', compact('users'));
   }
 
   public function update(Request $request)

@@ -2534,7 +2534,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('room_show').then(function (response) {
         self.rooms = response.data;
       })["catch"](function (error) {
-        alert(value);
+        alert("detaa");
       });
     },
     selectedRoom: function selectedRoom(index) {
@@ -2648,7 +2648,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       s_message: "",
       messages: "",
-      room: ""
+      room: {
+        room_name: "ルームが選択されていません。"
+      }
     };
   },
   created: function created() {},
@@ -2670,9 +2672,6 @@ __webpack_require__.r(__webpack_exports__);
         if (!self.messages.length) {}
       })["catch"](function (error) {
         console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.header);
-        alert(error);
       });
       this.getRoomInfo(room_id);
     },
@@ -2702,9 +2701,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         self.room = response.data;
         console.log(response.data);
-      })["catch"](function (error) {
-        alert(error);
-      });
+      })["catch"](function (error) {});
     }
   }
 });
@@ -2754,7 +2751,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       showContent: false,
-      users: ""
+      users: "",
+      room_id: ""
     };
   },
   methods: {
@@ -2778,9 +2776,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('room_create', {
         id: this.users[index].id,
         name: this.users[index].name
-      }).then(function (response) {})["catch"](function (error) {
-        alert(error);
-      });
+      }).then(function (response) {})["catch"](function (error) {});
       this.closeModal();
       this.$emit('update');
     }

@@ -31,7 +31,8 @@ export default {
     data () {
         return {
           showContent: false,
-          users: ""
+          users: "",
+          room_id: ""
         }
     },
     methods: {
@@ -58,7 +59,6 @@ export default {
         })
             .then(function(response){
             }).catch(function(error){
-                alert(error);
             });
         this.closeModal();
         this.$emit('update');

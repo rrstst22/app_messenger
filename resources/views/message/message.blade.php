@@ -8,7 +8,6 @@
     <button type="submit" name="button">送信</button>
   </form>
 
-  <!-- <contact-component v-bind:contacts='{{$contacts}}'></contact-component> -->
   <room-component></room-component>
 </div>
 @endsection

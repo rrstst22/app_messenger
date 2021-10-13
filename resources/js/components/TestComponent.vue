@@ -32,7 +32,7 @@ export default {
         return {
           s_message: "",
           messages: "",
-          room: ""
+          room: {room_name: "ルームが選択されていません。"}
         }
     },
     created: function () {
@@ -54,9 +54,6 @@ export default {
                 }
             }).catch(function(error){
               console.log(error.response.data);
-              console.log(error.response.status);
-              console.log(error.response.header);
-              alert(error);
             });
         this.getRoomInfo(room_id);
       },
@@ -88,7 +85,6 @@ export default {
                 self.room = response.data;
                 console.log(response.data);
             }).catch(function(error){
-                alert(error);
             });
       }
     }

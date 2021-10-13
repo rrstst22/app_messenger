@@ -52,7 +52,7 @@ export default {
         axios.get('room_show').then(function(response){
                 self.rooms = response.data;
             }).catch(function(error){
-                alert(value);
+                alert("detaa");
             });
       },
       selectedRoom: function (index) {
