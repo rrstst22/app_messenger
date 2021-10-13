@@ -2761,18 +2761,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     sendMessage: function sendMessage() {
       if (this.s_message) {
-        var self = this;
-        var obj = document.getElementById('screen');
-        var s_message_tmp = this.s_message; //重複送信回避
+        if (this.room_id) {
+          var self = this;
+          var obj = document.getElementById('screen');
+          var s_message_tmp = this.s_message; //重複送信回避
 
-        this.s_message = "";
-        axios.post('message_send', {
-          message: s_message_tmp,
-          room_id: self.room_id
-        }).then(function (response) {})["catch"](function (error) {
+          this.s_message = "";
+          axios.post('message_send', {
+            message: s_message_tmp,
+            room_id: self.room_id
+          }).then(function (response) {})["catch"](function (error) {});
+          this.screenUpdate(this.room_id);
+        } else {
           alert("ルームを選択してください。");
-        });
-        this.screenUpdate(this.room_id);
+        }
       }
     },
     scrollToEnd: function scrollToEnd() {

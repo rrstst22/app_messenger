@@ -54,6 +54,7 @@ export default {
       },
       sendMessage: function () {
         if(this.s_message){
+          if(this.room_id){
           var self = this;
           var obj = document.getElementById('screen');
           var s_message_tmp = this.s_message; //重複送信回避
@@ -64,9 +65,11 @@ export default {
           })
               .then(function(response){
               }).catch(function(error){
-                alert("ルームを選択してください。");
               });
           this.screenUpdate(this.room_id);
+          }else{
+            alert("ルームを選択してください。");
+          }
         }
       },
       scrollToEnd() {
