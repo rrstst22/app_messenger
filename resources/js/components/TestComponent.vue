@@ -2,11 +2,12 @@
 
   <div>
     <h1 class="my-4">メッセージ</h1>
+    {{ room.room_name }}
     <div class="my-4 m-screen" id="screen">
       <ol style="list-style: none; padding-left: 0;">
         <li v-for="message in messages" class="m-4">
           <button type="button" class="btn btn-primary btn-lg btn-block" style="height:100px; position:relative;">
-            <div class="m-1" style="">
+            <div class="m-1">
               {{ message.message }}
             </div>
             <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">{{ message.name}}</div>
@@ -26,10 +27,12 @@
 <script>
 export default {
     name: "TestComponent",
-    props:["room_id", "messages", "error"],
+    props:["room_id"],
     data () {
         return {
-          s_message: ""
+          s_message: "",
+          messages: "",
+          room: ""
         }
     },
     created: function () {
@@ -50,11 +53,12 @@ export default {
                 if(!self.messages.length){
                 }
             }).catch(function(error){
-              console.log(error.reponse.data);
-              console.log(error.reponse.status);
-              console.log(error.reponse.header);
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.header);
               alert(error);
             });
+        this.getRoomInfo(room_id);
       },
       sendMessage: function () {
         var self = this;
@@ -75,6 +79,17 @@ export default {
       scrollToEnd() {
         var obj = document.getElementById('screen');
         obj.scrollTop = obj.scrollHeight;
+      },
+      getRoomInfo: function (room_id) {
+        var self = this;
+        console.log(room_id);
+        axios.post('roominfo_get', {room_id: room_id})
+            .then(function(response){
+                self.room = response.data;
+                console.log(response.data);
+            }).catch(function(error){
+                alert(error);
+            });
       }
     }
 }

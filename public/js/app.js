@@ -2515,15 +2515,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
-  props: ["rooms"],
   data: function data() {
     return {
-      s_contact: {
-        email: 'test2@test2',
-        name: 'test2',
-        note: '111'
-      },
-      room_id: null
+      room_id: null,
+      rooms: null
     };
   },
   components: {
@@ -2541,17 +2536,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert(value);
       });
-    },
-    updateContact: function updateContact() {
-      axios.post('contact_update', {
-        email: this.s_contact.email,
-        name: this.s_contact.name,
-        note: this.s_contact.note
-      }).then(function (response) {// 成功したとき
-      })["catch"](function (error) {
-        alert(error);
-      });
-      this.screenUpdate();
     },
     selectedRoom: function selectedRoom(index) {
       this.room_id = this.rooms[index].id;
@@ -2656,12 +2640,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TestComponent",
-  props: ["room_id", "messages", "error"],
+  props: ["room_id"],
   data: function data() {
     return {
-      s_message: ""
+      s_message: "",
+      messages: "",
+      room: ""
     };
   },
   created: function created() {},
@@ -2682,11 +2669,12 @@ __webpack_require__.r(__webpack_exports__);
 
         if (!self.messages.length) {}
       })["catch"](function (error) {
-        console.log(error.reponse.data);
-        console.log(error.reponse.status);
-        console.log(error.reponse.header);
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.header);
         alert(error);
       });
+      this.getRoomInfo(room_id);
     },
     sendMessage: function sendMessage() {
       var self = this;
@@ -2705,6 +2693,18 @@ __webpack_require__.r(__webpack_exports__);
     scrollToEnd: function scrollToEnd() {
       var obj = document.getElementById('screen');
       obj.scrollTop = obj.scrollHeight;
+    },
+    getRoomInfo: function getRoomInfo(room_id) {
+      var self = this;
+      console.log(room_id);
+      axios.post('roominfo_get', {
+        room_id: room_id
+      }).then(function (response) {
+        self.room = response.data;
+        console.log(response.data);
+      })["catch"](function (error) {
+        alert(error);
+      });
     }
   }
 });
@@ -2749,29 +2749,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UserComponent",
-  props: ["users"],
   data: function data() {
     return {
-      showContent: false
+      showContent: false,
+      users: ""
     };
   },
   methods: {
@@ -40105,7 +40088,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("h1", { staticClass: "my-4" }, [_vm._v("メッセージ")]),
-    _vm._v(" "),
+    _vm._v("\n  " + _vm._s(_vm.room.room_name) + "\n  "),
     _c("div", { staticClass: "my-4 m-screen", attrs: { id: "screen" } }, [
       _c(
         "ol",

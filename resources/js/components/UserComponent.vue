@@ -18,23 +18,6 @@
             </ol>
           </div>
 
-          <!-- <div class="form m-4 border">
-            <h3 class="m-2">電話帳追加</h3>
-            <div class="form-group">
-              <label for="name">名前</label>
-              <input type="text" class="form-control" name="name" placeholder="text" v-model="s_contact.name">
-            </div>
-            <div class="form-group">
-              <label for="email">メールアドレス</label>
-              <input type="text" class="form-control" name="email" placeholder="text" v-model="s_contact.email">
-            </div>
-            <div class="form-group">
-              <label for="note">メモ</label>
-              <input type="text" class="form-control" name="note" placeholder="text" v-model="s_contact.note">
-            </div>
-            <button type="submit" name="button" v-on:click="updateContact">送信</button>
-          </div> -->
-
         </div>
       </div>
     </div>
@@ -45,10 +28,10 @@
 <script>
 export default {
     name: "UserComponent",
-    props:["users"],
     data () {
         return {
           showContent: false,
+          users: ""
         }
     },
     methods: {

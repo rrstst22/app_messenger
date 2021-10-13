@@ -45,4 +45,10 @@ class RoomController extends Controller
   {
     Room::findOrFail($request->id)->delete();
   }
+
+  public function get(Request $request)
+  {
+    $room = Room::findOrFail($request->room_id);
+    return $room;
+  }
 }

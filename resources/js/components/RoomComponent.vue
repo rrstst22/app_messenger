@@ -34,11 +34,10 @@ import TestComponent from './TestComponent.vue';
 import UserComponent from './UserComponent.vue';
 export default {
     name: "RoomComponent",
-    props:["rooms"],
     data () {
         return {
-          s_contact : {email : 'test2@test2', name : 'test2', note : '111'},
-          room_id : null
+          room_id : null,
+          rooms : null
         }
     },
     components: {
@@ -56,22 +55,8 @@ export default {
                 alert(value);
             });
       },
-      updateContact: function () {
-
-        axios.post('contact_update', {
-          email: this.s_contact.email,
-          name: this.s_contact.name,
-          note: this.s_contact.note
-        })
-            .then(function(response){
-                // 成功したとき
-            }).catch(function(error){
-                alert(error);
-            });
-        this.screenUpdate();
-      },
       selectedRoom: function (index) {
-        this.room_id = this.rooms[index].id
+        this.room_id = this.rooms[index].id;
         this.$refs.child.screenUpdate(this.rooms[index].id);
       },
       deleteRoom: function(index){

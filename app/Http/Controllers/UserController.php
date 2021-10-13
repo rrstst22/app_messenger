@@ -31,7 +31,8 @@ class UserController extends Controller
 
   public function show()
   {
-    $users = User::get(['id', 'name']);
+    $id = Auth::id();
+    $users = User::where('id', '!=', $id)->get(['id', 'name']);
 
     return $users;
   }

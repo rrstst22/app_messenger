@@ -46,5 +46,6 @@ Route::delete('contact_remove', [App\Http\Controllers\ContactController::class, 
 Route::get('room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
 Route::post('room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
 Route::delete('room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
+Route::post('roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
 
 Route::get('user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
