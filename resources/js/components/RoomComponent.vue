@@ -1,7 +1,13 @@
 <template>
 <div>
-  <UserComponent ref="child" @update="screenUpdate"></UserComponent>
+
+  <div class="d-flex flex-row">
+    <UserComponent ref="child" @update="screenUpdate"></UserComponent>
+    <login-component></login-component>
+  </div>
+
   <div class="row">
+
     <div class="col-md-8">
         <TestComponent v-bind:room_id="room_id" ref="child"></TestComponent>
     </div>
@@ -63,9 +69,10 @@ export default {
         axios.delete('room_remove', {data: {id: this.rooms[index].id}})
             .then(function(response){
             }).catch(function(error){
-              alert(error);
+              console.error(error)
             });
         this.screenUpdate();
+        this.$refs.child.screenUpdate(null);
       }
     }
 }

@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <button v-on:click="openModal">新しくルームを作成</button>
+    <button v-on:click="openModal">ログインユーザ選択</button>
 
     <div id="overlay" v-show="showContent">
       <div id="content">
@@ -21,13 +21,14 @@
         </div>
       </div>
     </div>
+
   </div>
 
 </template>
 
 <script>
 export default {
-    name: "UserComponent",
+    name: "LoginComponent",
     data () {
         return {
           showContent: false,
@@ -53,16 +54,15 @@ export default {
             });
       },
       selectedUser: function (index) {
-        axios.post('room_create', {
-          id : this.users[index].id,
-          name : this.users[index].name
+        var self = this;
+        axios.post('guest', {
+          id : this.users[index].id
         })
             .then(function(response){
+              self.$router.go({path: self.$router.currentRoute.path, force: true});
             }).catch(function(error){
             });
-        // console.error(this.users[index].id);
         this.closeModal();
-        this.$emit('update');
       },
     }
 }

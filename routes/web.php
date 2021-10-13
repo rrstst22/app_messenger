@@ -21,9 +21,14 @@ Route::get('sample', function () {
     return view('basic_vue/sample');
 })->name('vue.sample');
 
+Route::get('message/message_show/{any}', function () {
+    return view('message/message_show');
+})->where('any', '.*');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('message/guest', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('login.guest');
 
 Route::get('upload_index', [App\Http\Controllers\ImageController::class, 'upload_index'])->name('upload_index');
 Route::post('upload_image', [App\Http\Controllers\ImageController::class, 'upload_image'])->name('upload_image');
@@ -35,17 +40,13 @@ Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_reg
 Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
 Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
 
-Route::get('message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
-Route::post('message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
-Route::post('message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
+Route::get('message/message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
+Route::post('message/message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
+Route::post('message/message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
 
-Route::get('contact_show', [App\Http\Controllers\ContactController::class, 'show'])->name('contact.show');
-Route::post('contact_update', [App\Http\Controllers\ContactController::class, 'update'])->name('contact.update');
-Route::delete('contact_remove', [App\Http\Controllers\ContactController::class, 'remove'])->name('contact.remove');
+Route::get('message/room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
+Route::post('message/room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
+Route::delete('message/room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
+Route::post('message/roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
 
-Route::get('room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
-Route::post('room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
-Route::delete('room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
-Route::post('roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
-
-Route::get('user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
+Route::get('message/user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
