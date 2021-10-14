@@ -20,5 +20,11 @@ class UserController extends Controller
 
     return $users;
   }
+  public function get_id()
+  {
+    $id = Auth::id();
+
+    return $id;
+  }
 
 }

@@ -6,12 +6,22 @@
     <div class="my-4 m-screen" id="screen">
       <ol style="list-style: none; padding-left: 0;">
         <li v-for="message in messages" class="m-4">
-          <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-primary btn-lg btn-block" style="height:100px; position:relative;">
-            <div class="m-1">
-              {{ message.message }}
-            </div>
-            <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">{{ message.name}}</div>
-          </button>
+          <div v-if="message.sender_id === login_id" class="text-right">
+              <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-primary btn-lg text-left" style="height:100px; position:relative;">
+                <div class="m-1">
+                  {{ message.message }}
+                </div>
+                <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">{{ message.name}}</div>
+              </button>
+          </div>
+          <div v-else>
+              <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-secondary btn-lg text-left" style="height:100px; position:relative;">
+                <div class="m-1">
+                  {{ message.message }}
+                </div>
+                <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">{{ message.name}}</div>
+              </button>
+          </div>
         </li>
       </ol>
     </div>
@@ -32,7 +42,8 @@ export default {
         return {
           s_message: "",
           messages: "",
-          room: {room_name: "ルームが選択されていません。"}
+          room: {room_name: "ルームが選択されていません。"},
+          login_id: ""
         }
     },
     updated() {
@@ -45,6 +56,7 @@ export default {
       },
       screenUpdate: function (room_id) {
         var self = this;
+        this.getLoginUserId();
         axios.post('message_update', {room_id: room_id})
             .then(function(response){
                 self.messages = response.data;
@@ -87,6 +99,15 @@ export default {
         }else{
           this.room.room_name = "ルームが選択されていません";
         }
+      },
+      getLoginUserId() {
+        var self = this;
+        axios.get('userid_get')
+            .then(function(response){
+              self.login_id = response.data;
+            }).catch(function(error){
+            });
+            console.error(this.login_id);
       },
       writeToClipboard(text) {
         navigator.clipboard.writeText(text)

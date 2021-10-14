@@ -2730,6 +2730,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TestComponent",
   props: ["room_id"],
@@ -2739,7 +2749,8 @@ __webpack_require__.r(__webpack_exports__);
       messages: "",
       room: {
         room_name: "ルームが選択されていません。"
-      }
+      },
+      login_id: ""
     };
   },
   updated: function updated() {
@@ -2752,6 +2763,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     screenUpdate: function screenUpdate(room_id) {
       var self = this;
+      this.getLoginUserId();
       axios.post('message_update', {
         room_id: room_id
       }).then(function (response) {
@@ -2793,6 +2805,13 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.room.room_name = "ルームが選択されていません";
       }
+    },
+    getLoginUserId: function getLoginUserId() {
+      var self = this;
+      axios.get('userid_get').then(function (response) {
+        self.login_id = response.data;
+      })["catch"](function (error) {});
+      console.error(this.login_id);
     },
     writeToClipboard: function writeToClipboard(text) {
       navigator.clipboard.writeText(text).then(function (response) {
@@ -40393,40 +40412,83 @@ var render = function() {
         { staticStyle: { "list-style": "none", "padding-left": "0" } },
         _vm._l(_vm.messages, function(message) {
           return _c("li", { staticClass: "m-4" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary btn-lg btn-block",
-                staticStyle: { height: "100px", position: "relative" },
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    return _vm.writeToClipboard(message.message)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "m-1" }, [
-                  _vm._v(
-                    "\n            " + _vm._s(message.message) + "\n          "
+            message.sender_id === _vm.login_id
+              ? _c("div", { staticClass: "text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn-lg text-left",
+                      staticStyle: { height: "100px", position: "relative" },
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.writeToClipboard(message.message)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "m-1" }, [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(message.message) +
+                            "\n              "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-right mx-2",
+                          staticStyle: {
+                            "font-size": "0.8rem",
+                            position: "absolute",
+                            bottom: "0px",
+                            right: "0px"
+                          }
+                        },
+                        [_vm._v(_vm._s(message.name))]
+                      )
+                    ]
                   )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "text-right mx-2",
-                    staticStyle: {
-                      "font-size": "0.8rem",
-                      position: "absolute",
-                      bottom: "0px",
-                      right: "0px"
-                    }
-                  },
-                  [_vm._v(_vm._s(message.name))]
-                )
-              ]
-            )
+                ])
+              : _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary btn-lg text-left",
+                      staticStyle: { height: "100px", position: "relative" },
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.writeToClipboard(message.message)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "m-1" }, [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(message.message) +
+                            "\n              "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-right mx-2",
+                          staticStyle: {
+                            "font-size": "0.8rem",
+                            position: "absolute",
+                            bottom: "0px",
+                            right: "0px"
+                          }
+                        },
+                        [_vm._v(_vm._s(message.name))]
+                      )
+                    ]
+                  )
+                ])
           ])
         }),
         0

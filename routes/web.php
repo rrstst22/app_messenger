@@ -50,3 +50,4 @@ Route::delete('message/room_remove', [App\Http\Controllers\RoomController::class
 Route::post('message/roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
 
 Route::get('message/user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
+Route::get('message/userid_get', [App\Http\Controllers\UserController::class, 'get_id'])->name('userid.get');
