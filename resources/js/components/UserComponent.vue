@@ -1,10 +1,21 @@
 <template>
 
   <div>
-    <button v-on:click="openModal">新しくルームを作成</button>
+    <button v-on:click="openRoomModal">新しくルームを作成</button>
 
-    <div id="overlay" v-show="showContent">
-      <div id="content">
+    <div id="overlay1" v-show="showRoomContent">
+      <div id="content1">
+        <h2 class="my-4">ルーム名を入力してください。</h2>
+        <button v-on:click="closeModal">閉じる</button>
+        <button v-on:click="nextModal">次へ</button>
+        <div>
+          <input type="text" name="room_name" v-model="room_name" placeholder="ルーム名">
+        </div>
+      </div>
+    </div>
+
+    <div id="overlay2" v-show="showUserContent">
+      <div id="content2">
         <h2 class="my-4">ユーザーを選択してください。</h2>
         <button v-on:click="closeModal">Close</button>
         <div>
@@ -17,7 +28,6 @@
               </li>
             </ol>
           </div>
-
         </div>
       </div>
     </div>
@@ -30,23 +40,29 @@ export default {
     name: "UserComponent",
     data () {
         return {
-          showContent: false,
+          showRoomContent: false,
+          showUserContent: false,
           users: "",
-          room_id: ""
+          room_id: "",
+          room_name: ""
         }
     },
     methods: {
-      openModal: function(){
-        this.showContent = true;
+      openRoomModal: function(){
+        this.showRoomContent = true;
+      },
+      nextModal: function(){
         this.screenUpdate();
+        this.showRoomContent = false;
+        this.showUserContent = true;
       },
       closeModal: function(){
-        this.showContent = false;
+        this.showRoomContent = false;
+        this.showUserContent = false;
       },
       screenUpdate: function () {
         var self = this;
         axios.get('user_show').then(function(response){
-                // 成功したとき
                 self.users = response.data;
             }).catch(function(error){
                 alert(error);
@@ -55,7 +71,7 @@ export default {
       selectedUser: function (index) {
         axios.post('room_create', {
           id : this.users[index].id,
-          name : this.users[index].name
+          name : this.room_name
         })
             .then(function(response){
             }).catch(function(error){

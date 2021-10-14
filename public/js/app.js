@@ -2863,27 +2863,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UserComponent",
   data: function data() {
     return {
-      showContent: false,
+      showRoomContent: false,
+      showUserContent: false,
       users: "",
-      room_id: ""
+      room_id: "",
+      room_name: ""
     };
   },
   methods: {
-    openModal: function openModal() {
-      this.showContent = true;
+    openRoomModal: function openRoomModal() {
+      this.showRoomContent = true;
+    },
+    nextModal: function nextModal() {
       this.screenUpdate();
+      this.showRoomContent = false;
+      this.showUserContent = true;
     },
     closeModal: function closeModal() {
-      this.showContent = false;
+      this.showRoomContent = false;
+      this.showUserContent = false;
     },
     screenUpdate: function screenUpdate() {
       var self = this;
       axios.get('user_show').then(function (response) {
-        // 成功したとき
         self.users = response.data;
       })["catch"](function (error) {
         alert(error);
@@ -2892,7 +2908,7 @@ __webpack_require__.r(__webpack_exports__);
     selectedUser: function selectedUser(index) {
       axios.post('room_create', {
         id: this.users[index].id,
-        name: this.users[index].name
+        name: this.room_name
       }).then(function (response) {})["catch"](function (error) {}); // console.error(this.users[index].id);
 
       this.closeModal();
@@ -40554,7 +40570,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("button", { on: { click: _vm.openModal } }, [
+    _c("button", { on: { click: _vm.openRoomModal } }, [
       _vm._v("新しくルームを作成")
     ]),
     _vm._v(" "),
@@ -40565,14 +40581,67 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: _vm.showContent,
-            expression: "showContent"
+            value: _vm.showRoomContent,
+            expression: "showRoomContent"
           }
         ],
-        attrs: { id: "overlay" }
+        attrs: { id: "overlay1" }
       },
       [
-        _c("div", { attrs: { id: "content" } }, [
+        _c("div", { attrs: { id: "content1" } }, [
+          _c("h2", { staticClass: "my-4" }, [
+            _vm._v("ルーム名を入力してください。")
+          ]),
+          _vm._v(" "),
+          _c("button", { on: { click: _vm.closeModal } }, [_vm._v("閉じる")]),
+          _vm._v(" "),
+          _c("button", { on: { click: _vm.nextModal } }, [_vm._v("次へ")]),
+          _vm._v(" "),
+          _c("div", [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.room_name,
+                  expression: "room_name"
+                }
+              ],
+              attrs: {
+                type: "text",
+                name: "room_name",
+                placeholder: "ルーム名"
+              },
+              domProps: { value: _vm.room_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.room_name = $event.target.value
+                }
+              }
+            })
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showUserContent,
+            expression: "showUserContent"
+          }
+        ],
+        attrs: { id: "overlay2" }
+      },
+      [
+        _c("div", { attrs: { id: "content2" } }, [
           _c("h2", { staticClass: "my-4" }, [
             _vm._v("ユーザーを選択してください。")
           ]),
