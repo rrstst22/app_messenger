@@ -41,16 +41,17 @@ Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_reg
 Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
 Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
 
-Route::get('message/message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
-Route::post('message/message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
-Route::post('message/message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
-Route::post('message/user_get', [App\Http\Controllers\MessageController::class, 'get'])->name('user.get');
+Route::group(['prefix' => 'message'], function(){
+  Route::get('message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
+  Route::post('message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
+  Route::post('message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
+  Route::post('user_get', [App\Http\Controllers\MessageController::class, 'get'])->name('user.get');
 
+  Route::get('room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
+  Route::post('room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
+  Route::delete('room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
+  Route::post('roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
 
-Route::get('message/room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
-Route::post('message/room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
-Route::delete('message/room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
-Route::post('message/roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
-
-Route::get('message/user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
-Route::get('message/userid_get', [App\Http\Controllers\UserController::class, 'get_id'])->name('userid.get');
+  Route::get('user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
+  Route::get('userid_get', [App\Http\Controllers\UserController::class, 'get_id'])->name('userid.get');
+});

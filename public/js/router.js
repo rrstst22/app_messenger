@@ -144,6 +144,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TestComponent",
   props: ["room_id"],
@@ -162,10 +177,6 @@ __webpack_require__.r(__webpack_exports__);
     this.scrollToEnd();
   },
   methods: {
-    window: onload = function onload() {
-      var obj = document.getElementById('screen');
-      obj.scrollTop = obj.scrollHeight;
-    },
     screenUpdate: function screenUpdate(room_id) {
       var self = this;
       this.getLoginUserId();
@@ -181,15 +192,15 @@ __webpack_require__.r(__webpack_exports__);
       if (this.s_message) {
         if (this.room_id) {
           var self = this;
-          var obj = document.getElementById('screen');
           var s_message_tmp = this.s_message; //重複送信回避
 
           this.s_message = "";
           axios.post('message_send', {
             message: s_message_tmp,
             room_id: self.room_id
-          }).then(function (response) {})["catch"](function (error) {});
-          this.screenUpdate(this.room_id);
+          }).then(function (response) {
+            self.screenUpdate(self.room_id);
+          })["catch"](function (error) {});
         } else {
           alert("ルームを選択してください。");
         }
@@ -249,8 +260,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
 //
 //
 //
@@ -700,9 +709,9 @@ var render = function() {
                     [
                       _c("div", { staticClass: "m-1" }, [
                         _vm._v(
-                          "\n                " +
+                          "\n              " +
                             _vm._s(message.message) +
-                            "\n              "
+                            "\n            "
                         )
                       ]),
                       _vm._v(" "),
@@ -717,7 +726,13 @@ var render = function() {
                             right: "0px"
                           }
                         },
-                        [_vm._v(_vm._s(message.name))]
+                        [
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(message.name) +
+                              "\n            "
+                          )
+                        ]
                       )
                     ]
                   )
@@ -738,9 +753,9 @@ var render = function() {
                     [
                       _c("div", { staticClass: "m-1" }, [
                         _vm._v(
-                          "\n                " +
+                          "\n              " +
                             _vm._s(message.message) +
-                            "\n              "
+                            "\n            "
                         )
                       ]),
                       _vm._v(" "),
@@ -755,7 +770,13 @@ var render = function() {
                             right: "0px"
                           }
                         },
-                        [_vm._v(_vm._s(message.name))]
+                        [
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(message.name) +
+                              "\n            "
+                          )
+                        ]
                       )
                     ]
                   )
@@ -796,7 +817,7 @@ var render = function() {
           attrs: { type: "submit" },
           on: { click: _vm.sendMessage }
         },
-        [_vm._v("送信")]
+        [_vm._v("\n      送信\n    ")]
       )
     ])
   ])
@@ -902,42 +923,40 @@ var render = function() {
           _vm._v(" "),
           _c("button", { on: { click: _vm.closeModal } }, [_vm._v("Close")]),
           _vm._v(" "),
-          _c("div", [
-            _c("div", { staticClass: "mx-2 my-4" }, [
-              _c(
-                "ol",
-                { staticStyle: { "list-style": "none", "padding-left": "0" } },
-                _vm._l(_vm.users, function(user, index) {
-                  return _c(
-                    "li",
-                    { key: index, staticClass: "input-group border my-2" },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "form-control rounded btn btn-secondary btn-lg",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.selectedUser(index)
-                            }
+          _c("div", { staticClass: "mx-2 my-4" }, [
+            _c(
+              "ol",
+              { staticStyle: { "list-style": "none", "padding-left": "0" } },
+              _vm._l(_vm.users, function(user, index) {
+                return _c(
+                  "li",
+                  { key: index, staticClass: "input-group border my-2" },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "form-control rounded btn btn-secondary btn-lg",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.selectedUser(index)
                           }
-                        },
-                        [
-                          _vm._v(
-                            "\n                " +
-                              _vm._s(user.name) +
-                              "\n              "
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                }),
-                0
-              )
-            ])
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n              " +
+                            _vm._s(user.name) +
+                            "\n            "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              }),
+              0
+            )
           ])
         ])
       ]

@@ -45,7 +45,6 @@ class MessageController extends Controller
         'sent_at' => Carbon::now()
       )
     );
-    return redirect()->back();
   }
 
   public function get(Request $request)

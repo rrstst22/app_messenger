@@ -4,7 +4,5 @@
 
   <router-view />
 
-  <!-- <login-component></login-component>
-  <room-component></room-component> -->
 </div>
 @endsection
