@@ -18,10 +18,7 @@ class MessageController extends Controller
 
   public function show()
   {
-    $user_id = Auth::id();
-    $users = User::where('id', '!=', $user_id)->get(['id', 'name']);
-
-    return view('message/message', compact('users'));
+    return view('message/message');
   }
 
   public function update(Request $request)
@@ -49,5 +46,17 @@ class MessageController extends Controller
       )
     );
     return redirect()->back();
+  }
+
+  public function get(Request $request)
+  {
+    $login_user_id = Auth::id();
+    $users = \DB::table('user_rooms')
+    ->join('users','user_rooms.user_id','=','users.id')
+    ->where('room_id', $request->room_id)
+    ->where('user_id', '!=', $login_user_id)
+    ->get(['name', 'room_id']);
+
+    return $users;
   }
 }

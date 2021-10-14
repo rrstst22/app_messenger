@@ -69,16 +69,20 @@ export default {
             });
       },
       selectedUser: function (index) {
-        axios.post('room_create', {
-          id : this.users[index].id,
-          name : this.room_name
-        })
-            .then(function(response){
-            }).catch(function(error){
-            });
-        // console.error(this.users[index].id);
-        this.closeModal();
-        this.$emit('update');
+        if(this.room_name){
+          axios.post('room_create', {
+            id : this.users[index].id,
+            name : this.room_name
+          })
+              .then(function(response){
+              }).catch(function(error){
+              });
+          // console.error(this.users[index].id);
+          this.closeModal();
+          this.$emit('update');
+        }else{
+          alert("ルーム名が空欄です。");
+        }
       },
     }
 }

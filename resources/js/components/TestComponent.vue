@@ -2,7 +2,8 @@
 
   <div>
     <h1 class="my-4">メッセージ</h1>
-    {{ room.room_name }}
+    <div>ルーム名：{{ room.room_name }}</div>
+    <div>メンバー：<span v-for="user in users">あなた と {{ user.name }}さん </span></div>
     <div class="my-4 m-screen" id="screen">
       <ol style="list-style: none; padding-left: 0;">
         <li v-for="message in messages" class="m-4">
@@ -43,7 +44,8 @@ export default {
           s_message: "",
           messages: "",
           room: {room_name: "ルームが選択されていません。"},
-          login_id: ""
+          login_id: "",
+          users: ""
         }
     },
     updated() {
@@ -57,10 +59,11 @@ export default {
       screenUpdate: function (room_id) {
         var self = this;
         this.getLoginUserId();
+        this.getRoomInfo(room_id);
+        this.getUserInfo(room_id);
         axios.post('message_update', {room_id: room_id})
             .then(function(response){
                 self.messages = response.data;
-                self.getRoomInfo(room_id);
             }).catch(function(error){
             });
       },
@@ -107,7 +110,15 @@ export default {
               self.login_id = response.data;
             }).catch(function(error){
             });
-            console.error(this.login_id);
+      },
+      getUserInfo: function (room_id) {
+        var self = this;
+        axios.post('user_get', {room_id: room_id})
+            .then(function(response){
+              self.users = response.data;
+              console.log(response.data);
+            }).catch(function(error){
+            });
       },
       writeToClipboard(text) {
         navigator.clipboard.writeText(text)

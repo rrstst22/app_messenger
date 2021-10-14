@@ -28,6 +28,7 @@ Route::get('message/message_show/{any}', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('autologin', [App\Http\Controllers\UserController::class, 'autologin'])->name('autologin');
 Route::post('message/guest', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('login.guest');
 
 Route::get('upload_index', [App\Http\Controllers\ImageController::class, 'upload_index'])->name('upload_index');
@@ -43,6 +44,8 @@ Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class,
 Route::get('message/message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
 Route::post('message/message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
 Route::post('message/message_update', [App\Http\Controllers\MessageController::class, 'update'])->name('message.upate');
+Route::post('message/user_get', [App\Http\Controllers\MessageController::class, 'get'])->name('user.get');
+
 
 Route::get('message/room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
 Route::post('message/room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');

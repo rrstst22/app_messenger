@@ -3,8 +3,8 @@
   <div>
     <button v-on:click="openModal">ログインユーザ選択</button>
 
-    <div id="overlay" v-show="showContent">
-      <div id="content">
+    <div id="overlay1" v-show="showContent">
+      <div id="content1">
         <h2 class="my-4">ユーザーを選択してください。</h2>
         <button v-on:click="closeModal">Close</button>
         <div>

@@ -2740,6 +2740,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TestComponent",
   props: ["room_id"],
@@ -2750,7 +2751,8 @@ __webpack_require__.r(__webpack_exports__);
       room: {
         room_name: "ルームが選択されていません。"
       },
-      login_id: ""
+      login_id: "",
+      users: ""
     };
   },
   updated: function updated() {
@@ -2764,11 +2766,12 @@ __webpack_require__.r(__webpack_exports__);
     screenUpdate: function screenUpdate(room_id) {
       var self = this;
       this.getLoginUserId();
+      this.getRoomInfo(room_id);
+      this.getUserInfo(room_id);
       axios.post('message_update', {
         room_id: room_id
       }).then(function (response) {
         self.messages = response.data;
-        self.getRoomInfo(room_id);
       })["catch"](function (error) {});
     },
     sendMessage: function sendMessage() {
@@ -2811,7 +2814,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('userid_get').then(function (response) {
         self.login_id = response.data;
       })["catch"](function (error) {});
-      console.error(this.login_id);
+    },
+    getUserInfo: function getUserInfo(room_id) {
+      var self = this;
+      axios.post('user_get', {
+        room_id: room_id
+      }).then(function (response) {
+        self.users = response.data;
+        console.log(response.data);
+      })["catch"](function (error) {});
     },
     writeToClipboard: function writeToClipboard(text) {
       navigator.clipboard.writeText(text).then(function (response) {
@@ -2906,13 +2917,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     selectedUser: function selectedUser(index) {
-      axios.post('room_create', {
-        id: this.users[index].id,
-        name: this.room_name
-      }).then(function (response) {})["catch"](function (error) {}); // console.error(this.users[index].id);
+      if (this.room_name) {
+        axios.post('room_create', {
+          id: this.users[index].id,
+          name: this.room_name
+        }).then(function (response) {})["catch"](function (error) {}); // console.error(this.users[index].id);
 
-      this.closeModal();
-      this.$emit('update');
+        this.closeModal();
+        this.$emit('update');
+      } else {
+        alert("ルーム名が空欄です。");
+      }
     }
   }
 });
@@ -40137,10 +40152,10 @@ var render = function() {
             expression: "showContent"
           }
         ],
-        attrs: { id: "overlay" }
+        attrs: { id: "overlay1" }
       },
       [
-        _c("div", { attrs: { id: "content" } }, [
+        _c("div", { attrs: { id: "content1" } }, [
           _c("h2", { staticClass: "my-4" }, [
             _vm._v("ユーザーを選択してください。")
           ]),
@@ -40421,7 +40436,22 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("h1", { staticClass: "my-4" }, [_vm._v("メッセージ")]),
-    _vm._v("\n  " + _vm._s(_vm.room.room_name) + "\n  "),
+    _vm._v(" "),
+    _c("div", [_vm._v("ルーム名：" + _vm._s(_vm.room.room_name))]),
+    _vm._v(" "),
+    _c(
+      "div",
+      [
+        _vm._v("メンバー："),
+        _vm._l(_vm.users, function(user) {
+          return _c("span", [
+            _vm._v("あなた と " + _vm._s(user.name) + "さん ")
+          ])
+        })
+      ],
+      2
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "my-4 m-screen", attrs: { id: "screen" } }, [
       _c(
         "ol",
