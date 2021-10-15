@@ -4,9 +4,9 @@
       <h1 class="my-4">ルーム</h1>
       <div class="m-screen">
         <div class="mx-2 my-4">
-          <ol style="list-style: none; padding-left: 0;">
+          <ol>
             <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="selectedRoom(index)">
+              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="emitRoomId(index)">
                 {{ room.room_name }}
               </button>
               <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
@@ -48,14 +48,14 @@ export default {
                 alert(error);
             });
       },
-      selectedRoom: function (index) {
+      emitRoomId: function (index) {
         this.$emit('screen-update', this.rooms[index].id);
       },
       deleteRoom: function(index){
         var self = this;
         axios.delete('room_remove', {data: {id: this.rooms[index].id}})
             .then(function(response){
-              self.room_id = null; //Props更新
+              self.$emit('screen-update', null);
               self.screenUpdate(); //ルーム一覧アップデート
             }).catch(function(error){
               alert(error);
@@ -64,3 +64,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+.no-style {
+  list-style: none;
+  padding-left: 0;
+}
+</style>

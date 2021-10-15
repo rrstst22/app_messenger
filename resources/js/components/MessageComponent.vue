@@ -3,20 +3,20 @@
   <div>
     <h1 class="my-4">メッセージ</h1>
     <div>ルーム名：{{ room.room_name }}</div>
-    <div>メンバー：<span v-for="user in users">あなた と {{ user.name }}さん </span></div>
+    <div>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
 
     <!-- メッセージ画面 -->
     <div class="my-4 m-screen" id="screen">
-      <ol style="list-style: none; padding-left: 0;">
-        <li v-for="message in messages" class="m-4">
+      <ol class="no-style">
+        <li v-for="(message, index) in messages" v-bind:key="index" class="m-4">
 
           <!-- 送信者によってメッセージの色を分ける -->
           <div v-if="message.sender_id === login_user_id" class="text-right">
-            <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-primary btn-lg text-left" style="height:100px; position:relative;">
+            <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-primary btn-lg text-left message-box">
               <div class="m-1">
                 {{ message.message }}
               </div>
-              <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">
+              <div class="text-right mx-2 name-tag">
                 {{ message.name}}
               </div>
             </button>
@@ -28,7 +28,7 @@
               <div class="m-1">
                 {{ message.message }}
               </div>
-              <div class="text-right mx-2" style="font-size:0.8rem; position:absolute; bottom:0px; right:0px;">
+              <div class="text-right mx-2 name-tag">
                 {{ message.name}}
               </div>
             </button>
@@ -41,7 +41,7 @@
     <!-- 送信フォーム -->
     <div class="input-group m-auto">
       <input type="text" class="form-control rounded" placeholder="text" v-model="send_message" autofocus>
-      <button type="submit" class="btn btn-outline-primary" v-on:click="sendMessage">
+      <button type="submit" class="btn btn-outline-primary" v-on:click="postMessage">
         送信
       </button>
     </div>
@@ -57,9 +57,12 @@ export default {
     data () {
         return {
           users: "",
-          messages: "",
           send_message: "",
           room: {room_name: "ルームが選択されていません。"},
+          messages: {
+            message1: {message:"ようこそ！！"},
+            message2: {message:"新しくトークを始める場合は、上の「新しくルームを作成」を押してね。"}
+          },
         }
     },
     watch: {
@@ -71,21 +74,30 @@ export default {
         this.login_user_id = new_login_user_id;
       }
     },
-    updated() {
+    updated: function() {
       this.scrollToEnd();
     },
     methods: {
       screenUpdate: function () {
         var self = this;
-        axios.post('message_update', {room_id: this.room_id})
+        axios.get('message_get', {params:{room_id: this.room_id}})
             .then(function(response){
               self.messages = response.data;
             }).catch(function(error){
             });
-        this.getRoomInfo(this.room_id);
-        this.getUserInfo(this.room_id);
+        axios.get('roominfo_get', {params:{room_id: this.room_id}})
+            .then(function(response){
+              self.room = response.data;
+            }).catch(function(error){
+            });
+        axios.get('user_get', {params:{room_id: this.room_id}})
+            .then(function(response){
+              self.users = response.data;
+            }).catch(function(error){
+
+            });
       },
-      sendMessage: function () {
+      postMessage: function () {
         if(this.send_message){
           if(this.room_id){
             var self = this;
@@ -104,31 +116,6 @@ export default {
           }
         }
       },
-
-      getUserInfo: function (room_id) {
-        var self = this;
-        if(room_id){
-          axios.post('user_get', {room_id: room_id})
-          .then(function(response){
-            self.users = response.data;
-          }).catch(function(error){
-          });
-        }else{
-          self.users = null;
-        }
-      },
-      getRoomInfo: function (room_id) {
-        var self = this;
-        if(room_id){
-          axios.post('roominfo_get', {room_id: room_id})
-              .then(function(response){
-                self.room = response.data;
-              }).catch(function(error){
-              });
-        }else{
-          this.room.room_name = "ルームが選択されていません";
-        }
-      },
       scrollToEnd: function () {
         var obj = document.getElementById('screen');
         obj.scrollTop = obj.scrollHeight;
@@ -144,3 +131,19 @@ export default {
     }
 }
 </script>
+<style scoped>
+.no-style {
+  list-style: none;
+  padding-left: 0;
+}
+.name-tag {
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+.message-box {
+  height: 100px;
+  position: relative;
+}
+</style>

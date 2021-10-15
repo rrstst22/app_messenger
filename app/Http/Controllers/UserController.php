@@ -31,5 +31,16 @@ class UserController extends Controller
     Auth::loginUsingId(1);
     return redirect('/');
   }
+  public function get_room_users(Request $request)
+  {
+    $login_user_id = Auth::id();
+    $users = \DB::table('user_rooms')
+    ->join('users','user_rooms.user_id','=','users.id')
+    ->where('room_id', $request->room_id)
+    ->where('user_id', '!=', $login_user_id)
+    ->get(['name', 'room_id']);
+
+    return $users;
+  }
 
 }

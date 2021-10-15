@@ -50,9 +50,7 @@ const app = new Vue({
     },
     methods: {
       screenUpdate: function (room_id) {
-        if(room_id){
           this.room_id = room_id;
-        }
       },
       getLoginUserId: function () {
         var self = this;

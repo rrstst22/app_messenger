@@ -49,7 +49,13 @@ class RoomController extends Controller
 
   public function get(Request $request)
   {
-    $room = Room::findOrFail($request->room_id);
+    if(!is_null($request->room_id)){
+      $room = Room::find($request->room_id);
+    }else{
+      $room = array(
+        'room_name' => 'ルームが選択されていません。'
+      );
+    }
     return $room;
   }
 }

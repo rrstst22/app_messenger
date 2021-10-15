@@ -21,7 +21,7 @@ class MessageController extends Controller
     return view('message/message');
   }
 
-  public function update(Request $request)
+  public function get(Request $request)
   {
     if(!is_null($request->room_id)){
       $user_id = Auth::id();
@@ -45,17 +45,5 @@ class MessageController extends Controller
         'sent_at' => Carbon::now()
       )
     );
-  }
-
-  public function get(Request $request)
-  {
-    $login_user_id = Auth::id();
-    $users = \DB::table('user_rooms')
-    ->join('users','user_rooms.user_id','=','users.id')
-    ->where('room_id', $request->room_id)
-    ->where('user_id', '!=', $login_user_id)
-    ->get(['name', 'room_id']);
-
-    return $users;
   }
 }
