@@ -58,21 +58,21 @@ export default {
         axios.get('room_show').then(function(response){
                 self.rooms = response.data;
             }).catch(function(error){
-                alert("detaa");
+                alert(error);
             });
       },
       selectedRoom: function (index) {
-        this.room_id = this.rooms[index].id;
-        this.$refs.child.screenUpdate(this.rooms[index].id);
+        this.room_id = this.rooms[index].id; //Props更新
       },
       deleteRoom: function(index){
+        var self = this;
         axios.delete('room_remove', {data: {id: this.rooms[index].id}})
             .then(function(response){
+              self.room_id = null; //Props更新
+              self.screenUpdate(); //ルーム一覧アップデート
             }).catch(function(error){
-              console.error(error)
+              alert(error);
             });
-        this.screenUpdate();
-        this.$refs.child.screenUpdate(null);
       }
     }
 }

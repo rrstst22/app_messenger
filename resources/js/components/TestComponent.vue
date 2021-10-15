@@ -40,7 +40,7 @@
 
     <!-- 送信フォーム -->
     <div class="input-group m-auto">
-      <input type="text" class="form-control rounded" placeholder="text" v-model="s_message" autofocus>
+      <input type="text" class="form-control rounded" placeholder="text" v-model="send_message" autofocus>
       <button type="submit" class="btn btn-outline-primary" v-on:click="sendMessage">
         送信
       </button>
@@ -56,40 +56,46 @@ export default {
     props:["room_id"],
     data () {
         return {
-          s_message: "",
+          send_message: "",
           messages: "",
           room: {room_name: "ルームが選択されていません。"},
           login_id: "",
           users: ""
         }
     },
+    watch: {
+      room_id: function(new_room_id) {
+        this.room_id = new_room_id;
+        this.screenUpdate();
+      }
+    },
     updated() {
       this.scrollToEnd();
     },
     methods: {
-      screenUpdate: function (room_id) {
+      screenUpdate: function () {
         var self = this;
         this.getLoginUserId();
-        this.getRoomInfo(room_id);
-        this.getUserInfo(room_id);
-        axios.post('message_update', {room_id: room_id})
+        this.getRoomInfo(this.room_id);
+        this.getUserInfo(this.room_id);
+        axios.post('message_update', {room_id: this.room_id})
             .then(function(response){
               self.messages = response.data;
             }).catch(function(error){
             });
       },
       sendMessage: function () {
-        if(this.s_message){
+        if(this.send_message){
           if(this.room_id){
             var self = this;
-            var s_message_tmp = this.s_message; //重複送信回避
-            this.s_message = "";
+            var send_message_tmp = this.send_message; //重複送信回避
+            this.send_message = "";
             axios.post('message_send', {
-              message: s_message_tmp,
+              message: send_message_tmp,
               room_id: self.room_id
             })
                 .then(function(response){
-                  self.screenUpdate(self.room_id);
+                  self.screenUpdate();
                 }).catch(function(error){
                 });
           }else{
@@ -97,9 +103,25 @@ export default {
           }
         }
       },
-      scrollToEnd: function () {
-        var obj = document.getElementById('screen');
-        obj.scrollTop = obj.scrollHeight;
+      getLoginUserId: function () {
+        var self = this;
+        axios.get('userid_get')
+        .then(function(response){
+          self.login_id = response.data;
+        }).catch(function(error){
+        });
+      },
+      getUserInfo: function (room_id) {
+        var self = this;
+        if(room_id){
+          axios.post('user_get', {room_id: room_id})
+          .then(function(response){
+            self.users = response.data;
+          }).catch(function(error){
+          });
+        }else{
+          self.users = null;
+        }
       },
       getRoomInfo: function (room_id) {
         var self = this;
@@ -113,22 +135,9 @@ export default {
           this.room.room_name = "ルームが選択されていません";
         }
       },
-      getLoginUserId() {
-        var self = this;
-        axios.get('userid_get')
-            .then(function(response){
-              self.login_id = response.data;
-            }).catch(function(error){
-            });
-      },
-      getUserInfo: function (room_id) {
-        var self = this;
-        axios.post('user_get', {room_id: room_id})
-            .then(function(response){
-              self.users = response.data;
-              console.log(response.data);
-            }).catch(function(error){
-            });
+      scrollToEnd: function () {
+        var obj = document.getElementById('screen');
+        obj.scrollTop = obj.scrollHeight;
       },
       writeToClipboard: function (text) {
         navigator.clipboard.writeText(text)

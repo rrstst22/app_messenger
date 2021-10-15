@@ -74,23 +74,25 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('room_show').then(function (response) {
         self.rooms = response.data;
       })["catch"](function (error) {
-        alert("detaa");
+        alert(error);
       });
     },
     selectedRoom: function selectedRoom(index) {
-      this.room_id = this.rooms[index].id;
-      this.$refs.child.screenUpdate(this.rooms[index].id);
+      this.room_id = this.rooms[index].id; //Props更新
     },
     deleteRoom: function deleteRoom(index) {
+      var self = this;
       axios["delete"]('room_remove', {
         data: {
           id: this.rooms[index].id
         }
-      }).then(function (response) {})["catch"](function (error) {
-        console.error(error);
+      }).then(function (response) {
+        self.room_id = null; //Props更新
+
+        self.screenUpdate(); //ルーム一覧アップデート
+      })["catch"](function (error) {
+        alert(error);
       });
-      this.screenUpdate();
-      this.$refs.child.screenUpdate(null);
     }
   }
 });
@@ -164,7 +166,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["room_id"],
   data: function data() {
     return {
-      s_message: "",
+      send_message: "",
       messages: "",
       room: {
         room_name: "ルームが選択されていません。"
@@ -173,42 +175,63 @@ __webpack_require__.r(__webpack_exports__);
       users: ""
     };
   },
+  watch: {
+    room_id: function room_id(new_room_id) {
+      this.room_id = new_room_id;
+      this.screenUpdate();
+    }
+  },
   updated: function updated() {
     this.scrollToEnd();
   },
   methods: {
-    screenUpdate: function screenUpdate(room_id) {
+    screenUpdate: function screenUpdate() {
       var self = this;
       this.getLoginUserId();
-      this.getRoomInfo(room_id);
-      this.getUserInfo(room_id);
+      this.getRoomInfo(this.room_id);
+      this.getUserInfo(this.room_id);
       axios.post('message_update', {
-        room_id: room_id
+        room_id: this.room_id
       }).then(function (response) {
         self.messages = response.data;
       })["catch"](function (error) {});
     },
     sendMessage: function sendMessage() {
-      if (this.s_message) {
+      if (this.send_message) {
         if (this.room_id) {
           var self = this;
-          var s_message_tmp = this.s_message; //重複送信回避
+          var send_message_tmp = this.send_message; //重複送信回避
 
-          this.s_message = "";
+          this.send_message = "";
           axios.post('message_send', {
-            message: s_message_tmp,
+            message: send_message_tmp,
             room_id: self.room_id
           }).then(function (response) {
-            self.screenUpdate(self.room_id);
+            self.screenUpdate();
           })["catch"](function (error) {});
         } else {
           alert("ルームを選択してください。");
         }
       }
     },
-    scrollToEnd: function scrollToEnd() {
-      var obj = document.getElementById('screen');
-      obj.scrollTop = obj.scrollHeight;
+    getLoginUserId: function getLoginUserId() {
+      var self = this;
+      axios.get('userid_get').then(function (response) {
+        self.login_id = response.data;
+      })["catch"](function (error) {});
+    },
+    getUserInfo: function getUserInfo(room_id) {
+      var self = this;
+
+      if (room_id) {
+        axios.post('user_get', {
+          room_id: room_id
+        }).then(function (response) {
+          self.users = response.data;
+        })["catch"](function (error) {});
+      } else {
+        self.users = null;
+      }
     },
     getRoomInfo: function getRoomInfo(room_id) {
       var self = this;
@@ -223,20 +246,9 @@ __webpack_require__.r(__webpack_exports__);
         this.room.room_name = "ルームが選択されていません";
       }
     },
-    getLoginUserId: function getLoginUserId() {
-      var self = this;
-      axios.get('userid_get').then(function (response) {
-        self.login_id = response.data;
-      })["catch"](function (error) {});
-    },
-    getUserInfo: function getUserInfo(room_id) {
-      var self = this;
-      axios.post('user_get', {
-        room_id: room_id
-      }).then(function (response) {
-        self.users = response.data;
-        console.log(response.data);
-      })["catch"](function (error) {});
+    scrollToEnd: function scrollToEnd() {
+      var obj = document.getElementById('screen');
+      obj.scrollTop = obj.scrollHeight;
     },
     writeToClipboard: function writeToClipboard(text) {
       navigator.clipboard.writeText(text).then(function (response) {
@@ -793,19 +805,19 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.s_message,
-            expression: "s_message"
+            value: _vm.send_message,
+            expression: "send_message"
           }
         ],
         staticClass: "form-control rounded",
         attrs: { type: "text", placeholder: "text", autofocus: "" },
-        domProps: { value: _vm.s_message },
+        domProps: { value: _vm.send_message },
         on: {
           input: function($event) {
             if ($event.target.composing) {
               return
             }
-            _vm.s_message = $event.target.value
+            _vm.send_message = $event.target.value
           }
         }
       }),
