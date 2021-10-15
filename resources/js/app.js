@@ -23,13 +23,11 @@ import router from './router'
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('sample-component', require('./components/SampleComponent.vue').default);
 Vue.component('like-component', require('./components/LikeComponent.vue').default);
 Vue.component('liked-component', require('./components/LikedComponent.vue').default);
 Vue.component('message-component', require('./components/MessageComponent.vue').default);
-Vue.component('contact-component', require('./components/ContactComponent.vue').default);
 Vue.component('room-component', require('./components/RoomComponent.vue').default);
-Vue.component('user-component', require('./components/UserComponent.vue').default);
+Vue.component('room-create-component', require('./components/RoomCreateComponent.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 
 /**
@@ -40,5 +38,29 @@ Vue.component('login-component', require('./components/LoginComponent.vue').defa
 
 const app = new Vue({
     el: '#app',
-    router: router
+    router: router,
+    data () {
+        return {
+          room_id : null,
+          login_user_id : null,
+        }
+    },
+    created: function () {
+      this.getLoginUserId();
+    },
+    methods: {
+      screenUpdate: function (room_id) {
+        if(room_id){
+          this.room_id = room_id;
+        }
+      },
+      getLoginUserId: function () {
+        var self = this;
+        axios.get('userid_get')
+        .then(function(response){
+          self.login_user_id = response.data;
+        }).catch(function(error){
+        });
+      },
+    }
 });

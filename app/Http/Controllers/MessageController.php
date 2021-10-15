@@ -28,7 +28,7 @@ class MessageController extends Controller
 
       $messages = \DB::table('messages')
       ->join('users','messages.sender_id','=','users.id')
-      ->where('room_id', $request->room_id)->get();
+      ->where('room_id', $request->room_id)->orderBy('messages.id')->get();
     }else {
       $messages = array();
     }

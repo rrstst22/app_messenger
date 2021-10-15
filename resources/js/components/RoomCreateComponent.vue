@@ -41,7 +41,6 @@ export default {
           showRoomContent: false,
           showUserContent: false,
           users: "",
-          room_id: "",
           room_name: ""
         }
     },
@@ -67,17 +66,19 @@ export default {
             });
       },
       selectedUser: function (index) {
+        var self = this;
         if(this.room_name){
           axios.post('room_create', {
             id : this.users[index].id,
             name : this.room_name
           })
               .then(function(response){
+                self.$emit('screen-update', response.data);
+                self.room_name = null;
               }).catch(function(error){
+                console.error(error);
               });
-          // console.error(this.users[index].id);
           this.closeModal();
-          this.$emit('update');
         }else{
           alert("ルーム名が空欄です。");
         }

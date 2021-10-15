@@ -1,18 +1,6 @@
 <template>
 <div>
 
-  <div class="d-flex flex-row">
-    <UserComponent ref="child" @update="screenUpdate"></UserComponent>
-    <login-component></login-component>
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-8">
-        <TestComponent v-bind:room_id="room_id" ref="child"></TestComponent>
-    </div>
-
-    <div class="col-md-4">
       <h1 class="my-4">ルーム</h1>
       <div class="m-screen">
         <div class="mx-2 my-4">
@@ -28,26 +16,25 @@
           </ol>
         </div>
       </div>
-    </div>
 
-  </div>
 </div>
 
 </template>
 
 <script>
-import TestComponent from './TestComponent.vue';
-import UserComponent from './UserComponent.vue';
 export default {
     name: "RoomComponent",
+    props:["room_id"],
     data () {
         return {
-          room_id : null,
           rooms : null
         }
     },
-    components: {
-      TestComponent, UserComponent
+    watch: {
+      room_id: function(new_room_id) {
+        this.room_id = new_room_id;
+        this.screenUpdate();
+      }
     },
     created: function () {
       this.screenUpdate();
@@ -62,7 +49,7 @@ export default {
             });
       },
       selectedRoom: function (index) {
-        this.room_id = this.rooms[index].id; //Props更新
+        this.$emit('screen-update', this.rooms[index].id);
       },
       deleteRoom: function(index){
         var self = this;

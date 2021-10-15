@@ -30,7 +30,6 @@ export default {
         return {
           showContent: false,
           users: "",
-          room_id: ""
         }
     },
     methods: {
