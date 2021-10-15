@@ -46,4 +46,14 @@ class User extends Authenticatable
     {
       return $this->hasMany(Like::class, 'user_id');
     }
+
+    public function messages()
+    {
+      return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function user_rooms()
+    {
+      return $this->hasMany(User_room::class, 'user_id');
+    }
 }
