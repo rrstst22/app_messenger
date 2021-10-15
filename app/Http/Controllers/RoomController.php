@@ -28,6 +28,7 @@ class RoomController extends Controller
         'room_id' => $room->id
       )
     );
+    return $room->id;
   }
 
   public function show()
