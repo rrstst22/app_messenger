@@ -11,6 +11,15 @@ class RoomController extends Controller
 {
   public function create(Request $request)
   {
+    $request->validate([
+      'name' => 'required|string|max:12'
+    ],
+    [
+      'name.required' => 'ルーム名は必須です。',
+      'name.sting'  => '文字列を入力してください。',
+      'name.max'  => '最大max文字です。',
+    ]);
+
     $room = Room::create(
       array(
         'room_name' => $request->name

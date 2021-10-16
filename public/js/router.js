@@ -35,9 +35,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
-  props: ["room_id"],
+  props: {
+    room_id: {
+      type: Number,
+      "default": null
+    }
+  },
   data: function data() {
     return {
       rooms: null
@@ -45,15 +51,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     room_id: function room_id(new_room_id) {
-      this.room_id = new_room_id;
-      this.screenUpdate();
+      this.updateScreen();
     }
   },
   created: function created() {
-    this.screenUpdate();
+    this.updateScreen();
   },
   methods: {
-    screenUpdate: function screenUpdate() {
+    updateScreen: function updateScreen() {
       var self = this;
       axios.get('room_show').then(function (response) {
         self.rooms = response.data;
@@ -72,7 +77,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         self.$emit('screen-update', null);
-        self.screenUpdate(); //ルーム一覧アップデート
+        self.updateScreen(); //ルーム一覧アップデート
       })["catch"](function (error) {
         alert(error);
       });
@@ -98,7 +103,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-style[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -592,6 +597,7 @@ var render = function() {
       _c("div", { staticClass: "mx-2 my-4" }, [
         _c(
           "ol",
+          { staticClass: "no-list" },
           _vm._l(_vm.rooms, function(room, index) {
             return _c(
               "li",
@@ -611,9 +617,9 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\r\n                " +
+                      "\r\n            " +
                         _vm._s(room.room_name) +
-                        "\r\n              "
+                        "\r\n          "
                     )
                   ]
                 ),
@@ -628,7 +634,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\r\n                削除\r\n              ")]
+                  [_vm._v("\r\n            削除\r\n          ")]
                 )
               ]
             )

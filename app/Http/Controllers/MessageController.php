@@ -37,6 +37,15 @@ class MessageController extends Controller
 
   public function send(Request $request)
   {
+    $request->validate([
+      'message' => 'required|string|max:50'
+    ],
+    [
+      'message.required' => 'ルーム名は必須です。',
+      'message.sting'  => '文字列を入力してください。',
+      'message.max'  => '最大max文字です。',
+    ]);
+
     Message::create(
       array(
         'sender_id' => Auth::id(),

@@ -6,10 +6,13 @@
     <div id="overlay1" v-show="showRoomContent">
       <div id="content1">
         <h2 class="my-4">ルーム名を入力してください。</h2>
-        <button v-on:click="closeModal">閉じる</button>
-        <button v-on:click="nextModal">次へ</button>
-        <div>
-          <input type="text" name="room_name" v-model="room_name" placeholder="ルーム名">
+        <div class="m-2">
+          <button v-on:click="closeModal">閉じる</button>
+          <button v-on:click="nextModal">次へ</button>
+        </div>
+        <div class="mx-2 my-4">
+          <input type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
+          <small class="form-text text-muted">※12文字以内</small>
         </div>
       </div>
     </div>
@@ -17,9 +20,12 @@
     <div id="overlay2" v-show="showUserContent">
       <div id="content2">
         <h2 class="my-4">ユーザーを選択してください。</h2>
-        <button v-on:click="closeModal">Close</button>
+        <div class="m-2">
+          <button v-on:click="backModal">戻る</button>
+          <button v-on:click="closeModal">閉じる</button>
+        </div>
         <div class="mx-2 my-4">
-          <ol>
+          <ol class="no-list">
             <li class="input-group border my-2" v-for="(user, index) in users" v-bind:key="index">
               <button type="button" class="form-control rounded btn btn-secondary btn-lg" v-on:click="postUserId(index)">
                 {{ user.name }}
@@ -46,18 +52,22 @@ export default {
     },
     methods: {
       openRoomModal: function(){
+        this.updateScreen();
         this.showRoomContent = true;
       },
       nextModal: function(){
-        this.screenUpdate();
         this.showRoomContent = false;
         this.showUserContent = true;
+      },
+      backModal: function(){
+        this.showRoomContent = true;
+        this.showUserContent = false;
       },
       closeModal: function(){
         this.showRoomContent = false;
         this.showUserContent = false;
       },
-      screenUpdate: function () {
+      updateScreen: function () {
         var self = this;
         axios.get('user_show').then(function(response){
                 self.users = response.data;
@@ -76,7 +86,7 @@ export default {
                 self.$emit('screen-update', response.data);
                 self.room_name = null;
               }).catch(function(error){
-                console.error(error);
+                console.error(error.response.data.errors);
               });
           this.closeModal();
         }else{
@@ -87,7 +97,7 @@ export default {
 }
 </script>
 <style scoped>
-.no-style {
+.no-list {
   list-style: none;
   padding-left: 0;
 }

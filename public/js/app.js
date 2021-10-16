@@ -2322,12 +2322,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     openModal: function openModal() {
       this.showContent = true;
-      this.screenUpdate();
+      this.updateScreen();
     },
     closeModal: function closeModal() {
       this.showContent = false;
     },
-    screenUpdate: function screenUpdate() {
+    updateScreen: function updateScreen() {
       var self = this;
       axios.get('user_show').then(function (response) {
         self.users = response.data;
@@ -2416,7 +2416,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MessageComponent",
-  props: ["room_id", "login_user_id"],
+  props: {
+    room_id: {
+      type: Number,
+      "default": null
+    },
+    login_user_id: {
+      type: Number,
+      required: true
+    }
+  },
   data: function data() {
     return {
       users: "",
@@ -2436,18 +2445,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     room_id: function room_id(new_room_id) {
-      this.room_id = new_room_id;
-      this.screenUpdate();
-    },
-    login_user_id: function login_user_id(new_login_user_id) {
-      this.login_user_id = new_login_user_id;
+      this.updateScreen();
     }
   },
   updated: function updated() {
     this.scrollToEnd();
   },
   methods: {
-    screenUpdate: function screenUpdate() {
+    updateScreen: function updateScreen() {
       var self = this;
       axios.get('message_get', {
         params: {
@@ -2482,8 +2487,10 @@ __webpack_require__.r(__webpack_exports__);
             message: send_message_tmp,
             room_id: self.room_id
           }).then(function (response) {
-            self.screenUpdate();
-          })["catch"](function (error) {});
+            self.updateScreen();
+          })["catch"](function (error) {
+            console.error(error.response.data.errors);
+          });
         } else {
           alert("ルームを選択してください。");
         }
@@ -2496,8 +2503,8 @@ __webpack_require__.r(__webpack_exports__);
     writeToClipboard: function writeToClipboard(text) {
       navigator.clipboard.writeText(text).then(function (response) {
         alert("クリップボードにコピーしました。");
-      })["catch"](function (e) {
-        console.error(e);
+      })["catch"](function (error) {
+        console.error(error);
       });
     }
   }
@@ -2539,9 +2546,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
-  props: ["room_id"],
+  props: {
+    room_id: {
+      type: Number,
+      "default": null
+    }
+  },
   data: function data() {
     return {
       rooms: null
@@ -2549,15 +2562,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     room_id: function room_id(new_room_id) {
-      this.room_id = new_room_id;
-      this.screenUpdate();
+      this.updateScreen();
     }
   },
   created: function created() {
-    this.screenUpdate();
+    this.updateScreen();
   },
   methods: {
-    screenUpdate: function screenUpdate() {
+    updateScreen: function updateScreen() {
       var self = this;
       axios.get('room_show').then(function (response) {
         self.rooms = response.data;
@@ -2576,7 +2588,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         self.$emit('screen-update', null);
-        self.screenUpdate(); //ルーム一覧アップデート
+        self.updateScreen(); //ルーム一覧アップデート
       })["catch"](function (error) {
         alert(error);
       });
@@ -2632,6 +2644,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UserComponent",
   data: function data() {
@@ -2644,18 +2662,22 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     openRoomModal: function openRoomModal() {
+      this.updateScreen();
       this.showRoomContent = true;
     },
     nextModal: function nextModal() {
-      this.screenUpdate();
       this.showRoomContent = false;
       this.showUserContent = true;
+    },
+    backModal: function backModal() {
+      this.showRoomContent = true;
+      this.showUserContent = false;
     },
     closeModal: function closeModal() {
       this.showRoomContent = false;
       this.showUserContent = false;
     },
-    screenUpdate: function screenUpdate() {
+    updateScreen: function updateScreen() {
       var self = this;
       axios.get('user_show').then(function (response) {
         self.users = response.data;
@@ -2674,7 +2696,7 @@ __webpack_require__.r(__webpack_exports__);
           self.$emit('screen-update', response.data);
           self.room_name = null;
         })["catch"](function (error) {
-          console.error(error);
+          console.error(error.response.data.errors);
         });
         this.closeModal();
       } else {
@@ -2734,12 +2756,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
   router: _router__WEBPACK_IMPORTED_MODULE_0__["default"],
   data: function data() {
     return {
-      room_id: null,
-      login_user_id: null
+      room_id: 0,
+      login_user_id: 0,
+      buttonActive: false,
+      scroll: 0,
+      room_screen: true
     };
   },
   created: function created() {
+    window.addEventListener('resize', this.handleResize);
     this.getLoginUserId();
+  },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.scrollWindow);
   },
   methods: {
     screenUpdate: function screenUpdate(room_id) {
@@ -2750,6 +2779,30 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
       axios.get('userid_get').then(function (response) {
         self.login_user_id = response.data;
       })["catch"](function (error) {});
+    },
+    handleResize: function handleResize() {
+      if (window.innerWidth >= 800) {
+        this.room_screen = true;
+      } else {
+        this.room_screen = false;
+      }
+    },
+    returnTop: function returnTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
+    scrollWindow: function scrollWindow() {
+      var top = 100; // ボタンを表示させたい位置
+
+      this.scroll = window.scrollY;
+
+      if (top <= this.scroll) {
+        this.buttonActive = true;
+      } else {
+        this.buttonActive = false;
+      }
     }
   }
 });
@@ -7336,7 +7389,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-style[data-v-4d2414bf] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-4d2414bf] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7360,7 +7413,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-style[data-v-3f20c7be] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.name-tag[data-v-3f20c7be] {\r\n  font-size: 0.8rem;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  right: 0px;\n}\n.message-box[data-v-3f20c7be] {\r\n  height: 100px;\r\n  position: relative;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-3f20c7be] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.name-tag[data-v-3f20c7be] {\r\n  font-size: 0.8rem;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  right: 0px;\n}\n.message-box[data-v-3f20c7be] {\r\n  height: 100px;\r\n  position: relative;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7384,7 +7437,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-style[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7408,7 +7461,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-style[data-v-4861302a] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-4861302a] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39744,7 +39797,7 @@ var render = function() {
           _c("div", { staticClass: "mx-2 my-4" }, [
             _c(
               "ol",
-              { staticClass: "no-style" },
+              { staticClass: "no-list" },
               _vm._l(_vm.users, function(user, index) {
                 return _c(
                   "li",
@@ -39825,7 +39878,7 @@ var render = function() {
     _c("div", { staticClass: "my-4 m-screen", attrs: { id: "screen" } }, [
       _c(
         "ol",
-        { staticClass: "no-style" },
+        { staticClass: "no-list" },
         _vm._l(_vm.messages, function(message, index) {
           return _c("li", { key: index, staticClass: "m-4" }, [
             message.sender_id === _vm.login_user_id
@@ -39910,7 +39963,12 @@ var render = function() {
           }
         ],
         staticClass: "form-control rounded",
-        attrs: { type: "text", placeholder: "text", autofocus: "" },
+        attrs: {
+          type: "text",
+          maxlength: "50",
+          placeholder: "text",
+          autofocus: ""
+        },
         domProps: { value: _vm.send_message },
         on: {
           input: function($event) {
@@ -39964,6 +40022,7 @@ var render = function() {
       _c("div", { staticClass: "mx-2 my-4" }, [
         _c(
           "ol",
+          { staticClass: "no-list" },
           _vm._l(_vm.rooms, function(room, index) {
             return _c(
               "li",
@@ -39983,9 +40042,9 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\r\n                " +
+                      "\r\n            " +
                         _vm._s(room.room_name) +
-                        "\r\n              "
+                        "\r\n          "
                     )
                   ]
                 ),
@@ -40000,7 +40059,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\r\n                削除\r\n              ")]
+                  [_vm._v("\r\n            削除\r\n          ")]
                 )
               ]
             )
@@ -40058,11 +40117,13 @@ var render = function() {
             _vm._v("ルーム名を入力してください。")
           ]),
           _vm._v(" "),
-          _c("button", { on: { click: _vm.closeModal } }, [_vm._v("閉じる")]),
+          _c("div", { staticClass: "m-2" }, [
+            _c("button", { on: { click: _vm.closeModal } }, [_vm._v("閉じる")]),
+            _vm._v(" "),
+            _c("button", { on: { click: _vm.nextModal } }, [_vm._v("次へ")])
+          ]),
           _vm._v(" "),
-          _c("button", { on: { click: _vm.nextModal } }, [_vm._v("次へ")]),
-          _vm._v(" "),
-          _c("div", [
+          _c("div", { staticClass: "mx-2 my-4" }, [
             _c("input", {
               directives: [
                 {
@@ -40075,6 +40136,7 @@ var render = function() {
               attrs: {
                 type: "text",
                 name: "room_name",
+                maxlength: "12",
                 placeholder: "ルーム名"
               },
               domProps: { value: _vm.room_name },
@@ -40086,7 +40148,11 @@ var render = function() {
                   _vm.room_name = $event.target.value
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _c("small", { staticClass: "form-text text-muted" }, [
+              _vm._v("※12文字以内")
+            ])
           ])
         ])
       ]
@@ -40111,11 +40177,16 @@ var render = function() {
             _vm._v("ユーザーを選択してください。")
           ]),
           _vm._v(" "),
-          _c("button", { on: { click: _vm.closeModal } }, [_vm._v("Close")]),
+          _c("div", { staticClass: "m-2" }, [
+            _c("button", { on: { click: _vm.backModal } }, [_vm._v("戻る")]),
+            _vm._v(" "),
+            _c("button", { on: { click: _vm.closeModal } }, [_vm._v("閉じる")])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "mx-2 my-4" }, [
             _c(
               "ol",
+              { staticClass: "no-list" },
               _vm._l(_vm.users, function(user, index) {
                 return _c(
                   "li",

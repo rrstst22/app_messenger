@@ -7,7 +7,7 @@
 
     <!-- メッセージ画面 -->
     <div class="my-4 m-screen" id="screen">
-      <ol class="no-style">
+      <ol class="no-list">
         <li v-for="(message, index) in messages" v-bind:key="index" class="m-4">
 
           <!-- 送信者によってメッセージの色を分ける -->
@@ -40,7 +40,7 @@
 
     <!-- 送信フォーム -->
     <div class="input-group m-auto">
-      <input type="text" class="form-control rounded" placeholder="text" v-model="send_message" autofocus>
+      <input type="text" class="form-control rounded" maxlength="50" placeholder="text" v-model="send_message" autofocus>
       <button type="submit" class="btn btn-outline-primary" v-on:click="postMessage">
         送信
       </button>
@@ -53,7 +53,16 @@
 <script>
 export default {
     name: "MessageComponent",
-    props:["room_id", "login_user_id"],
+    props: {
+      room_id: {
+        type: Number,
+        default: null
+      },
+      login_user_id: {
+        type: Number,
+        required: true
+      }
+    },
     data () {
         return {
           users: "",
@@ -67,18 +76,14 @@ export default {
     },
     watch: {
       room_id: function(new_room_id) {
-        this.room_id = new_room_id;
-        this.screenUpdate();
+        this.updateScreen();
       },
-      login_user_id: function(new_login_user_id) {
-        this.login_user_id = new_login_user_id;
-      }
     },
     updated: function() {
       this.scrollToEnd();
     },
     methods: {
-      screenUpdate: function () {
+      updateScreen: function () {
         var self = this;
         axios.get('message_get', {params:{room_id: this.room_id}})
             .then(function(response){
@@ -108,8 +113,9 @@ export default {
               room_id: self.room_id
             })
                 .then(function(response){
-                  self.screenUpdate();
+                  self.updateScreen();
                 }).catch(function(error){
+                  console.error(error.response.data.errors);
                 });
           }else{
             alert("ルームを選択してください。");
@@ -123,16 +129,16 @@ export default {
       writeToClipboard: function (text) {
         navigator.clipboard.writeText(text)
               .then(function(response){
-                alert("クリップボードにコピーしました。")
-              }).catch(function(e){
-                console.error(e);
+                alert("クリップボードにコピーしました。");
+              }).catch(function(error){
+                console.error(error);
               });
       }
     }
 }
 </script>
 <style scoped>
-.no-style {
+.no-list {
   list-style: none;
   padding-left: 0;
 }

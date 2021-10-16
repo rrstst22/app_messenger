@@ -1,21 +1,22 @@
 <template>
 <div>
 
-      <h1 class="my-4">ルーム</h1>
-      <div class="m-screen">
-        <div class="mx-2 my-4">
-          <ol>
-            <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="emitRoomId(index)">
-                {{ room.room_name }}
-              </button>
-              <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
-                削除
-              </button>
-            </li>
-          </ol>
-        </div>
-      </div>
+  <h1 class="my-4">ルーム</h1>
+
+  <div class="m-screen">
+    <div class="mx-2 my-4">
+      <ol class="no-list">
+        <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
+          <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="emitRoomId(index)">
+            {{ room.room_name }}
+          </button>
+          <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
+            削除
+          </button>
+        </li>
+      </ol>
+    </div>
+  </div>
 
 </div>
 
@@ -24,23 +25,27 @@
 <script>
 export default {
     name: "RoomComponent",
-    props:["room_id"],
+    props: {
+      room_id: {
+        type: Number,
+        default: null
+      }
+    },
     data () {
         return {
-          rooms : null
+          rooms : null,
         }
     },
     watch: {
       room_id: function(new_room_id) {
-        this.room_id = new_room_id;
-        this.screenUpdate();
+        this.updateScreen();
       }
     },
     created: function () {
-      this.screenUpdate();
+      this.updateScreen();
     },
     methods: {
-      screenUpdate: function () {
+      updateScreen: function () {
         var self = this;
         axios.get('room_show').then(function(response){
                 self.rooms = response.data;
@@ -56,7 +61,7 @@ export default {
         axios.delete('room_remove', {data: {id: this.rooms[index].id}})
             .then(function(response){
               self.$emit('screen-update', null);
-              self.screenUpdate(); //ルーム一覧アップデート
+              self.updateScreen(); //ルーム一覧アップデート
             }).catch(function(error){
               alert(error);
             });
@@ -65,7 +70,7 @@ export default {
 }
 </script>
 <style scoped>
-.no-style {
+.no-list {
   list-style: none;
   padding-left: 0;
 }

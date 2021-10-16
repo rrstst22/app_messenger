@@ -22,9 +22,7 @@
 
 
     <div id="app">
-      <div class="sticky-button" id="sticky-button">
-        <button type="button" name="sticky-button" class="px-2 py-2 bg-dark" style="width: 50px; height: 50px;"></button>
-      </div>
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
