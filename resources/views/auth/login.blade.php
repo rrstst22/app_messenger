@@ -66,7 +66,7 @@
                         </div>
                     </form>
                     <div class="">
-                      <a href="{{ route('autologin') }}"><button type="button" class="btn btn-danger" name="button">簡易ログイン←</button></a>
+                      <a href="{{ route('autologin') }}"><button type="button" class="btn btn-danger" name="button">簡易ログイン</button></a>
                     </div>
                 </div>
             </div>

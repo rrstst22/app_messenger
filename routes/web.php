@@ -17,28 +17,10 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('sample', function () {
-    return view('basic_vue/sample');
-})->name('vue.sample');
-
-Route::get('message/show-message/{any}', function () {
-    return view('message/show-message');
-})->where('any', '.*');
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('autologin', [App\Http\Controllers\UserController::class, 'autologin'])->name('autologin');
-
-Route::get('upload_index', [App\Http\Controllers\ImageController::class, 'upload_index'])->name('upload_index');
-Route::post('upload_image', [App\Http\Controllers\ImageController::class, 'upload_image'])->name('upload_image');
-Route::get('image_show', [App\Http\Controllers\ImageController::class, 'image_show'])->name('image_show');
-
-Route::get('csv_index', [App\Http\Controllers\CsvController::class, 'csv_index'])->name('csv_index');
-Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_regist'])->name('csv_input');
-
-Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
-Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
 
 Route::group(['prefix' => 'message'], function(){
   Route::post('guest-login', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('guest.login');
