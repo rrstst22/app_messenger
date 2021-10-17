@@ -22,27 +22,6 @@
   margin: auto;
 }
 
-.test {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 901;
-}
-
-.test::before{
-  font-family: "Font Awesome 5 Free";
-  content: '\f106';
-  font-weight: 900;
-  font-size: 25px;
-  color: #fff;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  bottom: 20px;
-  right: 9px;
-  margin: auto;
-}
-
 .heart {
   background: none;
   border: none;
@@ -63,76 +42,26 @@
   color: red;
 }
 
-.m-screen {
- height: 350px;
- overflow: scroll;
- overflow-x: hidden;
-}
-
-#overlay1{
-  z-index:1;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:rgba(0,0,0,0.5);
-
-  /*　画面の中央に要素を表示させる設定　*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-
-#overlay2{
-  z-index:3;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:rgba(0,0,0,0.5);
-
-  /*　画面の中央に要素を表示させる設定　*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-}
-
-#content1{
-  z-index:2;
-  width:50%;
-  padding: 1em;
-  background:#fff;
-}
-
-#content2{
-  z-index:5;
-  width:50%;
-  padding: 1em;
-  background:#fff;
+.no-list {
+  list-style: none;
+  padding-left: 0;
 }
 
 .overlay{
-  z-index:1;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:rgba(0,0,0,0.5);
-
-  /*　画面の中央に要素を表示させる設定　*/
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .content{
-  z-index:2;
-  width:50%;
+  z-index: 5;
   padding: 1em;
-  background:#fff;
+  background: #fff;
 }

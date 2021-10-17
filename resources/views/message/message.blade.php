@@ -4,17 +4,17 @@
 
   <div>
     <div class="d-flex flex-row">
-      <button v-on:click="on_login_screen=!on_login_screen">ログインユーザ選択</button>
-      <button v-on:click="on_room_creater=!on_room_creater">新しくルームを作成</button>
-      <button v-on:click='on_room_screen=!on_room_screen' v-show="width_change">ルームの表示</button>
+      <button class="btn btn-primary m-1" v-on:click="show_login_screen=!show_login_screen">ユーザ変更</button>
+      <button class="btn btn-primary m-1" v-on:click="show_room_creater=!show_room_creater">ルーム作成</button>
+      <button class="btn btn-primary m-1" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode">ルーム変更</button>
     </div>
   </div>
 
   <div>
-    <room-create-component v-bind:on_room_creater="on_room_creater" @screen-update="updateScreen"></room-create-component>
+    <create-room-component v-bind:show_room_creater="show_room_creater" v-on:roominfo-input="updateRoomId"></create-room-component>
   </div>
   <div>
-    <login-component v-bind:on_login_screen="on_login_screen"></login-component>
+    <login-component v-bind:show_login_screen="show_login_screen"></login-component>
   </div>
 
 
@@ -23,7 +23,7 @@
       <message-component v-bind:room_id="room_id" v-bind:login_user_id="login_user_id"></message-component>
     </div>
     <div class="col-md-4">
-      <room-component v-bind:room_id="room_id" v-bind:on_room_screen="on_room_screen" @screen-update="updateScreen"  @width-change="getShow"></room-component>
+      <room-component v-bind:room_id="room_id" v-bind:show_room_screen="show_room_screen" v-on:room-click="updateRoomId" v-on:screen-type-change="switchRoomButton"></room-component>
     </div>
   </div>
 

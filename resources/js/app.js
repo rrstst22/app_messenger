@@ -27,7 +27,7 @@ Vue.component('like-component', require('./components/LikeComponent.vue').defaul
 Vue.component('liked-component', require('./components/LikedComponent.vue').default);
 Vue.component('message-component', require('./components/MessageComponent.vue').default);
 Vue.component('room-component', require('./components/RoomComponent.vue').default);
-Vue.component('room-create-component', require('./components/RoomCreateComponent.vue').default);
+Vue.component('create-room-component', require('./components/CreateRoomComponent.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 
 /**
@@ -43,32 +43,30 @@ const app = new Vue({
         return {
           room_id : 0,
           login_user_id : 0,
-          on_login: false,
-          on_room_creater: false,
-          on_room_screen: false,
-          width_change: false
+          show_login_screen: false,
+          show_room_creater: false,
+          show_room_screen: false,
+          on_modal_mode: false
         }
     },
     created: function () {
       this.getLoginUserId();
     },
-    mounted() {
-      window.addEventListener('scroll', this.scrollWindow);
-    },
     methods: {
-      updateScreen: function (room_id) {
+      updateRoomId: function (room_id) {
           this.room_id = room_id;
       },
       getLoginUserId: function () {
         var self = this;
-        axios.get('userid_get')
+        axios.get('get-login-user-id')
         .then(function(response){
           self.login_user_id = response.data;
         }).catch(function(error){
         });
       },
-      getShow: function (width_change) {
-        this.width_change = width_change;
+      //ウィンドウ幅によって「ルームの表示」ボタンの表示を決定
+      switchRoomButton: function (on_modal_mode) {
+        this.on_modal_mode = on_modal_mode;
       },
     }
 });

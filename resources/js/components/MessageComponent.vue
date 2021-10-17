@@ -1,13 +1,13 @@
 <template>
 
   <div class="message-section">
-    <h3 class="my-4">メッセージ</h3>
+    <h3 class="my-3">メッセージ</h3>
     <div class="room-info-box">
       <div>ルーム名：{{ room.room_name }}</div>
       <div>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
     </div>
     <!-- メッセージ画面 -->
-    <div class="my-4 post-box" id="screen">
+    <div class="my-2 post-box" id="screen">
       <ol class="no-list">
         <li v-for="(message, index) in messages" v-bind:key="index" class="m-2">
 
@@ -40,10 +40,10 @@
     </div><!-- メッセージ画面 -->
 
     <!-- 送信フォーム -->
-    <form class="my-4" v-on:submit.prevent>
+    <form class="my-3" v-on:submit.prevent>
       <div class="input-group m-auto">
         <input type="text" class="form-control rounded" maxlength="50" placeholder="text" v-model="send_message" autofocus>
-        <button type="submit" class="btn btn-outline-primary" v-on:click="postMessage">
+        <button type="submit" class="btn btn-outline-primary" v-on:click="sendMessage">
           送信
         </button>
       </div>
@@ -59,7 +59,7 @@ export default {
     props: {
       room_id: {
         type: Number,
-        default: null
+        default: ""
       },
       login_user_id: {
         type: Number,
@@ -78,7 +78,7 @@ export default {
         }
     },
     watch: {
-      room_id: function(new_room_id) {
+      room_id: function() {
         this.updateScreen();
       },
     },
@@ -88,37 +88,39 @@ export default {
     methods: {
       updateScreen: function () {
         var self = this;
-        axios.get('message_get', {params:{room_id: this.room_id}})
+        axios.get('get-messages', {params:{room_id: this.room_id}})
             .then(function(response){
               self.messages = response.data;
             }).catch(function(error){
+              alert(error);
             });
-        axios.get('roominfo_get', {params:{room_id: this.room_id}})
+        axios.get('get-room', {params:{room_id: this.room_id}})
             .then(function(response){
               self.room = response.data;
             }).catch(function(error){
+              alert(error);
             });
-        axios.get('user_get', {params:{room_id: this.room_id}})
+        axios.get('get-room-users', {params:{room_id: this.room_id}})
             .then(function(response){
               self.users = response.data;
             }).catch(function(error){
-
+              alert(error);
             });
       },
-      postMessage: function () {
+      sendMessage: function () {
         if(this.send_message){
           if(this.room_id){
             var self = this;
             var send_message_tmp = this.send_message; //重複送信回避
             this.send_message = "";
-            axios.post('message_send', {
+            axios.post('send-message', {
               message: send_message_tmp,
               room_id: self.room_id
             })
                 .then(function(response){
                   self.updateScreen();
                 }).catch(function(error){
-                  console.error(error.response.data.errors);
+                  alert(error);
                 });
           }else{
             alert("ルームを選択してください。");
@@ -141,10 +143,6 @@ export default {
 }
 </script>
 <style scoped>
-.no-list {
-  list-style: none;
-  padding-left: 0;
-}
 .message-section {
   padding: 0.5em 1em;
   margin: 2em 0;
@@ -157,7 +155,7 @@ export default {
 }
 .room-info-box {
   padding: 0.5em 1em;
-  margin: 2em 0;
+  margin: 2px 0;
   color: #232323;
   background: #fff8e8;
   border-left: solid 10px #ffc06e;

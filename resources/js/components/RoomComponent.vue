@@ -1,26 +1,24 @@
 <template>
 <div>
 
-  <div v-bind:class="{overlay:show_room}" v-show="showRoomContent">
-    <div v-bind:class="{content:show_room}" class="box3">
-      <h3 class="my-4">ルーム</h3>
+  <div v-bind:class="{overlay:on_modal_mode}" v-show="show_room_content">
+    <div v-bind:class="{content:on_modal_mode}" class="room-section">
+      <h3 class="my-2">ルームの選択</h3>
 
-      <div class="m-screen">
-        <div class="mx-2">
-          <ol class="no-list">
-            <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-secondary btn-lg" name="button" v-on:click="emitRoomId(index); closeModal()">
-                {{ room.room_name }}
-              </button>
-              <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
-                削除
-              </button>
-            </li>
-          </ol>
-        </div>
+      <div class="px-2 room-list">
+        <ol class="no-list">
+          <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
+            <button type="button" class="form-control rounded btn btn-secondary" name="button" v-on:click="showMessages(index); closeModal()">
+              {{ room.room_name }}
+            </button>
+            <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
+              削除
+            </button>
+          </li>
+        </ol>
       </div>
 
-      <button type="button" v-on:click="closeModal" v-show="show_room">閉じる</button>
+      <button type="button" v-on:click="closeModal" v-show="on_modal_mode">閉じる</button>
     </div>
   </div>
 
@@ -33,25 +31,25 @@ export default {
     props: {
       room_id: {
         type: Number,
-        default: null
+        default: ""
       },
-      on_room_screen: {
+      show_room_screen: {
         type: Boolean,
         required: true,
       },
     },
     data () {
         return {
-          rooms : null,
-          show_room: false,
-          showRoomContent: true,
+          rooms : "",
+          on_modal_mode: false,
+          show_room_content: true,
         }
     },
     watch: {
-      room_id: function(new_room_id) {
+      room_id: function() {
         this.updateScreen();
       },
-      on_room_screen: function(new_openModal) {
+      show_room_screen: function() {
         this.openModal();
       },
     },
@@ -64,67 +62,51 @@ export default {
     },
     methods: {
       openModal: function(){
-        this.showRoomContent = true;
-        this.updateScreen();
+        this.show_room_content = true;
       },
       closeModal: function(){
-        if(this.show_room){
-          this.showRoomContent = false;
+        //モーダル画面表示ではない場合は、何もしない。
+        if(this.on_modal_mode){
+          this.show_room_content = false;
         }
       },
       updateScreen: function () {
         var self = this;
-        axios.get('room_show').then(function(response){
+        axios.get('get-login-rooms').then(function(response){
                 self.rooms = response.data;
             }).catch(function(error){
                 alert(error);
             });
       },
-      emitRoomId: function (index) {
-        this.$emit('screen-update', this.rooms[index].id);
+      showMessages: function (index) {
+        this.$emit('room-click', this.rooms[index].id);
       },
       deleteRoom: function(index){
         var self = this;
-        axios.delete('room_remove', {data: {id: this.rooms[index].id}})
+        axios.delete('remove-room', {data: {id: this.rooms[index].id}})
             .then(function(response){
-              self.$emit('screen-update', null);
-              self.updateScreen(); //ルーム一覧アップデート
+              self.$emit('room-click', null);
+              self.updateScreen();
             }).catch(function(error){
               alert(error);
             });
       },
       handleResize: function() {
         if (window.innerWidth <= 800) {
-            this.show_room = true;
-            this.showRoomContent = false;
-            this.$emit('width-change', this.show_room);
+            this.on_modal_mode = true;
+            this.show_room_content = false;
+            this.$emit('screen-type-change', this.on_modal_mode);
         } else {
-            this.show_room = false;
-            this.showRoomContent = true;
-            this.$emit('width-change', false);
+            this.on_modal_mode = false;
+            this.show_room_content = true;
+            this.$emit('screen-type-change', false);
         }
       },
     }
 }
 </script>
 <style scoped>
-.no-list {
-  list-style: none;
-  padding-left: 0;
-}
-.box2{
-    padding: 8px 19px;
-    margin: 2em 0;
-    color: #2c2c2f;
-    background: #fff;
-    border-top: solid 5px black;
-    border-bottom: solid 5px black;
-}
-.box2 p {
-    margin: 0;
-    padding: 0;
-}
-.box3{
+.room-section{
     padding: 0.5em 1em;
     margin: 2em 0;
     color: #5d627b;
@@ -132,8 +114,13 @@ export default {
     border-top: solid 5px #5d627b;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
 }
-.box3 p {
+.room-section p {
     margin: 0;
     padding: 0;
+}
+.room-list {
+  height: 500px;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 </style>

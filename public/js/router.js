@@ -39,32 +39,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
     room_id: {
       type: Number,
-      "default": null
+      "default": ""
     },
-    on_room_screen: {
+    show_room_screen: {
       type: Boolean,
       required: true
     }
   },
   data: function data() {
     return {
-      rooms: null,
-      show_room: false,
-      showRoomContent: true
+      rooms: "",
+      on_modal_mode: false,
+      show_room_content: true
     };
   },
   watch: {
-    room_id: function room_id(new_room_id) {
+    room_id: function room_id() {
       this.updateScreen();
     },
-    on_room_screen: function on_room_screen(new_openModal) {
+    show_room_screen: function show_room_screen() {
       this.openModal();
     }
   },
@@ -77,47 +75,47 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     openModal: function openModal() {
-      this.showRoomContent = true;
-      this.updateScreen();
+      this.show_room_content = true;
     },
     closeModal: function closeModal() {
-      if (this.show_room) {
-        this.showRoomContent = false;
+      //モーダル画面表示ではない場合は、何もしない。
+      if (this.on_modal_mode) {
+        this.show_room_content = false;
       }
     },
     updateScreen: function updateScreen() {
       var self = this;
-      axios.get('room_show').then(function (response) {
+      axios.get('get-login-rooms').then(function (response) {
         self.rooms = response.data;
       })["catch"](function (error) {
         alert(error);
       });
     },
-    emitRoomId: function emitRoomId(index) {
-      this.$emit('screen-update', this.rooms[index].id);
+    showMessages: function showMessages(index) {
+      this.$emit('room-click', this.rooms[index].id);
     },
     deleteRoom: function deleteRoom(index) {
       var self = this;
-      axios["delete"]('room_remove', {
+      axios["delete"]('remove-room', {
         data: {
           id: this.rooms[index].id
         }
       }).then(function (response) {
-        self.$emit('screen-update', null);
-        self.updateScreen(); //ルーム一覧アップデート
+        self.$emit('room-click', null);
+        self.updateScreen();
       })["catch"](function (error) {
         alert(error);
       });
     },
     handleResize: function handleResize() {
       if (window.innerWidth <= 800) {
-        this.show_room = true;
-        this.showRoomContent = false;
-        this.$emit('width-change', this.show_room);
+        this.on_modal_mode = true;
+        this.show_room_content = false;
+        this.$emit('screen-type-change', this.on_modal_mode);
       } else {
-        this.show_room = false;
-        this.showRoomContent = true;
-        this.$emit('width-change', false);
+        this.on_modal_mode = false;
+        this.show_room_content = true;
+        this.$emit('screen-type-change', false);
       }
     }
   }
@@ -141,7 +139,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.box2[data-v-61759d07]{\r\n    padding: 8px 19px;\r\n    margin: 2em 0;\r\n    color: #2c2c2f;\r\n    background: #fff;\r\n    border-top: solid 5px black;\r\n    border-bottom: solid 5px black;\n}\n.box2 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\n.box3[data-v-61759d07]{\r\n    padding: 0.5em 1em;\r\n    margin: 2em 0;\r\n    color: #5d627b;\r\n    background: white;\r\n    border-top: solid 5px #5d627b;\r\n    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n}\n.box3 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.room-section[data-v-61759d07]{\r\n    padding: 0.5em 1em;\r\n    margin: 2em 0;\r\n    color: #5d627b;\r\n    background: white;\r\n    border-top: solid 5px #5d627b;\r\n    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n}\n.room-section p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\n.room-list[data-v-61759d07] {\r\n  height: 500px;\r\n  overflow: scroll;\r\n  overflow-x: hidden;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -636,18 +634,23 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: _vm.showRoomContent,
-            expression: "showRoomContent"
+            value: _vm.show_room_content,
+            expression: "show_room_content"
           }
         ],
-        class: { overlay: _vm.show_room }
+        class: { overlay: _vm.on_modal_mode }
       },
       [
-        _c("div", { staticClass: "box3", class: { content: _vm.show_room } }, [
-          _c("h3", { staticClass: "my-4" }, [_vm._v("ルーム")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "m-screen" }, [
-            _c("div", { staticClass: "mx-2" }, [
+        _c(
+          "div",
+          {
+            staticClass: "room-section",
+            class: { content: _vm.on_modal_mode }
+          },
+          [
+            _c("h3", { staticClass: "my-2" }, [_vm._v("ルームの選択")]),
+            _vm._v(" "),
+            _c("div", { staticClass: "px-2 room-list" }, [
               _c(
                 "ol",
                 { staticClass: "no-list" },
@@ -659,21 +662,20 @@ var render = function() {
                       _c(
                         "button",
                         {
-                          staticClass:
-                            "form-control rounded btn btn-secondary btn-lg",
+                          staticClass: "form-control rounded btn btn-secondary",
                           attrs: { type: "button", name: "button" },
                           on: {
                             click: function($event) {
-                              _vm.emitRoomId(index)
+                              _vm.showMessages(index)
                               _vm.closeModal()
                             }
                           }
                         },
                         [
                           _vm._v(
-                            "\r\n                " +
+                            "\r\n              " +
                               _vm._s(room.room_name) +
-                              "\r\n              "
+                              "\r\n            "
                           )
                         ]
                       ),
@@ -688,33 +690,33 @@ var render = function() {
                             }
                           }
                         },
-                        [_vm._v("\r\n                削除\r\n              ")]
+                        [_vm._v("\r\n              削除\r\n            ")]
                       )
                     ]
                   )
                 }),
                 0
               )
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.show_room,
-                  expression: "show_room"
-                }
-              ],
-              attrs: { type: "button" },
-              on: { click: _vm.closeModal }
-            },
-            [_vm._v("閉じる")]
-          )
-        ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.on_modal_mode,
+                    expression: "on_modal_mode"
+                  }
+                ],
+                attrs: { type: "button" },
+                on: { click: _vm.closeModal }
+              },
+              [_vm._v("閉じる")]
+            )
+          ]
+        )
       ]
     )
   ])
@@ -16139,7 +16141,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: "history",
   routes: [{
-    path: "/message/message_show",
+    path: "/message/show_message",
     name: "show",
     component: _components_RoomComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   }]

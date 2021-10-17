@@ -21,38 +21,39 @@ Route::get('sample', function () {
     return view('basic_vue/sample');
 })->name('vue.sample');
 
-Route::get('message/message_show/{any}', function () {
-    return view('message/message_show');
+Route::get('message/show-message/{any}', function () {
+    return view('message/show-message');
 })->where('any', '.*');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('autologin', [App\Http\Controllers\UserController::class, 'autologin'])->name('autologin');
-Route::post('message/guest', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('login.guest');
-Route::post('message/user_create', [App\Http\Controllers\LoginController::class, 'create'])->name('create.user');
 
 Route::get('upload_index', [App\Http\Controllers\ImageController::class, 'upload_index'])->name('upload_index');
 Route::post('upload_image', [App\Http\Controllers\ImageController::class, 'upload_image'])->name('upload_image');
 Route::get('image_show', [App\Http\Controllers\ImageController::class, 'image_show'])->name('image_show');
 
-Route::get('csv_index', [App\Http\Controllers\CsvController::class, 'csv_index'])->name('csv_index'); //表示
-Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_regist'])->name('csv_input'); //登録
+Route::get('csv_index', [App\Http\Controllers\CsvController::class, 'csv_index'])->name('csv_index');
+Route::post('csv_index', [App\Http\Controllers\CsvController::class, 'upload_regist'])->name('csv_input');
 
 Route::post('likes_index_store', [App\Http\Controllers\LikesController::class, 'likes_index_store'])->name('likes_index_store');
 Route::post('likes_index_destroy', [App\Http\Controllers\LikesController::class, 'likes_index_destroy'])->name('likes_index_destroy');
 
 Route::group(['prefix' => 'message'], function(){
-  Route::get('message_show', [App\Http\Controllers\MessageController::class, 'show'])->name('message.show');
-  Route::post('message_send', [App\Http\Controllers\MessageController::class, 'send'])->name('message.send');
-  Route::get('message_get', [App\Http\Controllers\MessageController::class, 'get'])->name('message.get');
+  Route::post('guest-login', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('guest.login');
+  Route::post('create-user', [App\Http\Controllers\LoginController::class, 'createUser'])->name('create.user');
 
-  Route::get('room_show', [App\Http\Controllers\RoomController::class, 'show'])->name('room.show');
-  Route::post('room_create', [App\Http\Controllers\RoomController::class, 'create'])->name('room.create');
-  Route::delete('room_remove', [App\Http\Controllers\RoomController::class, 'remove'])->name('room.remove');
-  Route::get('roominfo_get', [App\Http\Controllers\RoomController::class, 'get'])->name('roominfo.get');
+  Route::get('show-message', [App\Http\Controllers\MessageController::class, 'show'])->name('show.message');
+  Route::get('get-messages', [App\Http\Controllers\MessageController::class, 'getMessages'])->name('get.messages');
+  Route::post('send-message', [App\Http\Controllers\MessageController::class, 'sendMessage'])->name('send.message');
 
-  Route::get('user_show', [App\Http\Controllers\UserController::class, 'show'])->name('user.show');
-  Route::get('user_get', [App\Http\Controllers\UserController::class, 'get_room_users'])->name('user.get');
-  Route::get('userid_get', [App\Http\Controllers\UserController::class, 'get_id'])->name('userid.get');
+  Route::get('get-room', [App\Http\Controllers\RoomController::class, 'getRoom'])->name('get.room');
+  Route::get('get-login-rooms', [App\Http\Controllers\RoomController::class, 'getLoginRooms'])->name('get.login.rooms');
+  Route::post('create-room', [App\Http\Controllers\RoomController::class, 'createRoom'])->name('create.room');
+  Route::delete('remove-room', [App\Http\Controllers\RoomController::class, 'removeRoom'])->name('remove.room');
+
+  Route::get('get-other-users', [App\Http\Controllers\UserController::class, 'getOtherUsers'])->name('get.other.users');
+  Route::get('get-room-users', [App\Http\Controllers\UserController::class, 'getRoomUsers'])->name('get.room.users');
+  Route::get('get-login-user-id', [App\Http\Controllers\UserController::class, 'getLoginUserId'])->name('get.login.user.id');
 });

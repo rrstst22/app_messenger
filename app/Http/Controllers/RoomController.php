@@ -9,7 +9,30 @@ use Auth;
 
 class RoomController extends Controller
 {
-  public function create(Request $request)
+  public function getRoom(Request $request)
+  {
+    if(!is_null($request->room_id)){
+      $room = Room::find($request->room_id);
+    }else{
+      $room = array(
+        'room_name' => 'ルームが選択されていません。'
+      );
+    }
+    return $room;
+  }
+
+  public function getLoginRooms()
+  {
+    $user_id = Auth::id();
+
+    $rooms = \DB::table('user_rooms')
+    ->join('rooms','user_rooms.room_id','=','rooms.id')
+    ->where('user_id', $user_id)->get();
+
+    return $rooms;
+  }
+
+  public function createRoom(Request $request)
   {
     $request->validate([
       'name' => 'required|string|max:12'
@@ -40,31 +63,8 @@ class RoomController extends Controller
     return $room->id;
   }
 
-  public function show()
-  {
-    $user_id = Auth::id();
-
-    $rooms = \DB::table('user_rooms')
-    ->join('rooms','user_rooms.room_id','=','rooms.id')
-    ->where('user_id', $user_id)->get();
-
-    return $rooms;
-  }
-
-  public function remove(Request $request)
+  public function removeRoom(Request $request)
   {
     Room::findOrFail($request->id)->delete();
-  }
-
-  public function get(Request $request)
-  {
-    if(!is_null($request->room_id)){
-      $room = Room::find($request->room_id);
-    }else{
-      $room = array(
-        'room_name' => 'ルームが選択されていません。'
-      );
-    }
-    return $room;
   }
 }

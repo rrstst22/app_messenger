@@ -8,7 +8,7 @@
     <a href="{{ route('csv_index') }}">CSV入力</a>
   </div>
   <div>
-    <a href="{{ route('message.show') }}">メッセージ</a>
+    <a href="{{ route('show.message') }}">メッセージ</a>
   </div>
 </div>
 @endsection

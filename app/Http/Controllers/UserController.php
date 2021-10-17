@@ -13,14 +13,14 @@ use Auth;
 class UserController extends Controller
 {
 
-  public function show()
+  public function getOtherUsers()
   {
     $id = Auth::id();
     $users = User::where('id', '!=', $id)->get(['id', 'name']);
 
     return $users;
   }
-  public function get_id()
+  public function getLoginUserId()
   {
     $id = Auth::id();
 
@@ -31,7 +31,7 @@ class UserController extends Controller
     Auth::loginUsingId(1);
     return redirect('/');
   }
-  public function get_room_users(Request $request)
+  public function getRoomUsers(Request $request)
   {
     $login_user_id = Auth::id();
     $users = \DB::table('user_rooms')
