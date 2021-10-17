@@ -2,34 +2,29 @@
 @section('content')
 <div class="container">
 
-<div class="test">
-      <button v-show="buttonActive" @click="returnTop" class="px-2 py-2 bg-dark" style="width: 50px; height: 50px;">
-
-      </button>
-</div>
-
   <div>
     <div class="d-flex flex-row">
-      <div>
-        <room-create-component ref="child" @screen-update="screenUpdate"></room-create-component>
-      </div>
-      <div>
-        <login-component></login-component>
-      </div>
+      <button v-on:click="on_login_screen=!on_login_screen">ログインユーザ選択</button>
+      <button v-on:click="on_room_creater=!on_room_creater">新しくルームを作成</button>
+      <button v-on:click='on_room_screen=!on_room_screen' v-show="width_change">ルームの表示</button>
     </div>
+  </div>
 
-    <div class="row">
+  <div>
+    <room-create-component v-bind:on_room_creater="on_room_creater" @screen-update="updateScreen"></room-create-component>
+  </div>
+  <div>
+    <login-component v-bind:on_login_screen="on_login_screen"></login-component>
+  </div>
 
-      <div class="col-md-8">
-        <message-component v-bind:room_id="room_id" v-bind:login_user_id="login_user_id" ref="child"></message-component>
-      </div>
 
-      <div class="col-md-4" v-show="room_screen">
-        <room-component v-bind:room_id="room_id" @screen-update="screenUpdate"></room-component>
-      </div>
-
+  <div class="row">
+    <div class="col-md-8">
+      <message-component v-bind:room_id="room_id" v-bind:login_user_id="login_user_id"></message-component>
     </div>
-
+    <div class="col-md-4">
+      <room-component v-bind:room_id="room_id" v-bind:on_room_screen="on_room_screen" @screen-update="updateScreen"  @width-change="getShow"></room-component>
+    </div>
   </div>
 
 </div>

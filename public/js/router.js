@@ -36,28 +36,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
     room_id: {
       type: Number,
       "default": null
+    },
+    on_room_screen: {
+      type: Boolean,
+      required: true
     }
   },
   data: function data() {
     return {
-      rooms: null
+      rooms: null,
+      show_room: false,
+      showRoomContent: true
     };
   },
   watch: {
     room_id: function room_id(new_room_id) {
       this.updateScreen();
+    },
+    on_room_screen: function on_room_screen(new_openModal) {
+      this.openModal();
     }
   },
   created: function created() {
     this.updateScreen();
+    this.handleResize();
+  },
+  mounted: function mounted() {
+    window.addEventListener('resize', this.handleResize);
   },
   methods: {
+    openModal: function openModal() {
+      this.showRoomContent = true;
+      this.updateScreen();
+    },
+    closeModal: function closeModal() {
+      if (this.show_room) {
+        this.showRoomContent = false;
+      }
+    },
     updateScreen: function updateScreen() {
       var self = this;
       axios.get('room_show').then(function (response) {
@@ -81,6 +108,17 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert(error);
       });
+    },
+    handleResize: function handleResize() {
+      if (window.innerWidth <= 800) {
+        this.show_room = true;
+        this.showRoomContent = false;
+        this.$emit('width-change', this.show_room);
+      } else {
+        this.show_room = false;
+        this.showRoomContent = true;
+        this.$emit('width-change', false);
+      }
     }
   }
 });
@@ -103,7 +141,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.box2[data-v-61759d07]{\r\n    padding: 8px 19px;\r\n    margin: 2em 0;\r\n    color: #2c2c2f;\r\n    background: #fff;\r\n    border-top: solid 5px black;\r\n    border-bottom: solid 5px black;\n}\n.box2 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\n.box3[data-v-61759d07]{\r\n    padding: 0.5em 1em;\r\n    margin: 2em 0;\r\n    color: #5d627b;\r\n    background: white;\r\n    border-top: solid 5px #5d627b;\r\n    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n}\n.box3 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -591,58 +629,94 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", { staticClass: "my-4" }, [_vm._v("ルーム")]),
-    _vm._v(" "),
-    _c("div", { staticClass: "m-screen" }, [
-      _c("div", { staticClass: "mx-2 my-4" }, [
-        _c(
-          "ol",
-          { staticClass: "no-list" },
-          _vm._l(_vm.rooms, function(room, index) {
-            return _c(
-              "li",
-              { key: index, staticClass: "input-group border my-2" },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "form-control rounded btn btn-secondary btn-lg",
-                    attrs: { type: "button", name: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.emitRoomId(index)
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\r\n            " +
-                        _vm._s(room.room_name) +
-                        "\r\n          "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteRoom(index)
-                      }
-                    }
-                  },
-                  [_vm._v("\r\n            削除\r\n          ")]
-                )
-              ]
-            )
-          }),
-          0
-        )
-      ])
-    ])
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showRoomContent,
+            expression: "showRoomContent"
+          }
+        ],
+        class: { overlay: _vm.show_room }
+      },
+      [
+        _c("div", { staticClass: "box3", class: { content: _vm.show_room } }, [
+          _c("h3", { staticClass: "my-4" }, [_vm._v("ルーム")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "m-screen" }, [
+            _c("div", { staticClass: "mx-2" }, [
+              _c(
+                "ol",
+                { staticClass: "no-list" },
+                _vm._l(_vm.rooms, function(room, index) {
+                  return _c(
+                    "li",
+                    { key: index, staticClass: "input-group border my-2" },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "form-control rounded btn btn-secondary btn-lg",
+                          attrs: { type: "button", name: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.emitRoomId(index)
+                              _vm.closeModal()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                " +
+                              _vm._s(room.room_name) +
+                              "\r\n              "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteRoom(index)
+                            }
+                          }
+                        },
+                        [_vm._v("\r\n                削除\r\n              ")]
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.show_room,
+                  expression: "show_room"
+                }
+              ],
+              attrs: { type: "button" },
+              on: { click: _vm.closeModal }
+            },
+            [_vm._v("閉じる")]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []

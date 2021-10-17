@@ -43,20 +43,20 @@ const app = new Vue({
         return {
           room_id : 0,
           login_user_id : 0,
-          buttonActive: false,
-          scroll: 0,
-          room_screen: true
+          on_login: false,
+          on_room_creater: false,
+          on_room_screen: false,
+          width_change: false
         }
     },
     created: function () {
-      window.addEventListener('resize', this.handleResize);
       this.getLoginUserId();
     },
     mounted() {
-      window.addEventListener('scroll', this.scrollWindow)
+      window.addEventListener('scroll', this.scrollWindow);
     },
     methods: {
-      screenUpdate: function (room_id) {
+      updateScreen: function (room_id) {
           this.room_id = room_id;
       },
       getLoginUserId: function () {
@@ -67,27 +67,8 @@ const app = new Vue({
         }).catch(function(error){
         });
       },
-      handleResize: function() {
-        if (window.innerWidth >= 800) {
-            this.room_screen = true
-        } else {
-            this.room_screen = false
-        }
+      getShow: function (width_change) {
+        this.width_change = width_change;
       },
-      returnTop() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-      },
-      scrollWindow() {
-        const top = 100 // ボタンを表示させたい位置
-        this.scroll = window.scrollY
-        if (top <= this.scroll) {
-          this.buttonActive = true
-        } else {
-          this.buttonActive = false
-        }
-      }
     }
 });

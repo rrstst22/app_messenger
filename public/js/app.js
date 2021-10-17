@@ -2311,13 +2311,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "LoginComponent",
+  props: {
+    on_login_screen: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: function data() {
     return {
       showContent: false,
-      users: ""
+      users: "",
+      new_user_name: ""
     };
+  },
+  watch: {
+    on_login_screen: function on_login_screen(new_openModal) {
+      this.openModal();
+    }
   },
   methods: {
     openModal: function openModal() {
@@ -2345,6 +2359,17 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (error) {});
       this.closeModal();
+    },
+    createUser: function createUser() {
+      var self = this;
+      axios.post('user_create', {
+        name: self.new_user_name
+      }).then(function (response) {
+        alert("登録しました。");
+        self.updateScreen();
+      })["catch"](function (error) {
+        alert(error.response.data.errors.name);
+      });
     }
   }
 });
@@ -2362,6 +2387,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -2547,28 +2575,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
     room_id: {
       type: Number,
       "default": null
+    },
+    on_room_screen: {
+      type: Boolean,
+      required: true
     }
   },
   data: function data() {
     return {
-      rooms: null
+      rooms: null,
+      show_room: false,
+      showRoomContent: true
     };
   },
   watch: {
     room_id: function room_id(new_room_id) {
       this.updateScreen();
+    },
+    on_room_screen: function on_room_screen(new_openModal) {
+      this.openModal();
     }
   },
   created: function created() {
     this.updateScreen();
+    this.handleResize();
+  },
+  mounted: function mounted() {
+    window.addEventListener('resize', this.handleResize);
   },
   methods: {
+    openModal: function openModal() {
+      this.showRoomContent = true;
+      this.updateScreen();
+    },
+    closeModal: function closeModal() {
+      if (this.show_room) {
+        this.showRoomContent = false;
+      }
+    },
     updateScreen: function updateScreen() {
       var self = this;
       axios.get('room_show').then(function (response) {
@@ -2592,6 +2647,17 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert(error);
       });
+    },
+    handleResize: function handleResize() {
+      if (window.innerWidth <= 800) {
+        this.show_room = true;
+        this.showRoomContent = false;
+        this.$emit('width-change', this.show_room);
+      } else {
+        this.show_room = false;
+        this.showRoomContent = true;
+        this.$emit('width-change', false);
+      }
     }
   }
 });
@@ -2649,9 +2715,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "UserComponent",
+  name: "RoomCreateComponent",
   data: function data() {
     return {
       showRoomContent: false,
@@ -2659,6 +2724,17 @@ __webpack_require__.r(__webpack_exports__);
       users: "",
       room_name: ""
     };
+  },
+  props: {
+    on_room_creater: {
+      type: Boolean,
+      required: true
+    }
+  },
+  watch: {
+    on_room_creater: function on_room_creater(new_on_room_creater) {
+      this.openRoomModal();
+    }
   },
   methods: {
     openRoomModal: function openRoomModal() {
@@ -2758,20 +2834,20 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
     return {
       room_id: 0,
       login_user_id: 0,
-      buttonActive: false,
-      scroll: 0,
-      room_screen: true
+      on_login: false,
+      on_room_creater: false,
+      on_room_screen: false,
+      width_change: false
     };
   },
   created: function created() {
-    window.addEventListener('resize', this.handleResize);
     this.getLoginUserId();
   },
   mounted: function mounted() {
     window.addEventListener('scroll', this.scrollWindow);
   },
   methods: {
-    screenUpdate: function screenUpdate(room_id) {
+    updateScreen: function updateScreen(room_id) {
       this.room_id = room_id;
     },
     getLoginUserId: function getLoginUserId() {
@@ -2780,29 +2856,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__["default"]({
         self.login_user_id = response.data;
       })["catch"](function (error) {});
     },
-    handleResize: function handleResize() {
-      if (window.innerWidth >= 800) {
-        this.room_screen = true;
-      } else {
-        this.room_screen = false;
-      }
-    },
-    returnTop: function returnTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    },
-    scrollWindow: function scrollWindow() {
-      var top = 100; // ボタンを表示させたい位置
-
-      this.scroll = window.scrollY;
-
-      if (top <= this.scroll) {
-        this.buttonActive = true;
-      } else {
-        this.buttonActive = false;
-      }
+    getShow: function getShow(width_change) {
+      this.width_change = width_change;
     }
   }
 });
@@ -7413,7 +7468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-3f20c7be] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.name-tag[data-v-3f20c7be] {\r\n  font-size: 0.8rem;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  right: 0px;\n}\n.message-box[data-v-3f20c7be] {\r\n  height: 100px;\r\n  position: relative;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-3f20c7be] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.message-section[data-v-3f20c7be] {\r\n  padding: 0.5em 1em;\r\n  margin: 2em 0;\r\n  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\r\n  background: #fff;\n}\n.message-section p[data-v-3f20c7be] {\r\n  margin: 0;\r\n  padding: 0;\n}\n.room-info-box[data-v-3f20c7be] {\r\n  padding: 0.5em 1em;\r\n  margin: 2em 0;\r\n  color: #232323;\r\n  background: #fff8e8;\r\n  border-left: solid 10px #ffc06e;\n}\n.room-info-box p[data-v-3f20c7be] {\r\n  margin: 0;\r\n  padding: 0;\n}\n.primary-message-box[data-v-3f20c7be] {\r\n  position: relative;\r\n  background: #CBFFD3;\r\n  border: none;\r\n  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\r\n  margin: 5px;\r\n  border-radius: 20px;\n}\n.secondary-message-box[data-v-3f20c7be] {\r\n  position: relative;\r\n  background: #fff;\r\n  border: none;\r\n  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\r\n  padding: 5px;\r\n  border-radius: 20px;\n}\n.name-tag[data-v-3f20c7be] {\r\n  font-size: 0.8rem;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  right: 0px;\n}\n.post-box[data-v-3f20c7be]{\r\n    padding: 8px 19px;\r\n    margin: 2em 0;\r\n    color: #2c2c2f;\r\n    background: #F8F8FF;\r\n    height: 350px;\r\n    overflow: scroll;\r\n    overflow-x: hidden;\n}\n.post-box p[data-v-3f20c7be] {\r\n    margin: 0;\r\n    padding: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -7437,7 +7492,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.no-list[data-v-61759d07] {\r\n  list-style: none;\r\n  padding-left: 0;\n}\n.box2[data-v-61759d07]{\r\n    padding: 8px 19px;\r\n    margin: 2em 0;\r\n    color: #2c2c2f;\r\n    background: #fff;\r\n    border-top: solid 5px black;\r\n    border-bottom: solid 5px black;\n}\n.box2 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\n.box3[data-v-61759d07]{\r\n    padding: 0.5em 1em;\r\n    margin: 2em 0;\r\n    color: #5d627b;\r\n    background: white;\r\n    border-top: solid 5px #5d627b;\r\n    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n}\n.box3 p[data-v-61759d07] {\r\n    margin: 0;\r\n    padding: 0;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39769,10 +39824,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("button", { on: { click: _vm.openModal } }, [
-      _vm._v("ログインユーザ選択")
-    ]),
-    _vm._v(" "),
     _c(
       "div",
       {
@@ -39828,7 +39879,39 @@ var render = function() {
               }),
               0
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "name" } }, [_vm._v("ユーザー登録")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.new_user_name,
+                expression: "new_user_name"
+              }
+            ],
+            attrs: { type: "text", name: "name", maxlength: "10" },
+            domProps: { value: _vm.new_user_name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.new_user_name = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              attrs: { type: "submit", name: "button" },
+              on: { click: _vm.createUser }
+            },
+            [_vm._v("登録")]
+          )
         ])
       ]
     )
@@ -39857,37 +39940,38 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h1", { staticClass: "my-4" }, [_vm._v("メッセージ")]),
+  return _c("div", { staticClass: "message-section" }, [
+    _c("h3", { staticClass: "my-4" }, [_vm._v("メッセージ")]),
     _vm._v(" "),
-    _c("div", [_vm._v("ルーム名：" + _vm._s(_vm.room.room_name))]),
+    _c("div", { staticClass: "room-info-box" }, [
+      _c("div", [_vm._v("ルーム名：" + _vm._s(_vm.room.room_name))]),
+      _vm._v(" "),
+      _c(
+        "div",
+        [
+          _vm._v("メンバー："),
+          _vm._l(_vm.users, function(user, index) {
+            return _c("span", { key: index }, [
+              _vm._v("あなた と " + _vm._s(user.name) + "さん ")
+            ])
+          })
+        ],
+        2
+      )
+    ]),
     _vm._v(" "),
-    _c(
-      "div",
-      [
-        _vm._v("メンバー："),
-        _vm._l(_vm.users, function(user, index) {
-          return _c("span", { key: index }, [
-            _vm._v("あなた と " + _vm._s(user.name) + "さん ")
-          ])
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "my-4 m-screen", attrs: { id: "screen" } }, [
+    _c("div", { staticClass: "my-4 post-box", attrs: { id: "screen" } }, [
       _c(
         "ol",
         { staticClass: "no-list" },
         _vm._l(_vm.messages, function(message, index) {
-          return _c("li", { key: index, staticClass: "m-4" }, [
+          return _c("li", { key: index, staticClass: "m-2" }, [
             message.sender_id === _vm.login_user_id
               ? _c("div", { staticClass: "text-right" }, [
                   _c(
                     "button",
                     {
-                      staticClass:
-                        "btn btn-primary btn-lg text-left message-box",
+                      staticClass: "text-left primary-message-box",
                       attrs: { type: "button" },
                       on: {
                         click: function($event) {
@@ -39896,7 +39980,7 @@ var render = function() {
                       }
                     },
                     [
-                      _c("div", { staticClass: "m-1" }, [
+                      _c("div", { staticClass: "p-4" }, [
                         _vm._v(
                           "\n              " +
                             _vm._s(message.message) +
@@ -39918,8 +40002,7 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-secondary btn-lg text-left",
-                      staticStyle: { height: "100px", position: "relative" },
+                      staticClass: "secondary-message-box text-left",
                       attrs: { type: "button" },
                       on: {
                         click: function($event) {
@@ -39928,7 +40011,7 @@ var render = function() {
                       }
                     },
                     [
-                      _c("div", { staticClass: "m-1" }, [
+                      _c("div", { staticClass: "p-4" }, [
                         _vm._v(
                           "\n              " +
                             _vm._s(message.message) +
@@ -39952,44 +40035,57 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "input-group m-auto" }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.send_message,
-            expression: "send_message"
-          }
-        ],
-        staticClass: "form-control rounded",
-        attrs: {
-          type: "text",
-          maxlength: "50",
-          placeholder: "text",
-          autofocus: ""
-        },
-        domProps: { value: _vm.send_message },
+    _c(
+      "form",
+      {
+        staticClass: "my-4",
         on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.send_message = $event.target.value
+          submit: function($event) {
+            $event.preventDefault()
           }
         }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-primary",
-          attrs: { type: "submit" },
-          on: { click: _vm.postMessage }
-        },
-        [_vm._v("\n      送信\n    ")]
-      )
-    ])
+      },
+      [
+        _c("div", { staticClass: "input-group m-auto" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.send_message,
+                expression: "send_message"
+              }
+            ],
+            staticClass: "form-control rounded",
+            attrs: {
+              type: "text",
+              maxlength: "50",
+              placeholder: "text",
+              autofocus: ""
+            },
+            domProps: { value: _vm.send_message },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.send_message = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-primary",
+              attrs: { type: "submit" },
+              on: { click: _vm.postMessage }
+            },
+            [_vm._v("\n        送信\n      ")]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -40016,58 +40112,94 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h1", { staticClass: "my-4" }, [_vm._v("ルーム")]),
-    _vm._v(" "),
-    _c("div", { staticClass: "m-screen" }, [
-      _c("div", { staticClass: "mx-2 my-4" }, [
-        _c(
-          "ol",
-          { staticClass: "no-list" },
-          _vm._l(_vm.rooms, function(room, index) {
-            return _c(
-              "li",
-              { key: index, staticClass: "input-group border my-2" },
-              [
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "form-control rounded btn btn-secondary btn-lg",
-                    attrs: { type: "button", name: "button" },
-                    on: {
-                      click: function($event) {
-                        return _vm.emitRoomId(index)
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\r\n            " +
-                        _vm._s(room.room_name) +
-                        "\r\n          "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary",
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteRoom(index)
-                      }
-                    }
-                  },
-                  [_vm._v("\r\n            削除\r\n          ")]
-                )
-              ]
-            )
-          }),
-          0
-        )
-      ])
-    ])
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showRoomContent,
+            expression: "showRoomContent"
+          }
+        ],
+        class: { overlay: _vm.show_room }
+      },
+      [
+        _c("div", { staticClass: "box3", class: { content: _vm.show_room } }, [
+          _c("h3", { staticClass: "my-4" }, [_vm._v("ルーム")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "m-screen" }, [
+            _c("div", { staticClass: "mx-2" }, [
+              _c(
+                "ol",
+                { staticClass: "no-list" },
+                _vm._l(_vm.rooms, function(room, index) {
+                  return _c(
+                    "li",
+                    { key: index, staticClass: "input-group border my-2" },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "form-control rounded btn btn-secondary btn-lg",
+                          attrs: { type: "button", name: "button" },
+                          on: {
+                            click: function($event) {
+                              _vm.emitRoomId(index)
+                              _vm.closeModal()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                " +
+                              _vm._s(room.room_name) +
+                              "\r\n              "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-primary",
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteRoom(index)
+                            }
+                          }
+                        },
+                        [_vm._v("\r\n                削除\r\n              ")]
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.show_room,
+                  expression: "show_room"
+                }
+              ],
+              attrs: { type: "button" },
+              on: { click: _vm.closeModal }
+            },
+            [_vm._v("閉じる")]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -40094,10 +40226,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("button", { on: { click: _vm.openRoomModal } }, [
-      _vm._v("新しくルームを作成")
-    ]),
-    _vm._v(" "),
     _c(
       "div",
       {

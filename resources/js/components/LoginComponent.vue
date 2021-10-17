@@ -1,7 +1,6 @@
 <template>
 
   <div>
-    <button v-on:click="openModal">ログインユーザ選択</button>
 
     <div id="overlay1" v-show="showContent">
       <div id="content1">
@@ -16,6 +15,9 @@
             </li>
           </ol>
         </div>
+        <label for="name">ユーザー登録</label>
+        <input type="text" name="name" v-model="new_user_name" maxlength="10">
+        <button type="submit" name="button" v-on:click="createUser">登録</button>
       </div>
     </div>
 
@@ -26,11 +28,23 @@
 <script>
 export default {
     name: "LoginComponent",
+    props: {
+      on_login_screen: {
+        type: Boolean,
+        required: true,
+      },
+    },
     data () {
         return {
           showContent: false,
           users: "",
+          new_user_name: ""
         }
+    },
+    watch: {
+      on_login_screen: function(new_openModal) {
+        this.openModal();
+      },
     },
     methods: {
       openModal: function(){
@@ -59,6 +73,17 @@ export default {
             });
         this.closeModal();
       },
+      createUser: function () {
+        var self = this;
+        axios.post('user_create', {
+          name: self.new_user_name,
+        }).then(function(response){
+          alert("登録しました。");
+          self.updateScreen();
+        }).catch(function(error){
+          alert(error.response.data.errors.name);
+        });
+      }
     }
 }
 </script>

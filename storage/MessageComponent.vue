@@ -1,20 +1,19 @@
 <template>
 
-  <div class="message-section">
-    <h3 class="my-4">メッセージ</h3>
-    <div class="room-info-box">
-      <div>ルーム名：{{ room.room_name }}</div>
-      <div>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
-    </div>
+  <div>
+    <h1 class="my-4">メッセージ</h1>
+    <div>ルーム名：{{ room.room_name }}</div>
+    <div>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
+
     <!-- メッセージ画面 -->
-    <div class="my-4 post-box" id="screen">
+    <div class="my-4 m-screen" id="screen">
       <ol class="no-list">
-        <li v-for="(message, index) in messages" v-bind:key="index" class="m-2">
+        <li v-for="(message, index) in messages" v-bind:key="index" class="m-4">
 
           <!-- 送信者によってメッセージの色を分ける -->
           <div v-if="message.sender_id === login_user_id" class="text-right">
-            <button type="button" v-on:click="writeToClipboard(message.message)" class="text-left primary-message-box">
-              <div class="p-4">
+            <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-primary btn-lg text-left message-box">
+              <div class="m-1">
                 {{ message.message }}
               </div>
               <div class="text-right mx-2 name-tag">
@@ -25,8 +24,8 @@
 
           <!-- ログイン者以外のメッセージの場合 -->
           <div v-else>
-            <button type="button" v-on:click="writeToClipboard(message.message)" class="secondary-message-box text-left">
-              <div class="p-4">
+            <button type="button" v-on:click="writeToClipboard(message.message)" class="btn btn-secondary btn-lg text-left" style="height:100px; position:relative;">
+              <div class="m-1">
                 {{ message.message }}
               </div>
               <div class="text-right mx-2 name-tag">
@@ -40,14 +39,12 @@
     </div><!-- メッセージ画面 -->
 
     <!-- 送信フォーム -->
-    <form class="my-4" v-on:submit.prevent>
-      <div class="input-group m-auto">
-        <input type="text" class="form-control rounded" maxlength="50" placeholder="text" v-model="send_message" autofocus>
-        <button type="submit" class="btn btn-outline-primary" v-on:click="postMessage">
-          送信
-        </button>
-      </div>
-    </form>
+    <div class="input-group m-auto">
+      <input type="text" class="form-control rounded" maxlength="50" placeholder="text" v-model="send_message" autofocus>
+      <button type="submit" class="btn btn-outline-primary" v-on:click="postMessage">
+        送信
+      </button>
+    </div>
 
   </div>
 
@@ -145,60 +142,14 @@ export default {
   list-style: none;
   padding-left: 0;
 }
-.message-section {
-  padding: 0.5em 1em;
-  margin: 2em 0;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-  background: #fff;
-}
-.message-section p {
-  margin: 0;
-  padding: 0;
-}
-.room-info-box {
-  padding: 0.5em 1em;
-  margin: 2em 0;
-  color: #232323;
-  background: #fff8e8;
-  border-left: solid 10px #ffc06e;
-}
-.room-info-box p {
-  margin: 0;
-  padding: 0;
-}
-.primary-message-box {
-  position: relative;
-  background: #CBFFD3;
-  border: none;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-  margin: 5px;
-  border-radius: 20px;
-}
-.secondary-message-box {
-  position: relative;
-  background: #fff;
-  border: none;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-  padding: 5px;
-  border-radius: 20px;
-}
 .name-tag {
   font-size: 0.8rem;
   position: absolute;
   bottom: 0px;
   right: 0px;
 }
-.post-box{
-    padding: 8px 19px;
-    margin: 2em 0;
-    color: #2c2c2f;
-    background: #F8F8FF;
-    height: 350px;
-    overflow: scroll;
-    overflow-x: hidden;
-}
-.post-box p {
-    margin: 0;
-    padding: 0;
+.message-box {
+  height: 100px;
+  position: relative;
 }
 </style>

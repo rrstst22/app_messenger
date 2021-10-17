@@ -1,7 +1,6 @@
 <template>
 
   <div>
-    <button v-on:click="openRoomModal">新しくルームを作成</button>
 
     <div id="overlay1" v-show="showRoomContent">
       <div id="content1">
@@ -41,7 +40,7 @@
 
 <script>
 export default {
-    name: "UserComponent",
+    name: "RoomCreateComponent",
     data () {
         return {
           showRoomContent: false,
@@ -49,6 +48,17 @@ export default {
           users: "",
           room_name: ""
         }
+    },
+    props: {
+      on_room_creater: {
+        type: Boolean,
+        required: true,
+      },
+    },
+    watch: {
+      on_room_creater: function(new_on_room_creater) {
+        this.openRoomModal();
+      },
     },
     methods: {
       openRoomModal: function(){

@@ -30,6 +30,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('autologin', [App\Http\Controllers\UserController::class, 'autologin'])->name('autologin');
 Route::post('message/guest', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('login.guest');
+Route::post('message/user_create', [App\Http\Controllers\LoginController::class, 'create'])->name('create.user');
 
 Route::get('upload_index', [App\Http\Controllers\ImageController::class, 'upload_index'])->name('upload_index');
 Route::post('upload_image', [App\Http\Controllers\ImageController::class, 'upload_image'])->name('upload_image');
