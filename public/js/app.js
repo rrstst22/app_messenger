@@ -2107,6 +2107,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CreateRoomComponent",
   data: function data() {
@@ -2162,11 +2165,13 @@ __webpack_require__.r(__webpack_exports__);
       var self = this;
 
       if (this.room_name) {
+        //ルーム名の空欄チェック
         axios.post('create-room', {
           id: this.users[index].id,
           name: this.room_name
         }).then(function (response) {
-          self.$emit('roominfo-input', response.data);
+          self.$emit('roominfo-input', response.data); //ルームコンポーネントへ変更を伝える
+
           self.room_name = "";
         })["catch"](function (error) {
           alert(error.response.data.errors);
@@ -2277,7 +2282,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     show_login_screen: function show_login_screen() {
-      this.openModal();
+      this.openModal(); //ユーザー変更ボタン押下で実行
     }
   },
   created: function created() {
@@ -2304,8 +2309,8 @@ __webpack_require__.r(__webpack_exports__);
         id: this.users[index].id
       }).then(function (response) {
         self.$router.go({
-          path: self.$router.currentRoute.path
-        });
+          path: "/message/show_message"
+        }); // ユーザー切り替えの為再読込
       })["catch"](function (error) {
         alert(error);
       });
@@ -2396,6 +2401,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MessageComponent",
   props: {
@@ -2428,8 +2435,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     room_id: function room_id() {
-      clearInterval(this.updateMessageTimer);
-      this.updateMessageTimer = setInterval(this.getMessages, 5000);
+      clearInterval(this.updateMessageTimer); //setInterval重複実行防止
+
+      this.updateMessageTimer = setInterval(this.getMessages, 5000); //メッセージを定期的にアップデート
+
       this.updateScreen();
     }
   },
@@ -2450,7 +2459,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.send_message) {
         if (this.room_id) {
           var self = this;
-          var send_message_tmp = this.send_message; //重複送信回避
+          var send_message_tmp = this.send_message; //重複送信防止
 
           this.send_message = "";
           axios.post('send-message', {
@@ -2564,6 +2573,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
@@ -2596,15 +2611,15 @@ __webpack_require__.r(__webpack_exports__);
     this.handleResize();
   },
   mounted: function mounted() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize); //リサイズ検知
   },
   methods: {
     openModal: function openModal() {
       this.show_room_content = true;
     },
     closeModal: function closeModal() {
-      //モーダル画面表示ではない場合は、何もしない。
       if (this.on_modal_mode) {
+        //モーダル画面表示ではない場合は、画面を閉じない。
         this.show_room_content = false;
       }
     },
@@ -2634,13 +2649,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     handleResize: function handleResize() {
       if (window.innerWidth <= 800) {
+        //画面幅800px以下でモーダルモード
         this.on_modal_mode = true;
         this.show_room_content = false;
-        this.$emit('screen-type-change', this.on_modal_mode);
+        this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
       } else {
         this.on_modal_mode = false;
         this.show_room_content = true;
-        this.$emit('screen-type-change', false);
+        this.$emit('screen-type-change', false); //ルーム変更ボタンの有無を調整
       }
     }
   }
@@ -39374,9 +39390,9 @@ var render = function() {
                           [
                             _c("i", { staticClass: "fas fa-user m-1" }),
                             _vm._v(
-                              "\n              " +
+                              "\n                " +
                                 _vm._s(user.name) +
-                                "\n            "
+                                "\n              "
                             )
                           ]
                         )
@@ -39660,9 +39676,9 @@ var render = function() {
                           [
                             _c("div", { staticClass: "p-4" }, [
                               _vm._v(
-                                "\r\n                  " +
+                                "\n                  " +
                                   _vm._s(message.message) +
-                                  "\r\n                "
+                                  "\n                "
                               )
                             ]),
                             _vm._v(" "),
@@ -39671,9 +39687,9 @@ var render = function() {
                               { staticClass: "text-right mx-2 name-tag" },
                               [
                                 _vm._v(
-                                  "\r\n                  " +
+                                  "\n                  " +
                                     _vm._s(message.name) +
-                                    "\r\n                "
+                                    "\n                "
                                 )
                               ]
                             )
@@ -39695,9 +39711,9 @@ var render = function() {
                           [
                             _c("div", { staticClass: "p-4" }, [
                               _vm._v(
-                                "\r\n                  " +
+                                "\n                  " +
                                   _vm._s(message.message) +
-                                  "\r\n                "
+                                  "\n                "
                               )
                             ]),
                             _vm._v(" "),
@@ -39706,9 +39722,9 @@ var render = function() {
                               { staticClass: "text-right mx-2 name-tag" },
                               [
                                 _vm._v(
-                                  "\r\n                  " +
+                                  "\n                  " +
                                     _vm._s(message.name) +
-                                    "\r\n                "
+                                    "\n                "
                                 )
                               ]
                             )
@@ -39770,7 +39786,7 @@ var render = function() {
                 attrs: { type: "submit" },
                 on: { click: _vm.sendMessage }
               },
-              [_vm._v("\r\n          送信\r\n        ")]
+              [_vm._v("\n          送信\n        ")]
             )
           ])
         ]
@@ -39903,9 +39919,9 @@ var render = function() {
                               [
                                 _c("i", { staticClass: "fas fa-users m-1" }),
                                 _vm._v(
-                                  "\r\n                  " +
+                                  "\n                  " +
                                     _vm._s(room.room_name) +
-                                    "\r\n                "
+                                    "\n                "
                                 )
                               ]
                             )
@@ -39928,7 +39944,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                  削除\r\n                "
+                                  "\n                  削除\n                "
                                 )
                               ]
                             )

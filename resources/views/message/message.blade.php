@@ -3,6 +3,7 @@
 <div id="app">
   <div class="container">
 
+    <!-- 以下のボタンでVueコンポーネントの表示切り替え -->
     <div>
       <div class="d-flex flex-row">
         <button class="btn btn-light" v-on:click="show_login_screen=!show_login_screen">
@@ -13,7 +14,7 @@
           <i class="fas fa-plus m-1"></i>
           ルーム作成
         </button>
-        <button class="btn btn-light" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode">
+        <button class="btn btn-light" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode"><!--ウィンドウ幅でボタン有無の調整-->
           <i class="fas fa-spinner m-1"></i>
           ルーム変更
         </button>
@@ -26,7 +27,6 @@
     <div>
       <login-component v-bind:show_login_screen="show_login_screen"></login-component>
     </div>
-
 
     <div class="row">
       <div class="col-md-8">

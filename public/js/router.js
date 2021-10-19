@@ -47,6 +47,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
@@ -79,15 +85,15 @@ __webpack_require__.r(__webpack_exports__);
     this.handleResize();
   },
   mounted: function mounted() {
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize); //リサイズ検知
   },
   methods: {
     openModal: function openModal() {
       this.show_room_content = true;
     },
     closeModal: function closeModal() {
-      //モーダル画面表示ではない場合は、何もしない。
       if (this.on_modal_mode) {
+        //モーダル画面表示ではない場合は、画面を閉じない。
         this.show_room_content = false;
       }
     },
@@ -117,13 +123,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     handleResize: function handleResize() {
       if (window.innerWidth <= 800) {
+        //画面幅800px以下でモーダルモード
         this.on_modal_mode = true;
         this.show_room_content = false;
-        this.$emit('screen-type-change', this.on_modal_mode);
+        this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
       } else {
         this.on_modal_mode = false;
         this.show_room_content = true;
-        this.$emit('screen-type-change', false);
+        this.$emit('screen-type-change', false); //ルーム変更ボタンの有無を調整
       }
     }
   }
@@ -726,9 +733,9 @@ var render = function() {
                               [
                                 _c("i", { staticClass: "fas fa-users m-1" }),
                                 _vm._v(
-                                  "\r\n                  " +
+                                  "\n                  " +
                                     _vm._s(room.room_name) +
-                                    "\r\n                "
+                                    "\n                "
                                 )
                               ]
                             )
@@ -751,7 +758,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\r\n                  削除\r\n                "
+                                  "\n                  削除\n                "
                                 )
                               ]
                             )

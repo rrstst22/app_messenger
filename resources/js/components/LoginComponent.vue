@@ -1,7 +1,7 @@
 <template>
 
   <div>
-
+      <!-- 親コンポーネントのボタンクリックを検知し表示 -->
       <div class="overlay" v-show="show_content">
         <transition name="vbounce">
         <div class="content" v-show="show_content">
@@ -48,7 +48,7 @@ export default {
     },
     watch: {
       show_login_screen: function() {
-        this.openModal();
+        this.openModal(); //ユーザー変更ボタン押下で実行
       },
     },
     created: function () {
@@ -75,7 +75,7 @@ export default {
           id : this.users[index].id
         })
             .then(function(response){
-              self.$router.go({path: self.$router.currentRoute.path});
+              self.$router.go({path: "/message/show_message"}); // ユーザー切り替えの為再読込
             }).catch(function(error){
               alert(error);
             });

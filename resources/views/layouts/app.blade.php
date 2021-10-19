@@ -19,8 +19,6 @@
     <script src="https://kit.fontawesome.com/a4d6751d2b.js" crossorigin="anonymous"></script> <!-- Font Awsome -->
 </head>
 <body>
-
-
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -75,6 +73,7 @@
             </div>
         </nav>
 
+        <!-- メインコンテンツ -->
         <main class="py-4">
             @yield('content')
         </main>

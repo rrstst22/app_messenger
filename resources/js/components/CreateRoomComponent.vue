@@ -1,8 +1,10 @@
 <template>
 
   <div>
-      <div class="overlay" v-show="show_overlay">
-        <transition name="vslide">
+    <!-- 親コンポーネントのボタンクリックを検知し表示 -->
+    <div class="overlay" v-show="show_overlay">
+      <transition name="vslide">
+        <!-- １画面目 -->
         <div class="content" v-show="show_room_content">
           <h3 class="my-4"><i class="fas fa-home m-1"></i>ルーム名の入力</h3>
           <div class="text-center border-top border-bottom">
@@ -17,23 +19,24 @@
       </transition>
 
       <transition name="vbounce2">
-      <div class="content" v-show="show_user_content">
-        <h3 class="my-4"><i class="fas fa-user m-1"></i>トーク相手の選択</h3>
-        <div class="m-2 text-center border-top border-bottom">
-          <button class="btn btn-light" v-on:click="backModal"><i class="fas fa-arrow-circle-left m-1"></i>戻る</button>
-          <button class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
+        <!-- ２画面目 -->
+        <div class="content" v-show="show_user_content">
+          <h3 class="my-4"><i class="fas fa-user m-1"></i>トーク相手の選択</h3>
+          <div class="m-2 text-center border-top border-bottom">
+            <button class="btn btn-light" v-on:click="backModal"><i class="fas fa-arrow-circle-left m-1"></i>戻る</button>
+            <button class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
+          </div>
+          <div class="mx-2 my-4 user-list border-top">
+            <ol class="no-list">
+              <li class="input-group border-bottom" v-for="(user, index) in users" v-bind:key="index">
+                <button type="button" class="form-control rounded btn btn-light" v-on:click="createRoom(index)">
+                  <i class="fas fa-user m-1"></i>
+                  {{ user.name }}
+                </button>
+              </li>
+            </ol>
+          </div>
         </div>
-        <div class="mx-2 my-4 user-list border-top">
-          <ol class="no-list">
-            <li class="input-group border-bottom" v-for="(user, index) in users" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-light" v-on:click="createRoom(index)">
-                <i class="fas fa-user m-1"></i>
-                {{ user.name }}
-              </button>
-            </li>
-          </ol>
-        </div>
-      </div>
       </transition>
     </div>
   </div>
@@ -94,13 +97,13 @@ export default {
       },
       createRoom: function (index) {
         var self = this;
-        if(this.room_name){
+        if(this.room_name){ //ルーム名の空欄チェック
           axios.post('create-room', {
             id : this.users[index].id,
             name : this.room_name
           })
               .then(function(response){
-                self.$emit('roominfo-input', response.data);
+                self.$emit('roominfo-input', response.data); //ルームコンポーネントへ変更を伝える
                 self.room_name = "";
               }).catch(function(error){
                 alert(error.response.data.errors);

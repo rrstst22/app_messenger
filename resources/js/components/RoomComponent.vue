@@ -1,36 +1,42 @@
 <template>
-<div>
-  <div v-bind:class="{overlay:on_modal_mode}" v-show="show_room_content">
-    <transition name="vbounce">
-      <div class="room-section" v-bind:class="{content:on_modal_mode}" v-show="show_room_content">
-        <h3 class="py-4"><i class="fas fa-home m-1"></i>ルーム選択</h3>
 
-        <div class="text-center border-top border-bottom">
-          <button type="button" class="btn btn-light" v-on:click="closeModal" v-show="on_modal_mode"><i class="fas fa-times m-1"></i>閉じる</button>
+  <div>
+    <!-- classの抜差しで、通常モードとモーダルモードの切り替え -->
+    <div v-bind:class="{overlay:on_modal_mode}" v-show="show_room_content">
+      <transition name="vbounce">
+        <div class="room-section" v-bind:class="{content:on_modal_mode}" v-show="show_room_content">
+          <h3 class="py-4"><i class="fas fa-home m-1"></i>ルーム選択</h3>
+
+          <div class="text-center border-top border-bottom">
+            <button type="button" class="btn btn-light" v-on:click="closeModal" v-show="on_modal_mode"><i class="fas fa-times m-1"></i>閉じる</button>
+          </div>
+
+          <div class="mx-2 my-4 room-list border-top">
+            <ol class="no-list">
+              <li class="input-group border-bottom" v-for="(room, index) in rooms" v-bind:key="index">
+
+                <transition name="vfade" appear>
+                  <button type="button" class="form-control rounded btn btn-light" name="button" v-on:click="showMessages(index); closeModal()">
+                    <i class="fas fa-users m-1"></i>
+                    {{ room.room_name }}
+                  </button>
+                </transition>
+
+                <transition name="vfade" appear>
+                  <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
+                    削除
+                  </button>
+                </transition>
+
+              </li>
+            </ol>
+          </div>
+
         </div>
-
-        <div class="mx-2 my-4 room-list border-top">
-          <ol class="no-list">
-            <li class="input-group border-bottom" v-for="(room, index) in rooms" v-bind:key="index">
-              <transition name="vfade" appear>
-                <button type="button" class="form-control rounded btn btn-light" name="button" v-on:click="showMessages(index); closeModal()">
-                  <i class="fas fa-users m-1"></i>
-                  {{ room.room_name }}
-                </button>
-              </transition>
-              <transition name="vfade" appear>
-                <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
-                  削除
-                </button>
-              </transition>
-            </li>
-          </ol>
-        </div>
-
-      </div>
-    </transition>
+      </transition>
+    </div>
   </div>
-</div>
+
 </template>
 
 <script>
@@ -66,15 +72,14 @@ export default {
       this.handleResize();
     },
     mounted() {
-      window.addEventListener('resize', this.handleResize);
+      window.addEventListener('resize', this.handleResize); //リサイズ検知
     },
     methods: {
       openModal: function(){
         this.show_room_content = true;
       },
       closeModal: function(){
-        //モーダル画面表示ではない場合は、何もしない。
-        if(this.on_modal_mode){
+        if(this.on_modal_mode){   //モーダル画面表示ではない場合は、画面を閉じない。
           this.show_room_content = false;
         }
       },
@@ -100,14 +105,14 @@ export default {
             });
       },
       handleResize: function() {
-        if (window.innerWidth <= 800) {
+        if (window.innerWidth <= 800) { //画面幅800px以下でモーダルモード
             this.on_modal_mode = true;
             this.show_room_content = false;
-            this.$emit('screen-type-change', this.on_modal_mode);
+            this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
         } else {
             this.on_modal_mode = false;
             this.show_room_content = true;
-            this.$emit('screen-type-change', false);
+            this.$emit('screen-type-change', false); //ルーム変更ボタンの有無を調整
         }
       },
     }
