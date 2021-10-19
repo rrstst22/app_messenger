@@ -2,26 +2,29 @@
 
   <div>
 
-    <div class="overlay" v-show="show_content">
-      <div class="content">
-        <h3 class="my-4">ログインユーザーの選択</h3>
-        <button class="btn btn-secondary" v-on:click="closeModal">閉じる</button>
+      <div class="overlay" v-show="show_content">
+        <transition name="vbounce">
+        <div class="content" v-show="show_content">
+          <h4 class="my-4"><i class="fas fa-users m-1"></i>ログインユーザーの選択</h4>
+          <button class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
 
-        <div class="mx-2 my-4 px-2 user-list">
-          <ol class="no-list">
-            <li class="input-group border my-2" v-for="(user, index) in users" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-secondary" v-on:click="guestLogin(index); closeModal()">
-                {{ user.name }}
-              </button>
-            </li>
-          </ol>
+          <div class="mx-2 my-4 user-list border-top">
+            <ol class="no-list">
+              <li class="input-group border-bottom" v-for="(user, index) in users" v-bind:key="index">
+                <button type="button" class="form-control rounded btn btn-light" v-on:click="guestLogin(index); closeModal()">
+                  <i class="fas fa-user m-1"></i>
+                  {{ user.name }}
+                </button>
+              </li>
+            </ol>
+          </div>
+
+          <label for="name"><i class="fas fa-user-plus m-1"></i>ユーザー登録</label>
+          <input type="text" name="name" v-model="new_user_name" maxlength="10">
+          <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
         </div>
-
-        <label for="name">ユーザー登録</label>
-        <input type="text" name="name" v-model="new_user_name" maxlength="10">
-        <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
+      </transition>
       </div>
-    </div>
 
   </div>
 

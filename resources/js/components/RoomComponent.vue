@@ -1,27 +1,35 @@
 <template>
 <div>
-
   <div v-bind:class="{overlay:on_modal_mode}" v-show="show_room_content">
-    <div v-bind:class="{content:on_modal_mode}" class="room-section">
-      <h3 class="my-2">ルームの選択</h3>
+    <transition name="vbounce">
+      <div class="room-section" v-bind:class="{content:on_modal_mode}" v-show="show_room_content">
+        <h3 class="py-4"><i class="fas fa-home m-1"></i>ルーム選択</h3>
 
-      <div class="px-2 room-list">
-        <ol class="no-list">
-          <li class="input-group border my-2" v-for="(room, index) in rooms" v-bind:key="index">
-            <button type="button" class="form-control rounded btn btn-secondary" name="button" v-on:click="showMessages(index); closeModal()">
-              {{ room.room_name }}
-            </button>
-            <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
-              削除
-            </button>
-          </li>
-        </ol>
+        <div class="text-center border-top border-bottom">
+          <button type="button" class="btn btn-light" v-on:click="closeModal" v-show="on_modal_mode"><i class="fas fa-times m-1"></i>閉じる</button>
+        </div>
+
+        <div class="mx-2 my-4 room-list border-top">
+          <ol class="no-list">
+            <li class="input-group border-bottom" v-for="(room, index) in rooms" v-bind:key="index">
+              <transition name="vfade" appear>
+                <button type="button" class="form-control rounded btn btn-light" name="button" v-on:click="showMessages(index); closeModal()">
+                  <i class="fas fa-users m-1"></i>
+                  {{ room.room_name }}
+                </button>
+              </transition>
+              <transition name="vfade" appear>
+                <button class="btn btn-outline-primary" v-on:click="deleteRoom(index)">
+                  削除
+                </button>
+              </transition>
+            </li>
+          </ol>
+        </div>
+
       </div>
-
-      <button type="button" v-on:click="closeModal" v-show="on_modal_mode">閉じる</button>
-    </div>
+    </transition>
   </div>
-
 </div>
 </template>
 
@@ -111,7 +119,6 @@ export default {
     margin: 2em 0;
     color: #5d627b;
     background: white;
-    border-top: solid 5px #5d627b;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
 }
 .room-section p {
@@ -119,7 +126,7 @@ export default {
     padding: 0;
 }
 .room-list {
-  height: 500px;
+  height: 350px;
   overflow: scroll;
   overflow-x: hidden;
 }

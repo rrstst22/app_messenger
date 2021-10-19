@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    //return view('index');
+    return redirect()->route('show.message');
 });
 
 Auth::routes();

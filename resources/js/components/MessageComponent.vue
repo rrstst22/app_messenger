@@ -1,41 +1,43 @@
 <template>
-
+<div>
   <div class="message-section">
-    <h3 class="my-3">メッセージ</h3>
-    <div class="room-info-box">
-      <div>ルーム名：{{ room.room_name }}</div>
-      <div>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
+    <h3 class="py-4"><i class="fas fa-comments m-1"></i>メッセージ</h3>
+    <div class="py-2 border-top border-bottom">
+      <div><i class="fas fa-home m-1"></i>ルーム名：{{ room.room_name }}</div>
+      <div><i class="fas fa-users m-1"></i>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
     </div>
     <!-- メッセージ画面 -->
     <div class="my-2 post-box" id="screen">
       <ol class="no-list">
-        <li v-for="(message, index) in messages" v-bind:key="index" class="m-2">
+          <li v-for="(message, index) in messages" v-bind:key="index" class="m-2">
 
-          <!-- 送信者によってメッセージの色を分ける -->
-          <div v-if="message.sender_id === login_user_id" class="text-right">
-            <button type="button" v-on:click="writeToClipboard(message.message)" class="text-left primary-message-box">
-              <div class="p-4">
-                {{ message.message }}
-              </div>
-              <div class="text-right mx-2 name-tag">
-                {{ message.name}}
-              </div>
-            </button>
-          </div>
+            <transition name="vfade" appear>
+            <!-- 送信者によってメッセージの色を分ける -->
+            <div v-if="message.sender_id === login_user_id" class="text-right">
+              <button type="button" v-on:click="writeToClipboard(message.message)" class="text-left primary-message-box">
+                <div class="p-4">
+                  {{ message.message }}
+                </div>
+                <div class="text-right mx-2 name-tag">
+                  {{ message.name}}
+                </div>
+              </button>
+            </div>
 
-          <!-- ログイン者以外のメッセージの場合 -->
-          <div v-else>
-            <button type="button" v-on:click="writeToClipboard(message.message)" class="secondary-message-box text-left">
-              <div class="p-4">
-                {{ message.message }}
-              </div>
-              <div class="text-right mx-2 name-tag">
-                {{ message.name}}
-              </div>
-            </button>
-          </div>
+            <!-- ログイン者以外のメッセージの場合 -->
+            <div v-else>
+              <button type="button" v-on:click="writeToClipboard(message.message)" class="secondary-message-box text-left">
+                <div class="p-4">
+                  {{ message.message }}
+                </div>
+                <div class="text-right mx-2 name-tag">
+                  {{ message.name}}
+                </div>
+              </button>
+            </div>
+          </transition>
 
-        </li>
+          </li>
       </ol>
     </div><!-- メッセージ画面 -->
 
@@ -48,9 +50,8 @@
         </button>
       </div>
     </form>
-
   </div>
-
+</div>
 </template>
 
 <script>
@@ -71,41 +72,33 @@ export default {
           users: "",
           send_message: "",
           room: {room_name: "ルームが選択されていません。"},
+          updateMessageTimer: "",
           messages: {
             message1: {message:"ようこそ！！"},
-            message2: {message:"新しくトークを始める場合は、上の「新しくルームを作成」を押してね。"}
+            message2: {message:"新しくトークを始める場合は、上の「新しくルームを作成」を押してね。"},
           },
         }
     },
     watch: {
       room_id: function() {
+        clearInterval(this.updateMessageTimer);
+        this.updateMessageTimer = setInterval(this.getMessages, 5000);
         this.updateScreen();
       },
+    },
+    created: function () {
     },
     updated: function() {
       this.scrollToEnd();
     },
+    destroyed: function () {
+      clearInterval(this.updateMessageTimer);
+    },
     methods: {
       updateScreen: function () {
-        var self = this;
-        axios.get('get-messages', {params:{room_id: this.room_id}})
-            .then(function(response){
-              self.messages = response.data;
-            }).catch(function(error){
-              alert(error);
-            });
-        axios.get('get-room', {params:{room_id: this.room_id}})
-            .then(function(response){
-              self.room = response.data;
-            }).catch(function(error){
-              alert(error);
-            });
-        axios.get('get-room-users', {params:{room_id: this.room_id}})
-            .then(function(response){
-              self.users = response.data;
-            }).catch(function(error){
-              alert(error);
-            });
+        this.getMessages();
+        this.getRoom();
+        this.getRoomUsers();
       },
       sendMessage: function () {
         if(this.send_message){
@@ -126,6 +119,33 @@ export default {
             alert("ルームを選択してください。");
           }
         }
+      },
+      getMessages: function () {
+        var self = this;
+        axios.get('get-messages', {params:{room_id: this.room_id}})
+            .then(function(response){
+              self.messages = response.data;
+            }).catch(function(error){
+              alert(error);
+            });
+      },
+      getRoom: function () {
+        var self = this;
+        axios.get('get-room', {params:{room_id: this.room_id}})
+            .then(function(response){
+              self.room = response.data;
+            }).catch(function(error){
+              alert(error);
+            });
+      },
+      getRoomUsers: function () {
+        var self = this;
+        axios.get('get-room-users', {params:{room_id: this.room_id}})
+            .then(function(response){
+              self.users = response.data;
+            }).catch(function(error){
+              alert(error);
+            });
       },
       scrollToEnd: function () {
         var obj = document.getElementById('screen');
@@ -153,22 +173,10 @@ export default {
   margin: 0;
   padding: 0;
 }
-.room-info-box {
-  padding: 0.5em 1em;
-  margin: 2px 0;
-  color: #232323;
-  background: #fff8e8;
-  border-left: solid 10px #ffc06e;
-}
-.room-info-box p {
-  margin: 0;
-  padding: 0;
-}
 .primary-message-box {
   position: relative;
   background: #CBFFD3;
   border: none;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
   margin: 5px;
   border-radius: 20px;
 }
@@ -176,8 +184,7 @@ export default {
   position: relative;
   background: #fff;
   border: none;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-  padding: 5px;
+  margin: 5px;
   border-radius: 20px;
 }
 .name-tag {
@@ -189,8 +196,7 @@ export default {
 .post-box{
     padding: 8px 19px;
     margin: 2em 0;
-    color: #2c2c2f;
-    background: #F8F8FF;
+    background: #F0F8FF;
     height: 350px;
     overflow: scroll;
     overflow-x: hidden;
