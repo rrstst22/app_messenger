@@ -2110,6 +2110,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CreateRoomComponent",
   data: function data() {
@@ -2128,15 +2130,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   watch: {
-    show_room_creater: function show_room_creater(new_show_room_creater) {
+    show_room_creater: function show_room_creater() {
       this.openRoomModal();
     }
   },
-  created: function created() {
-    this.updateScreen();
-  },
   methods: {
     openRoomModal: function openRoomModal() {
+      this.updateScreen();
       this.show_overlay = true;
       this.show_room_content = true;
     },
@@ -2233,6 +2233,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
 //
 //
 //
@@ -39253,66 +39255,82 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c(
-                "div",
-                { staticClass: "text-center border-top border-bottom" },
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                    }
+                  }
+                },
                 [
                   _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-light",
-                      on: { click: _vm.closeModal }
-                    },
+                    "div",
+                    { staticClass: "text-center border-top border-bottom" },
                     [
-                      _c("i", { staticClass: "fas fa-times m-1" }),
-                      _vm._v("閉じる")
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-light",
+                          attrs: { type: "button" },
+                          on: { click: _vm.closeModal }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-times m-1" }),
+                          _vm._v("閉じる")
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-light",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.nextModal }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-arrow-circle-right m-1"
+                          }),
+                          _vm._v("次へ")
+                        ]
+                      )
                     ]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-light",
-                      on: { click: _vm.nextModal }
-                    },
-                    [
-                      _c("i", { staticClass: "fas fa-arrow-circle-right m-1" }),
-                      _vm._v("次へ")
-                    ]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "mx-2 my-4" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.room_name,
-                      expression: "room_name"
-                    }
-                  ],
-                  attrs: {
-                    type: "text",
-                    name: "room_name",
-                    maxlength: "12",
-                    placeholder: "ルーム名"
-                  },
-                  domProps: { value: _vm.room_name },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                  _c("div", { staticClass: "mx-2 my-4" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.room_name,
+                          expression: "room_name"
+                        }
+                      ],
+                      attrs: {
+                        type: "text",
+                        name: "room_name",
+                        maxlength: "12",
+                        placeholder: "ルーム名"
+                      },
+                      domProps: { value: _vm.room_name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.room_name = $event.target.value
+                        }
                       }
-                      _vm.room_name = $event.target.value
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("small", { staticClass: "form-text text-muted" }, [
-                  _vm._v("※12文字以内")
-                ])
-              ])
+                    }),
+                    _vm._v(" "),
+                    _c("small", { staticClass: "form-text text-muted" }, [
+                      _vm._v("※12文字以内")
+                    ])
+                  ])
+                ]
+              )
             ]
           )
         ]),
@@ -39559,40 +39577,52 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("label", { attrs: { for: "name" } }, [
-                _c("i", { staticClass: "fas fa-user-plus m-1" }),
-                _vm._v("ユーザー登録")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.new_user_name,
-                    expression: "new_user_name"
-                  }
-                ],
-                attrs: { type: "text", name: "name", maxlength: "10" },
-                domProps: { value: _vm.new_user_name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.new_user_name = $event.target.value
-                  }
-                }
-              }),
-              _vm._v(" "),
               _c(
-                "button",
+                "form",
                 {
-                  staticClass: "btn btn-success",
-                  attrs: { type: "submit", name: "button" },
-                  on: { click: _vm.createUser }
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                    }
+                  }
                 },
-                [_vm._v("登録")]
+                [
+                  _c("label", { attrs: { for: "name" } }, [
+                    _c("i", { staticClass: "fas fa-user-plus m-1" }),
+                    _vm._v("ユーザー登録")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.new_user_name,
+                        expression: "new_user_name"
+                      }
+                    ],
+                    attrs: { type: "text", name: "name", maxlength: "10" },
+                    domProps: { value: _vm.new_user_name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.new_user_name = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "submit", name: "button" },
+                      on: { click: _vm.createUser }
+                    },
+                    [_vm._v("登録")]
+                  )
+                ]
               )
             ]
           )
