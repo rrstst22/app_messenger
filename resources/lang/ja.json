@@ -9,5 +9,7 @@
   "Logout": "ログアウト",
   "Reset Password": "パスワードをリセット",
   "Send Password Reset Link": "リセット用するリンクを送る",
-  "Confirm Password": "確認用"
+  "Confirm Password": "確認用",
+  "Dashboard": "ログイン完了",
+  "You are logged in!": "ログインが完了しました。"
 }

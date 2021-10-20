@@ -14,14 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    //return view('index');
     return redirect()->route('show.message');
 });
 
 Auth::routes();
 
-Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('autologin', [App\Http\Controllers\UserController::class, 'autologin'])->name('autologin');
+Route::get('auto-login', [App\Http\Controllers\UserController::class, 'autoLogin'])->name('auto.login');
 
 Route::group(['prefix' => 'message'], function(){
   Route::post('guest-login', [App\Http\Controllers\LoginController::class, 'guestLogin'])->name('guest.login');

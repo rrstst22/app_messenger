@@ -7,14 +7,16 @@
         <!-- １画面目 -->
         <div class="content" v-show="show_room_content">
           <h3 class="my-4"><i class="fas fa-home m-1"></i>ルーム名の入力</h3>
-          <div class="text-center border-top border-bottom">
-            <button class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
-            <button class="btn btn-light" v-on:click="nextModal"><i class="fas fa-arrow-circle-right m-1"></i>次へ</button>
-          </div>
-          <div class="mx-2 my-4">
-            <input type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
-            <small class="form-text text-muted">※12文字以内</small>
-          </div>
+          <form v-on:submit.prevent>
+            <div class="text-center border-top border-bottom">
+              <button type="button" class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
+              <button type="submit" class="btn btn-light" v-on:click="nextModal"><i class="fas fa-arrow-circle-right m-1"></i>次へ</button>
+            </div>
+            <div class="mx-2 my-4">
+              <input type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
+              <small class="form-text text-muted">※12文字以内</small>
+            </div>
+          </form>
         </div>
       </transition>
 
@@ -62,15 +64,13 @@ export default {
       },
     },
     watch: {
-      show_room_creater: function(new_show_room_creater) {
+      show_room_creater: function() {
         this.openRoomModal();
       },
     },
-    created: function () {
-      this.updateScreen();
-    },
     methods: {
       openRoomModal: function(){
+        this.updateScreen();
         this.show_overlay = true;
         this.show_room_content = true;
       },
