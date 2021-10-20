@@ -9,7 +9,7 @@ const router = new VueRouter({
     mode: "history",
     routes: [
         {
-            path: "/message/message_show",
+            path: "/message/show_message",
             name: "show",
             component: show
         }

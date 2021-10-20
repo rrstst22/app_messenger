@@ -1,36 +1,42 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
+<div id="app">
+  <div class="container">
 
-<div class="test">
-      <button v-show="buttonActive" @click="returnTop" class="px-2 py-2 bg-dark" style="width: 50px; height: 50px;">
-
-      </button>
-</div>
-
-  <div>
-    <div class="d-flex flex-row">
-      <div>
-        <room-create-component ref="child" @screen-update="screenUpdate"></room-create-component>
+    <!-- 以下のボタンでVueコンポーネントの表示切り替え -->
+    <div>
+      <div class="d-flex flex-row">
+        <button class="btn btn-light" v-on:click="show_login_screen=!show_login_screen">
+          <i class="fas fa-users m-1"></i>
+          ユーザ変更
+        </button>
+        <button class="btn btn-light" v-on:click="show_room_creater=!show_room_creater">
+          <i class="fas fa-plus m-1"></i>
+          ルーム作成
+        </button>
+        <button class="btn btn-light" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode"><!--ウィンドウ幅でボタン有無の調整-->
+          <i class="fas fa-spinner m-1"></i>
+          ルーム変更
+        </button>
       </div>
-      <div>
-        <login-component></login-component>
-      </div>
+    </div>
+
+    <div>
+      <create-room-component v-bind:show_room_creater="show_room_creater" v-on:roominfo-input="updateRoomId"></create-room-component>
+    </div>
+    <div>
+      <login-component v-bind:show_login_screen="show_login_screen"></login-component>
     </div>
 
     <div class="row">
-
       <div class="col-md-8">
-        <message-component v-bind:room_id="room_id" v-bind:login_user_id="login_user_id" ref="child"></message-component>
+        <message-component v-bind:room_id="room_id" v-bind:login_user_id="login_user_id"></message-component>
       </div>
-
-      <div class="col-md-4" v-show="room_screen">
-        <room-component v-bind:room_id="room_id" @screen-update="screenUpdate"></room-component>
+      <div class="col-md-4">
+        <room-component v-bind:room_id="room_id" v-bind:show_room_screen="show_room_screen" v-on:room-click="updateRoomId" v-on:screen-type-change="switchRoomButton"></room-component>
       </div>
-
     </div>
 
   </div>
-
 </div>
 @endsection

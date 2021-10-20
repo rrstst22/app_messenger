@@ -23,11 +23,9 @@ import router from './router'
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('like-component', require('./components/LikeComponent.vue').default);
-Vue.component('liked-component', require('./components/LikedComponent.vue').default);
 Vue.component('message-component', require('./components/MessageComponent.vue').default);
 Vue.component('room-component', require('./components/RoomComponent.vue').default);
-Vue.component('room-create-component', require('./components/RoomCreateComponent.vue').default);
+Vue.component('create-room-component', require('./components/CreateRoomComponent.vue').default);
 Vue.component('login-component', require('./components/LoginComponent.vue').default);
 
 /**
@@ -43,51 +41,30 @@ const app = new Vue({
         return {
           room_id : 0,
           login_user_id : 0,
-          buttonActive: false,
-          scroll: 0,
-          room_screen: true
+          show_login_screen: false,
+          show_room_creater: false,
+          show_room_screen: false,
+          on_modal_mode: false
         }
     },
     created: function () {
-      window.addEventListener('resize', this.handleResize);
       this.getLoginUserId();
     },
-    mounted() {
-      window.addEventListener('scroll', this.scrollWindow)
-    },
     methods: {
-      screenUpdate: function (room_id) {
+      updateRoomId: function (room_id) {
           this.room_id = room_id;
       },
       getLoginUserId: function () {
         var self = this;
-        axios.get('userid_get')
+        axios.get('get-login-user-id')
         .then(function(response){
           self.login_user_id = response.data;
         }).catch(function(error){
         });
       },
-      handleResize: function() {
-        if (window.innerWidth >= 800) {
-            this.room_screen = true
-        } else {
-            this.room_screen = false
-        }
+      //ウィンドウ幅によって「ルームの表示」ボタンの表示を決定
+      switchRoomButton: function (on_modal_mode) {
+        this.on_modal_mode = on_modal_mode;
       },
-      returnTop() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-      },
-      scrollWindow() {
-        const top = 100 // ボタンを表示させたい位置
-        this.scroll = window.scrollY
-        if (top <= this.scroll) {
-          this.buttonActive = true
-        } else {
-          this.buttonActive = false
-        }
-      }
     }
 });

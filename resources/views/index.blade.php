@@ -1,14 +1,12 @@
 @extends('layouts.app')
 @section('content')
+<div id="loading">
+  <div class="spinner"></div>
+</div>
+
 <div class="container">
   <div>
-    <a href="{{ route('image_show') }}">画像管理</a>
-  </div>
-  <div>
-    <a href="{{ route('csv_index') }}">CSV入力</a>
-  </div>
-  <div>
-    <a href="{{ route('message.show') }}">メッセージ</a>
+    <a href="{{ route('show.message') }}">メッセージ</a>
   </div>
 </div>
 @endsection

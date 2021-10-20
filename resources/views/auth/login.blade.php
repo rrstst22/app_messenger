@@ -53,7 +53,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" disabled>
                                     {{ __('Login') }}
                                 </button>
 
@@ -66,7 +66,7 @@
                         </div>
                     </form>
                     <div class="">
-                      <a href="{{ route('autologin') }}"><button type="button" class="btn btn-danger" name="button">簡易ログイン←</button></a>
+                      <a href="{{ route('autologin') }}"><button type="button" class="btn btn-danger" name="button">簡易ログイン</button></a>
                     </div>
                 </div>
             </div>

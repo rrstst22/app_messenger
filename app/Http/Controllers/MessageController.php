@@ -21,7 +21,7 @@ class MessageController extends Controller
     return view('message/message');
   }
 
-  public function get(Request $request)
+  public function getMessages(Request $request)
   {
     if(!is_null($request->room_id)){
       $user_id = Auth::id();
@@ -35,7 +35,7 @@ class MessageController extends Controller
     return $messages;
   }
 
-  public function send(Request $request)
+  public function sendMessage(Request $request)
   {
     $request->validate([
       'message' => 'required|string|max:50'

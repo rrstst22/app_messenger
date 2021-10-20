@@ -1,23 +1,30 @@
 <template>
 
   <div>
-    <button v-on:click="openModal">ログインユーザ選択</button>
+      <!-- 親コンポーネントのボタンクリックを検知し表示 -->
+      <div class="overlay" v-show="show_content">
+        <transition name="vbounce">
+        <div class="content" v-show="show_content">
+          <h4 class="my-4"><i class="fas fa-users m-1"></i>ログインユーザーの選択</h4>
+          <button class="btn btn-light" v-on:click="closeModal"><i class="fas fa-times m-1"></i>閉じる</button>
 
-    <div id="overlay1" v-show="showContent">
-      <div id="content1">
-        <h2 class="my-4">ユーザーを選択してください。</h2>
-        <button v-on:click="closeModal">Close</button>
-        <div class="mx-2 my-4">
-          <ol class="no-list">
-            <li class="input-group border my-2" v-for="(user, index) in users" v-bind:key="index">
-              <button type="button" class="form-control rounded btn btn-secondary btn-lg" v-on:click="postUserId(index)">
-                {{ user.name }}
-              </button>
-            </li>
-          </ol>
+          <div class="mx-2 my-4 user-list border-top">
+            <ol class="no-list">
+              <li class="input-group border-bottom" v-for="(user, index) in users" v-bind:key="index">
+                <button type="button" class="form-control rounded btn btn-light" v-on:click="guestLogin(index); closeModal()">
+                  <i class="fas fa-user m-1"></i>
+                  {{ user.name }}
+                </button>
+              </li>
+            </ol>
+          </div>
+
+          <label for="name"><i class="fas fa-user-plus m-1"></i>ユーザー登録</label>
+          <input type="text" name="name" v-model="new_user_name" maxlength="10">
+          <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
         </div>
+      </transition>
       </div>
-    </div>
 
   </div>
 
@@ -26,45 +33,73 @@
 <script>
 export default {
     name: "LoginComponent",
+    props: {
+      show_login_screen: {
+        type: Boolean,
+        required: true,
+      },
+    },
     data () {
         return {
-          showContent: false,
+          show_content: false,
           users: "",
+          new_user_name: ""
         }
+    },
+    watch: {
+      show_login_screen: function() {
+        this.openModal(); //ユーザー変更ボタン押下で実行
+      },
+    },
+    created: function () {
+      this.updateScreen();
     },
     methods: {
       openModal: function(){
-        this.showContent = true;
-        this.updateScreen();
+        this.show_content = true;
       },
       closeModal: function(){
-        this.showContent = false;
+        this.show_content = false;
       },
       updateScreen: function () {
         var self = this;
-        axios.get('user_show').then(function(response){
+        axios.get('get-other-users').then(function(response){
                 self.users = response.data;
             }).catch(function(error){
                 alert(error);
             });
       },
-      postUserId: function (index) {
+      guestLogin: function (index) {
         var self = this;
-        axios.post('guest', {
+        axios.post('guest-login', {
           id : this.users[index].id
         })
             .then(function(response){
-              self.$router.go({path: self.$router.currentRoute.path});
+              self.$router.go({path: "/message/show_message"}); // ユーザー切り替えの為再読込
             }).catch(function(error){
+              alert(error);
             });
-        this.closeModal();
       },
+      createUser: function () {
+        var self = this;
+        if(this.new_user_name){
+          axios.post('create-user', {
+            name: self.new_user_name,
+          }).then(function(response){
+            alert("登録しました。");
+            self.updateScreen();
+          }).catch(function(error){
+            alert(error.response.data.errors.name);
+          });
+        }
+      }
     }
 }
 </script>
 <style scoped>
-.no-list {
-  list-style: none;
-  padding-left: 0;
+.user-list {
+  height: 350px;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 </style>
