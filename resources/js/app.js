@@ -22,7 +22,6 @@ import router from './router'
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('message-component', require('./components/MessageComponent.vue').default);
 Vue.component('room-component', require('./components/RoomComponent.vue').default);
 Vue.component('create-room-component', require('./components/CreateRoomComponent.vue').default);
