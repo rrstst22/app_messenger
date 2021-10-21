@@ -13,7 +13,7 @@
               <button type="submit" class="btn btn-light" v-on:click="nextModal"><i class="fas fa-arrow-circle-right m-1"></i>次へ</button>
             </div>
             <div class="mx-2 my-4">
-              <input type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
+              <input class="form-control" type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
               <small class="form-text text-muted">※12文字以内</small>
             </div>
           </form>

@@ -21,8 +21,10 @@
 
           <form v-on:submit.prevent>
             <label for="name"><i class="fas fa-user-plus m-1"></i>ユーザー登録</label>
-            <input type="text" name="name" v-model="new_user_name" maxlength="10">
-            <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
+            <div class="input-group m-auto">
+              <input class="form-control" type="text" name="name" v-model="new_user_name" maxlength="10">
+              <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
+            </div>
           </form>
         </div>
       </transition>

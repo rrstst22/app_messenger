@@ -1,4 +1,4 @@
-input {
+.form-control {
   font-size: 16px; /* iPhpne用調整 */
 }
 
@@ -36,7 +36,6 @@ input {
   position: fixed;
   top: 60px;
   z-index: 5;
-  opacity: .8;
 }
 
 .vfade-enter-active, .vfade-leave-active {
