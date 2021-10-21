@@ -77,7 +77,7 @@ export default {
           updateMessageTimer: "",
           messages: {
             message1: {message:"ようこそ！！"},
-            message2: {message:"新しくトークを始める場合は、上の「新しくルームを作成」を押してね。"},
+            message2: {message:"新しくトークを始める場合は、上の「ルーム作成」ボタンを押してください。"},
           },
         }
     },
