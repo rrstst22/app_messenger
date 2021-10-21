@@ -5,7 +5,7 @@
 
     <!-- 以下のボタンでVueコンポーネントの表示切り替え -->
     <div>
-      <div class="d-flex flex-row">
+      <div class="d-flex flex-row" v-bind:class={'fixed-button':on_modal_mode}><!-- ウィンドウ幅が小さい場合、position:fixed -->
         <button class="btn btn-light" v-on:click="show_login_screen=!show_login_screen">
           <i class="fas fa-users m-1"></i>
           ユーザ変更
@@ -14,7 +14,7 @@
           <i class="fas fa-plus m-1"></i>
           ルーム作成
         </button>
-        <button class="btn btn-light" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode"><!--ウィンドウ幅でボタン有無の調整-->
+        <button class="btn btn-light" v-on:click='show_room_screen=!show_room_screen' v-show="on_modal_mode"><!-- ウィンドウ幅でボタン有無の調整 -->
           <i class="fas fa-spinner m-1"></i>
           ルーム変更
         </button>

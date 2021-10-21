@@ -131,7 +131,7 @@ export default {
     padding: 0;
 }
 .room-list {
-  height: 350px;
+  height: 300px;
   overflow: scroll;
   overflow-x: hidden;
 }

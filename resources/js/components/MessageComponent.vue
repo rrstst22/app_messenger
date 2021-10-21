@@ -199,7 +199,7 @@ export default {
     padding: 8px 19px;
     margin: 2em 0;
     background: #F0F8FF;
-    height: 350px;
+    height: 300px;
     overflow: scroll;
     overflow-x: hidden;
 }
