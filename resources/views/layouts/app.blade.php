@@ -19,7 +19,7 @@
     <script src="https://kit.fontawesome.com/a4d6751d2b.js" crossorigin="anonymous"></script> <!-- Font Awsome -->
 </head>
 <body>
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}

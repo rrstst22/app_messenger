@@ -65,7 +65,7 @@
                             </div>
                         </div>
                     </form>
-                    <div class="">
+                    <div class="my-2">
                       <a href="{{ route('auto.login') }}"><button type="button" class="btn btn-danger" name="button">簡単ログイン</button></a>
                     </div>
                 </div>

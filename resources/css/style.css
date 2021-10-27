@@ -1,3 +1,7 @@
+body {
+  background: #fff;
+}
+
 .form-control {
   font-size: 16px; /* iPhpne用調整 */
 }
