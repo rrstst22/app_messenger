@@ -79,7 +79,7 @@ export default {
           id : this.users[index].id
         })
             .then(function(response){
-              self.$router.go({path: "/message/show_message"}); // ユーザー切り替えの為再読込
+              self.$router.go({path: "/"}); // ユーザー切り替えの為再読込
             }).catch(function(error){
               alert(error);
             });
