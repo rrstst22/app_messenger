@@ -15,24 +15,24 @@
               <transition name="vfade" appear>
               <!-- 送信者によってメッセージの色を分ける -->
               <div v-if="message.sender_id === login_user_id" class="text-right">
-                <button type="button" v-on:click="writeToClipboard(message.message)" class="text-left primary-message-box">
-                  <div class="p-4">
+                <div class="text-right mx-2 name-tag">
+                  {{ message.name}}
+                </div>
+                <button type="button" v-on:click="writeToClipboard(message.message)" class="primary-message-box text-left">
+                  <div class="p-3">
                     {{ message.message }}
-                  </div>
-                  <div class="text-right mx-2 name-tag">
-                    {{ message.name}}
                   </div>
                 </button>
               </div>
 
               <!-- ログイン者以外のメッセージの場合 -->
               <div v-else>
+                <div class="mx-2 name-tag">
+                  {{ message.name}}
+                </div>
                 <button type="button" v-on:click="writeToClipboard(message.message)" class="secondary-message-box text-left">
-                  <div class="p-4">
+                  <div class="p-3">
                     {{ message.message }}
-                  </div>
-                  <div class="text-right mx-2 name-tag">
-                    {{ message.name}}
                   </div>
                 </button>
               </div>
@@ -84,11 +84,9 @@ export default {
     watch: {
       room_id: function() {
         clearInterval(this.updateMessageTimer); //setInterval重複実行防止
-        this.updateMessageTimer = setInterval(this.getMessages, 5000); //メッセージを定期的にアップデート
+        this.updateMessageTimer = setInterval(this.getMessages, 10000); //メッセージを定期的にアップデート
         this.updateScreen();
       },
-    },
-    created: function () {
     },
     updated: function() {
       this.scrollToEnd();
@@ -126,6 +124,7 @@ export default {
         var self = this;
         axios.get('get-messages', {params:{room_id: this.room_id}})
             .then(function(response){
+              //console.log(response.data);
               self.messages = response.data;
             }).catch(function(error){
               alert(error);
@@ -180,20 +179,16 @@ export default {
   background: #CBFFD3;
   border: none;
   margin: 5px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .secondary-message-box {
-  position: relative;
   background: #fff;
   border: none;
   margin: 5px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .name-tag {
-  font-size: 0.8rem;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
+  font-size: 0.7rem;
 }
 .post-box{
     padding: 8px 19px;

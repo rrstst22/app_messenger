@@ -16207,7 +16207,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: "history",
   routes: [{
-    path: "/message/show_message",
+    path: "/",
     name: "show",
     component: _components_RoomComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   }]
