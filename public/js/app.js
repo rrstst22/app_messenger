@@ -2406,12 +2406,11 @@ __webpack_require__.r(__webpack_exports__);
     room_id: function room_id() {
       clearInterval(this.updateMessageTimer); //setInterval重複実行防止
 
-      this.updateMessageTimer = setInterval(this.getMessages, 5000); //メッセージを定期的にアップデート
+      this.updateMessageTimer = setInterval(this.getMessages, 10000); //メッセージを定期的にアップデート
 
       this.updateScreen();
     }
   },
-  created: function created() {},
   updated: function updated() {
     this.scrollToEnd();
   },
@@ -2451,6 +2450,7 @@ __webpack_require__.r(__webpack_exports__);
           room_id: this.room_id
         }
       }).then(function (response) {
+        //console.log(response.data);
         self.messages = response.data;
       })["catch"](function (error) {
         alert(error);
@@ -7288,7 +7288,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.message-section[data-v-3f20c7be] {\n  padding: 0.5em 1em;\n  margin: 2em 0;\n  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n  background: #fff;\n}\n.message-section p[data-v-3f20c7be] {\n  margin: 0;\n  padding: 0;\n}\n.primary-message-box[data-v-3f20c7be] {\n  position: relative;\n  background: #CBFFD3;\n  border: none;\n  margin: 5px;\n  border-radius: 20px;\n}\n.secondary-message-box[data-v-3f20c7be] {\n  position: relative;\n  background: #fff;\n  border: none;\n  margin: 5px;\n  border-radius: 20px;\n}\n.name-tag[data-v-3f20c7be] {\n  font-size: 0.8rem;\n  position: absolute;\n  bottom: 0px;\n  right: 0px;\n}\n.post-box[data-v-3f20c7be]{\n    padding: 8px 19px;\n    margin: 2em 0;\n    background: #F0F8FF;\n    height: 300px;\n    overflow: scroll;\n    overflow-x: hidden;\n}\n.post-box p[data-v-3f20c7be] {\n    margin: 0;\n    padding: 0;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.message-section[data-v-3f20c7be] {\n  padding: 0.5em 1em;\n  margin: 2em 0;\n  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);\n  background: #fff;\n}\n.message-section p[data-v-3f20c7be] {\n  margin: 0;\n  padding: 0;\n}\n.primary-message-box[data-v-3f20c7be] {\n  position: relative;\n  background: #CBFFD3;\n  border: none;\n  margin: 5px;\n  border-radius: 20px;\n}\n.secondary-message-box[data-v-3f20c7be] {\n  background: #fff;\n  border: none;\n  margin: 5px;\n  border-radius: 20px;\n}\n.name-tag[data-v-3f20c7be] {\n  font-size: 0.7rem;\n}\n.post-box[data-v-3f20c7be]{\n    padding: 8px 19px;\n    margin: 2em 0;\n    background: #F0F8FF;\n    height: 300px;\n    overflow: scroll;\n    overflow-x: hidden;\n}\n.post-box p[data-v-3f20c7be] {\n    margin: 0;\n    padding: 0;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39542,10 +39542,18 @@ var render = function() {
                 _c("transition", { attrs: { name: "vfade", appear: "" } }, [
                   message.sender_id === _vm.login_user_id
                     ? _c("div", { staticClass: "text-right" }, [
+                        _c("div", { staticClass: "text-right mx-2 name-tag" }, [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(message.name) +
+                              "\n              "
+                          )
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {
-                            staticClass: "text-left primary-message-box",
+                            staticClass: "primary-message-box text-left",
                             attrs: { type: "button" },
                             on: {
                               click: function($event) {
@@ -39560,23 +39568,19 @@ var render = function() {
                                   _vm._s(message.message) +
                                   "\n                "
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "text-right mx-2 name-tag" },
-                              [
-                                _vm._v(
-                                  "\n                  " +
-                                    _vm._s(message.name) +
-                                    "\n                "
-                                )
-                              ]
-                            )
+                            ])
                           ]
                         )
                       ])
                     : _c("div", [
+                        _c("div", { staticClass: "mx-2 name-tag" }, [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(message.name) +
+                              "\n              "
+                          )
+                        ]),
+                        _vm._v(" "),
                         _c(
                           "button",
                           {
@@ -39595,19 +39599,7 @@ var render = function() {
                                   _vm._s(message.message) +
                                   "\n                "
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "text-right mx-2 name-tag" },
-                              [
-                                _vm._v(
-                                  "\n                  " +
-                                    _vm._s(message.name) +
-                                    "\n                "
-                                )
-                              ]
-                            )
+                            ])
                           ]
                         )
                       ])

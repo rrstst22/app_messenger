@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\MessageController::class, 'show'])->name('show.message');
+Route::get('auto-login', [App\Http\Controllers\UserController::class, 'autoLogin'])->name('auto.login');
 
 
 // Vue用 同一オリジンAPI
-Route::get('auto-login', [App\Http\Controllers\UserController::class, 'autoLogin']);
 
 Route::post('guest-login', [App\Http\Controllers\LoginController::class, 'guestLogin']);
 Route::post('create-user', [App\Http\Controllers\LoginController::class, 'createUser']);

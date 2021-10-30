@@ -11,7 +11,6 @@ use Auth;
 
 class LoginTest extends TestCase
 {
-
     public function testGuestLogin()
     {
         $this->post('guest-login', ['id'=>1]);

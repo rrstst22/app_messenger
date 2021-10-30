@@ -15,8 +15,8 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            'sender_id' => $this->faker->numberBetween($min = 1, $max = 10),
-            'room_id' => $this->faker->numberBetween($min = 1, $max = 10),
+            'sender_id' => $this->faker->numberBetween($min = 1, $max = 2),
+            'room_id' => $this->faker->numberBetween($min = 1, $max = 1),
             'message' => $this->faker->text,
             'sent_at' => $this->faker->dateTime
         ];
