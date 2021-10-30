@@ -19,7 +19,7 @@
                   {{ message.name}}
                 </div>
                 <button type="button" v-on:click="writeToClipboard(message.message)" class="primary-message-box text-left">
-                  <div class="p-4">
+                  <div class="p-3">
                     {{ message.message }}
                   </div>
                 </button>
@@ -31,7 +31,7 @@
                   {{ message.name}}
                 </div>
                 <button type="button" v-on:click="writeToClipboard(message.message)" class="secondary-message-box text-left">
-                  <div class="p-4">
+                  <div class="p-3">
                     {{ message.message }}
                   </div>
                 </button>
@@ -179,13 +179,13 @@ export default {
   background: #CBFFD3;
   border: none;
   margin: 5px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .secondary-message-box {
   background: #fff;
   border: none;
   margin: 5px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .name-tag {
   font-size: 0.7rem;
