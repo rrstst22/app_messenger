@@ -51,3 +51,5 @@
 - フロント・バックエンドのエラー処理（Vue.js, Laravel）
 
 ### ER図
+
+![message-erd](https://user-images.githubusercontent.com/92190851/140932486-ca90c51e-14e9-4a10-8a64-30b4cb47d8b1.png)
