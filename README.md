@@ -10,6 +10,8 @@
 1. 「ルーム作成」ボタンから、ルーム作成
 2. 作成したルーム内でメッセージのやりとり開始
 
+![message-start](https://user-images.githubusercontent.com/92190851/140931962-7c1206e8-d395-4e5d-8488-68c76c565aa4.png)
+
 ### 機能
 
 - メッセージ送受信
