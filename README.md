@@ -2,10 +2,16 @@
 
 画像
 
-## URL
-メッセージングWebアプリ
 
-## 本アプリについて
+
+## :globe_with_meridians:URL
+http://test
+
+<br>
+<br>
+
+## :pencil2:本アプリについて
+
 ### 使い方
 1. 「ルーム作成」ボタンから、ルーム作成
 2. 作成したルーム内でメッセージのやりとり開始
@@ -26,24 +32,26 @@
 - スマホでも使えるようなレスポンシブなデザイン
 - 簡単ログイン機能、簡単ログインユーザ変更機能搭載
 
+<br>
+<br>
 
-## 技術仕様
+## :page_facing_up:技術仕様
 
 ### 基本情報
-#### 言語フレームワーク
-- HTML, CSS, JavaScript, PHP
-- Vue.js, Laravel
+- 言語フレームワーク
+    - HTML, CSS, JavaScript, PHP
+    - Vue.js, Laravel
 
-#### 開発環境
-- Windows 10 Home
-- Apache, MySQL (XAMPP使用)
+- 開発環境
+    - Windows 10 Home
+    - Apache, MySQL (XAMPP使用)
 
-#### デプロイ環境
-- CentOS 7
-- Apache, MySQL
+- デプロイ環境
+    - CentOS 7
+    - Apache, MySQL
 
 
-### 使用手法
+### 使用技術
 
 - 非同期通信Ajax（Vue.js）
 - 親子コンポーネント間の受け渡し（Vue.js）
