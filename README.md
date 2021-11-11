@@ -14,7 +14,7 @@ http://test
 1. 「ルーム作成」ボタンから、ルーム作成
 2. 作成したルーム内でメッセージのやりとり開始
 
-![message-start](https://user-images.githubusercontent.com/92190851/140931962-7c1206e8-d395-4e5d-8488-68c76c565aa4.png)
+![messenger](https://user-images.githubusercontent.com/92190851/141328735-802d9248-8e17-4211-ad81-e3050b366001.png)
 
 ### 機能
 
@@ -25,8 +25,8 @@ http://test
 
 ### 特徴
 
-- Vue.jsが得意とするシングルページアプリケーション
-- スマホでも使えるようなレスポンシブなデザイン
+- SPA（シングルページアプリケーション）
+- スマホ対応のレスポンシブなデザイン
 - 簡単ログイン機能、簡単ログインユーザ変更機能搭載
 
 <br>
@@ -56,8 +56,7 @@ http://test
 
 - 非同期通信Ajax（Vue.js）
 - 親子コンポーネント間の受け渡し（Vue.js）
-- テーブル作成、挿入、削除、結合（Laravel）
-- フロント・バックエンドのエラー処理（Vue.js, Laravel）
+- テーブル参照、作成、挿入、削除、結合（Laravel）
 
 ### ER図
 
