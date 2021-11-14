@@ -17,7 +17,7 @@ class MessageFactory extends Factory
         return [
             'sender_id' => $this->faker->numberBetween($min = 1, $max = 2),
             'room_id' => $this->faker->numberBetween($min = 1, $max = 1),
-            'message' => $this->faker->text,
+            'message' => $this->faker->realText(10),
             'sent_at' => $this->faker->dateTime
         ];
     }

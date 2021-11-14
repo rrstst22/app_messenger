@@ -14,6 +14,6 @@ class MessagesTableSeeder extends Seeder
      */
     public function run()
     {
-        Message::factory()->count(10)->create();
+        Message::factory()->count(20)->create();
     }
 }
