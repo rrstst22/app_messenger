@@ -13,7 +13,7 @@
               <button type="submit" class="btn btn-light" v-on:click="nextModal"><i class="fas fa-arrow-circle-right m-1"></i>次へ</button>
             </div>
             <div class="mx-2 my-4">
-              <input class="form-control" type="text" name="room_name" v-model="room_name" maxlength="12" placeholder="ルーム名">
+              <input class="form-control" type="text" name="room_name" v-model="room_name" v-bind:class={red:error_name} maxlength="12" placeholder="ルーム名">
               <small class="form-text text-muted">※12文字以内</small>
             </div>
           </form>
@@ -47,74 +47,77 @@
 
 <script>
 export default {
-    name: "CreateRoomComponent",
-    data () {
-        return {
-          show_overlay: false,
-          show_room_content: false,
-          show_user_content: false,
-          users: "",
-          room_name: ""
-        }
+  name: "CreateRoomComponent",
+  data () {
+      return {
+        show_overlay: false,
+        show_room_content: false,
+        show_user_content: false,
+        users: "",
+        room_name: "",
+        error_name: false
+      }
+  },
+  props: {
+    show_room_creater: {
+      type: Boolean,
+      required: true,
     },
-    props: {
-      show_room_creater: {
-        type: Boolean,
-        required: true,
-      },
+  },
+  watch: {
+    show_room_creater: function() {
+      this.openRoomModal();
     },
-    watch: {
-      show_room_creater: function() {
-        this.openRoomModal();
-      },
+  },
+  methods: {
+    openRoomModal: function(){
+      this.updateScreen();
+      this.show_overlay = true;
+      this.show_room_content = true;
     },
-    methods: {
-      openRoomModal: function(){
-        this.updateScreen();
-        this.show_overlay = true;
-        this.show_room_content = true;
-      },
-      nextModal: function(){
-        this.show_room_content = false;
-        this.show_user_content = true;
-      },
-      backModal: function(){
-        this.show_user_content = false;
-        this.show_room_content = true;
-      },
-      closeModal: function(){
-        this.show_overlay = false;
-        this.show_room_content = false;
-        this.show_user_content = false;
-      },
-      updateScreen: function () {
-        var self = this;
-        axios.get('get-other-users').then(function(response){
-                self.users = response.data;
+    nextModal: function(){
+      this.show_room_content = false;
+      this.show_user_content = true;
+    },
+    backModal: function(){
+      this.show_user_content = false;
+      this.show_room_content = true;
+    },
+    closeModal: function(){
+      this.show_overlay = false;
+      this.show_room_content = false;
+      this.show_user_content = false;
+      this.error_name = false;
+    },
+    updateScreen: function () {
+      var self = this;
+      axios.get('get-other-users').then(function(response){
+              self.users = response.data;
+          }).catch(function(error){
+              alert(error);
+          });
+    },
+    createRoom: function (index) {
+      var self = this;
+      if(this.room_name){ //ルーム名の空欄チェック
+        axios.post('create-room', {
+          id : this.users[index].id,
+          name : this.room_name
+        })
+            .then(function(response){
+              self.$emit('roominfo-input', response.data); //ルームコンポーネントへ変更を伝える
+              self.room_name = "";
             }).catch(function(error){
-                alert(error);
+              alert(error.response.data.errors);
             });
-      },
-      createRoom: function (index) {
-        var self = this;
-        if(this.room_name){ //ルーム名の空欄チェック
-          axios.post('create-room', {
-            id : this.users[index].id,
-            name : this.room_name
-          })
-              .then(function(response){
-                self.$emit('roominfo-input', response.data); //ルームコンポーネントへ変更を伝える
-                self.room_name = "";
-              }).catch(function(error){
-                alert(error.response.data.errors);
-              });
-          this.closeModal();
-        }else{
-          alert("ルーム名が空欄です。");
-          this.backModal();
-        }
-      },
-    }
+        this.closeModal();
+      }else{
+        alert("ルーム名が空欄です。");
+        this.error_name = true;
+        this.backModal();
+      }
+    },
+  }
 }
 </script>
 <style scoped>

@@ -22,7 +22,7 @@
           <form v-on:submit.prevent>
             <label for="name"><i class="fas fa-user-plus m-1"></i>ユーザー登録</label>
             <div class="input-group m-auto">
-              <input class="form-control" type="text" name="name" v-model="new_user_name" maxlength="10">
+              <input class="form-control" type="text" name="name" v-model="new_user_name" v-bind:class={red:error_name} maxlength="10">
               <button type="submit" class="btn btn-success" name="button" v-on:click="createUser">登録</button>
             </div>
           </form>
@@ -36,68 +36,72 @@
 
 <script>
 export default {
-    name: "LoginComponent",
-    props: {
-      show_login_screen: {
-        type: Boolean,
-        required: true,
-      },
+  name: "LoginComponent",
+  props: {
+    show_login_screen: {
+      type: Boolean,
+      required: true,
     },
-    data () {
-        return {
-          show_content: false,
-          users: "",
-          new_user_name: ""
-        }
+  },
+  data () {
+      return {
+        show_content: false,
+        users: "",
+        new_user_name: "",
+        error_name: false
+      }
+  },
+  watch: {
+    show_login_screen: function() {
+      this.openModal(); //ユーザー変更ボタン押下で実行
     },
-    watch: {
-      show_login_screen: function() {
-        this.openModal(); //ユーザー変更ボタン押下で実行
-      },
+  },
+  created: function() {
+    this.updateScreen();
+  },
+  methods: {
+    openModal: function() {
+      this.show_content = true;
     },
-    created: function () {
-      this.updateScreen();
+    closeModal: function() {
+      this.show_content = false;
+      this.error_name = false;
     },
-    methods: {
-      openModal: function(){
-        this.show_content = true;
-      },
-      closeModal: function(){
-        this.show_content = false;
-      },
-      updateScreen: function () {
-        var self = this;
-        axios.get('get-other-users').then(function(response){
-                self.users = response.data;
-            }).catch(function(error){
-                alert(error);
-            });
-      },
-      guestLogin: function (index) {
-        var self = this;
-        axios.post('guest-login', {
-          id : this.users[index].id
-        })
-            .then(function(response){
-              self.$router.go({path: "/"}); // ユーザー切り替えの為再読込
-            }).catch(function(error){
+    updateScreen: function() {
+      var self = this;
+      axios.get('get-other-users').then(function(response) {
+              self.users = response.data;
+          }).catch(function(error) {
               alert(error);
-            });
-      },
-      createUser: function () {
-        var self = this;
-        if(this.new_user_name){
-          axios.post('create-user', {
-            name: self.new_user_name,
-          }).then(function(response){
-            alert("登録しました。");
-            self.updateScreen();
-          }).catch(function(error){
-            alert(error.response.data.errors.name);
           });
-        }
+    },
+    guestLogin: function(index) {
+      var self = this;
+      axios.post('guest-login', {
+        id : this.users[index].id
+      })
+          .then(function(response) {
+            self.$router.go({path: "/"}); // ユーザー切り替えの為再読込
+          }).catch(function(error) {
+            alert(error);
+          });
+    },
+    createUser: function() {
+      var self = this;
+      if(this.new_user_name) {
+        axios.post('create-user', {
+          name: self.new_user_name,
+        }).then(function(response){
+          alert("登録しました。");
+          self.updateScreen();
+        }).catch(function(error) {
+          alert(error);
+        });
+      }else {
+        this.error_name = true;
       }
     }
+  }
 }
 </script>
 <style scoped>

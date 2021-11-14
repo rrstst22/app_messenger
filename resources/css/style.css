@@ -42,6 +42,12 @@ body {
   z-index: 5;
 }
 
+.red {
+  border: 2px solid red;
+}
+
+
+/* Vue.js transition */
 .vfade-enter-active, .vfade-leave-active {
   transition: opacity 1s;
 }
