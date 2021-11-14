@@ -6,7 +6,6 @@
 http://riupad-dev.com:8080
 
 <br>
-<br>
 
 ## :pencil2:本アプリについて
 
