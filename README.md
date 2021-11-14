@@ -3,9 +3,8 @@
 ブラウザを複数開くことでユーザー間でメッセージ送受信のテストが可能です。
 
 ## :globe_with_meridians:URL
-http://test
+http://riupad-dev.com:8080
 
-<br>
 <br>
 
 ## :pencil2:本アプリについて
