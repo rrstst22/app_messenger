@@ -76,23 +76,23 @@ export default {
     //ユーザー一覧を取得
     updateScreen: function() {
       var self = this;
-      axios.get('get-other-users').then(function(response) {
-              self.users = response.data;
-          }).catch(function(error) {
-              alert(error);
-          });
+      axios.get('get-other-users')
+        .then(function(response) {
+            self.users = response.data;
+        }).catch(function(error) {
+            alert(error);
+      });
     },
     //ログインユーザーの取得
     guestLogin: function(index) {
       var self = this;
       axios.post('guest-login', {
-        id : this.users[index].id
-      })
-          .then(function(response) {
-            self.$router.go({path: "/"}); // ユーザー切り替えの為再読込
-          }).catch(function(error) {
-            alert(error);
-          });
+          id : this.users[index].id
+        }).then(function(response) {
+          self.$router.go({path: "/"}); // ユーザー切り替えの為再読込
+        }).catch(function(error) {
+          alert(error);
+      });
     },
     //ユーザー作成
     createUser: function() {
@@ -100,12 +100,12 @@ export default {
       //null処理
       if(this.new_user_name) {
         axios.post('create-user', {
-          name: self.new_user_name,
-        }).then(function(response){
-          alert("登録しました。");
-          self.updateScreen();
-        }).catch(function(error) {
-          alert(error);
+            name: self.new_user_name,
+          }).then(function(response) {
+            alert("登録しました。");
+            self.updateScreen();
+          }).catch(function(error) {
+            alert(error);
         });
       }else {
         this.error_name = true;

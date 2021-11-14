@@ -19,7 +19,7 @@
 
               <!-- 送信者によってメッセージの色を分ける -->
               <!-- ログイン者のメッセージの場合 -->
-              <div v-if="message.sender_id === login_user_id" class="text-right">
+              <div v-if="message.sender_id == login_user_id" class="text-right">
                 <div class="text-right mx-2 name-tag">
                   {{ message.name}}
                 </div>
@@ -99,7 +99,7 @@ export default {
   updated: function() {
     this.scrollToEnd(); //一番下へスクロール
   },
-  destroyed: function () {
+  destroyed: function() {
     clearInterval(this.updateMessageTimer); //退出時にタイマーを停止
   },
   methods: {
@@ -122,11 +122,11 @@ export default {
             message: send_message_tmp,
             room_id: self.room_id
           })
-              .then(function(response) {
-                self.updateScreen();
-              }).catch(function(error) {
-                alert(error);
-              });
+            .then(function(response) {
+              self.updateScreen();
+            }).catch(function(error) {
+              alert(error);
+          });
         }else {
           alert("ルームを選択してください。");
         }
@@ -138,31 +138,31 @@ export default {
     getMessages: function() {
       var self = this;
       axios.get('get-messages', {params:{room_id: this.room_id}})
-          .then(function(response) {
-            self.messages = response.data;
-          }).catch(function(error) {
-            alert(error);
-          });
+        .then(function(response) {
+          self.messages = response.data;
+        }).catch(function(error) {
+          alert(error);
+      });
     },
     //ルーム情報を取得
     getRoom: function() {
       var self = this;
       axios.get('get-room', {params:{room_id: this.room_id}})
-          .then(function(response) {
-            self.room = response.data;
-          }).catch(function(error) {
-            alert(error);
-          });
+        .then(function(response) {
+          self.room = response.data;
+        }).catch(function(error) {
+          alert(error);
+      });
     },
     //ルームに在籍するユーザーを取得
     getRoomUsers: function() {
       var self = this;
       axios.get('get-room-users', {params:{room_id: this.room_id}})
-          .then(function(response) {
-            self.users = response.data;
-          }).catch(function(error) {
-            alert(error);
-          });
+        .then(function(response) {
+          self.users = response.data;
+        }).catch(function(error) {
+          alert(error);
+      });
     },
     //一番下へスクロール
     scrollToEnd: function() {
@@ -172,11 +172,11 @@ export default {
     //クリックでコピー
     writeToClipboard: function(text) {
       navigator.clipboard.writeText(text)
-            .then(function(response) {
-              alert("クリップボードにコピーしました。");
-            }).catch(function(error) {
-              console.error(error);
-            });
+        .then(function(response) {
+          alert("クリップボードにコピーしました。");
+        }).catch(function(error) {
+          console.error(error);
+      });
     }
   }
 }

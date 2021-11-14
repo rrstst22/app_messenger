@@ -43,87 +43,88 @@
 
 <script>
 export default {
-    name: "RoomComponent",
-    props: {
-      //新しいルームの追加を検知
-      room_id: {
-        type: Number,
-        default: ""
-      },
-      //親要素でのボタンクリックを検知
-      show_room_screen: {
-        type: Boolean,
-        required: true,
-      },
+  name: "RoomComponent",
+  props: {
+    //新しいルームの追加を検知
+    room_id: {
+      type: Number,
+      default: ""
     },
-    data () {
-        return {
-          rooms : "",
-          on_modal_mode: false, //モーダルモードのオンオフ
-          show_room_content: true,
-        }
+    //親要素でのボタンクリックを検知
+    show_room_screen: {
+      type: Boolean,
+      required: true,
     },
-    watch: {
-      room_id: function() {
-        this.updateScreen();
-      },
-      show_room_screen: function() {
-        this.openModal();
-      },
-    },
-    created: function () {
+  },
+  data() {
+      return {
+        rooms : "",
+        on_modal_mode: false, //モーダルモードのオンオフ
+        show_room_content: true,
+      }
+  },
+  watch: {
+    room_id: function() {
       this.updateScreen();
-      this.handleResize();
     },
-    mounted() {
-      window.addEventListener('resize', this.handleResize); //リサイズ検知
+    show_room_screen: function() {
+      this.openModal();
     },
-    methods: {
-      openModal: function(){
+  },
+  created: function() {
+    this.updateScreen();
+    this.handleResize();
+  },
+  mounted() {
+    window.addEventListener('resize', this.handleResize); //リサイズ検知
+  },
+  methods: {
+    openModal: function() {
+      this.show_room_content = true;
+    },
+    closeModal: function() {
+      if(this.on_modal_mode) {   //モーダル画面表示ではない場合は、画面を閉じない。
+        this.show_room_content = false;
+      }
+    },
+    //ルーム情報を取得
+    updateScreen: function() {
+      var self = this;
+      axios.get('get-login-rooms')
+        .then(function(response) {
+          self.rooms = response.data;
+        }).catch(function(error) {
+          alert(error);
+      });
+    },
+    //メッセージコンポーネントへクリックされたルームを伝達
+    showMessages: function(index) {
+      this.$emit('room-click', this.rooms[index].id);
+    },
+    //ルームを削除
+    deleteRoom: function(index) {
+      var self = this;
+      axios.delete('remove-room', {data: {id: this.rooms[index].id}})
+        .then(function(response) {
+          self.$emit('room-click', null);
+          self.updateScreen();
+        }).catch(function(error) {
+          alert(error);
+      });
+    },
+    //画面幅によってモーダルモードと通常モードの変更
+    handleResize: function() {
+      if (window.innerWidth <= 770) {
+        this.on_modal_mode = true;
+        this.show_room_content = false;
+        this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
+      } else {
+        this.on_modal_mode = false;
         this.show_room_content = true;
-      },
-      closeModal: function(){
-        if(this.on_modal_mode){   //モーダル画面表示ではない場合は、画面を閉じない。
-          this.show_room_content = false;
-        }
-      },
-      //ルーム情報を取得
-      updateScreen: function () {
-        var self = this;
-        axios.get('get-login-rooms').then(function(response){
-                self.rooms = response.data;
-            }).catch(function(error){
-                alert(error);
-            });
-      },
-      //メッセージコンポーネントへクリックされたルームを伝達
-      showMessages: function (index) {
-        this.$emit('room-click', this.rooms[index].id);
-      },
-      //ルームを削除
-      deleteRoom: function(index){
-        var self = this;
-        axios.delete('remove-room', {data: {id: this.rooms[index].id}})
-            .then(function(response){
-              self.$emit('room-click', null);
-              self.updateScreen();
-            }).catch(function(error){
-              alert(error);
-            });
-      },
-      //画面幅によってモーダルモードと通常モードの変更
-      handleResize: function() {
-        if (window.innerWidth <= 770) {
-            this.on_modal_mode = true;
-            this.show_room_content = false;
-            this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
-        } else {
-            this.on_modal_mode = false;
-            this.show_room_content = true;
-            this.$emit('screen-type-change', false); //ルーム変更ボタンの有無を調整
-        }
-      },
-    }
+        this.$emit('screen-type-change', false); //ルーム変更ボタンの有無を調整
+      }
+    },
+  }
 }
 </script>
 <style scoped>

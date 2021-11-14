@@ -15,7 +15,8 @@ class LoginController extends Controller
     Auth::loginUsingId($request->id);
   }
 
-  public function createUser(Request $request){
+  public function createUser(Request $request)
+  {
     $request->validate([
       'name' => 'required|string|max:10|unique:users'
     ],

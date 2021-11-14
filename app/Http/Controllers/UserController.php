@@ -20,17 +20,20 @@ class UserController extends Controller
 
     return $users;
   }
+
   public function getLoginUserId()
   {
     $id = Auth::id();
 
     return $id;
   }
+
   public function autoLogin()
   {
     Auth::loginUsingId(1);
     return redirect('/');
   }
+
   public function getRoomUsers(Request $request)
   {
     $login_user_id = Auth::id();
@@ -42,5 +45,4 @@ class UserController extends Controller
 
     return $users;
   }
-
 }

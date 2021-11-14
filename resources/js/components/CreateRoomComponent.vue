@@ -83,48 +83,48 @@ export default {
     },
   },
   methods: {
-    openRoomModal: function(){
+    openRoomModal: function() {
       this.updateScreen();
       this.show_overlay = true;
       this.show_room_content = true;
     },
-    nextModal: function(){
+    nextModal: function() {
       this.show_room_content = false;
       this.show_user_content = true;
     },
-    backModal: function(){
+    backModal: function() {
       this.show_user_content = false;
       this.show_room_content = true;
     },
-    closeModal: function(){
+    closeModal: function() {
       this.show_overlay = false;
       this.show_room_content = false;
       this.show_user_content = false;
       this.error_name = false;
     },
     //ユーザー情報を取得
-    updateScreen: function () {
+    updateScreen: function() {
       var self = this;
-      axios.get('get-other-users').then(function(response){
-              self.users = response.data;
-          }).catch(function(error){
-              alert(error);
-          });
+      axios.get('get-other-users')
+        .then(function(response) {
+          self.users = response.data;
+        }).catch(function(error) {
+          alert(error);
+      });
     },
     //ルームを作成
-    createRoom: function (index) {
+    createRoom: function(index) {
       var self = this;
-      if(this.room_name){ //ルーム名の空欄チェック
+      if(this.room_name) { //ルーム名の空欄チェック
         axios.post('create-room', {
-          id : this.users[index].id,
-          name : this.room_name
-        })
-            .then(function(response){
+            id : this.users[index].id,
+            name : this.room_name
+          }).then(function(response) {
               self.$emit('roominfo-input', response.data); //ルームコンポーネントへ変更を伝える
               self.room_name = "";
-            }).catch(function(error){
+          }).catch(function(error) {
               alert(error.response.data.errors);
-            });
+        });
         this.closeModal();
       }else{
         alert("ルーム名が空欄です。");

@@ -39606,7 +39606,7 @@ var render = function() {
               { key: index, staticClass: "m-2" },
               [
                 _c("transition", { attrs: { name: "vfade", appear: "" } }, [
-                  message.sender_id === _vm.login_user_id
+                  message.sender_id == _vm.login_user_id
                     ? _c("div", { staticClass: "text-right" }, [
                         _c("div", { staticClass: "text-right mx-2 name-tag" }, [
                           _vm._v(
