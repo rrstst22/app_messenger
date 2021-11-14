@@ -53,13 +53,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "RoomComponent",
   props: {
+    //新しいルームの追加を検知
     room_id: {
       type: Number,
       "default": ""
     },
+    //親要素でのボタンクリックを検知
     show_room_screen: {
       type: Boolean,
       required: true
@@ -69,6 +73,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       rooms: "",
       on_modal_mode: false,
+      //モーダルモードのオンオフ
       show_room_content: true
     };
   },
@@ -97,6 +102,7 @@ __webpack_require__.r(__webpack_exports__);
         this.show_room_content = false;
       }
     },
+    //ルーム情報を取得
     updateScreen: function updateScreen() {
       var self = this;
       axios.get('get-login-rooms').then(function (response) {
@@ -105,9 +111,11 @@ __webpack_require__.r(__webpack_exports__);
         alert(error);
       });
     },
+    //メッセージコンポーネントへクリックされたルームを伝達
     showMessages: function showMessages(index) {
       this.$emit('room-click', this.rooms[index].id);
     },
+    //ルームを削除
     deleteRoom: function deleteRoom(index) {
       var self = this;
       axios["delete"]('remove-room', {
@@ -121,9 +129,9 @@ __webpack_require__.r(__webpack_exports__);
         alert(error);
       });
     },
+    //画面幅によってモーダルモードと通常モードの変更
     handleResize: function handleResize() {
-      if (window.innerWidth <= 800) {
-        //画面幅800px以下でモーダルモード
+      if (window.innerWidth <= 770) {
         this.on_modal_mode = true;
         this.show_room_content = false;
         this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整

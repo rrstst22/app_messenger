@@ -3,17 +3,22 @@
   <div>
     <div class="message-section">
       <h3 class="py-4"><i class="fas fa-comments m-1"></i>メッセージ</h3>
+
+      <!-- ルーム情報 -->
       <div class="py-2 border-top border-bottom">
         <div><i class="fas fa-home m-1"></i>ルーム名：{{ room.room_name }}</div>
         <div><i class="fas fa-users m-1"></i>メンバー：<span v-for="(user, index) in users" v-bind:key="index">あなた と {{ user.name }}さん </span></div>
       </div>
+
       <!-- メッセージ画面 -->
       <div class="my-2 post-box" id="screen">
         <ol class="no-list">
             <li v-for="(message, index) in messages" v-bind:key="index" class="m-2">
 
               <transition name="vfade" appear>
+
               <!-- 送信者によってメッセージの色を分ける -->
+              <!-- ログイン者のメッセージの場合 -->
               <div v-if="message.sender_id === login_user_id" class="text-right">
                 <div class="text-right mx-2 name-tag">
                   {{ message.name}}
@@ -36,6 +41,7 @@
                   </div>
                 </button>
               </div>
+
             </transition>
 
             </li>
@@ -51,6 +57,7 @@
           </button>
         </div>
       </form>
+      
     </div>
   </div>
 
@@ -75,7 +82,7 @@ export default {
         send_message: "",
         room: {room_name: "ルームが選択されていません。"},
         updateMessageTimer: "", 
-        error_message: false, //メッセージ送信のエラー時に使用
+        error_message: false, //メッセージ送信時の空欄検知用
         messages: { //デフォルトで表示するメッセージ
           message1: {message:"ようこそ！！"},
           message2: {message:"新しくトークを始める場合は、上の「ルーム作成」ボタンを押してください。"},

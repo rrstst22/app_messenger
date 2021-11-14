@@ -7,10 +7,12 @@
         <div class="room-section" v-bind:class="{content:on_modal_mode}" v-show="show_room_content">
           <h3 class="py-4"><i class="fas fa-home m-1"></i>ルーム選択</h3>
 
+          <!-- 閉じるボタン（モーダルモード中のみ） -->
           <div class="text-center border-top border-bottom">
             <button type="button" class="btn btn-light" v-on:click="closeModal" v-show="on_modal_mode"><i class="fas fa-times m-1"></i>閉じる</button>
           </div>
 
+          <!-- ルーム一覧の表示 -->
           <div class="mx-2 my-4 room-list border-top">
             <ol class="no-list">
               <li class="input-group border-bottom" v-for="(room, index) in rooms" v-bind:key="index">
@@ -43,10 +45,12 @@
 export default {
     name: "RoomComponent",
     props: {
+      //新しいルームの追加を検知
       room_id: {
         type: Number,
         default: ""
       },
+      //親要素でのボタンクリックを検知
       show_room_screen: {
         type: Boolean,
         required: true,
@@ -55,7 +59,7 @@ export default {
     data () {
         return {
           rooms : "",
-          on_modal_mode: false,
+          on_modal_mode: false, //モーダルモードのオンオフ
           show_room_content: true,
         }
     },
@@ -83,6 +87,7 @@ export default {
           this.show_room_content = false;
         }
       },
+      //ルーム情報を取得
       updateScreen: function () {
         var self = this;
         axios.get('get-login-rooms').then(function(response){
@@ -91,9 +96,11 @@ export default {
                 alert(error);
             });
       },
+      //メッセージコンポーネントへクリックされたルームを伝達
       showMessages: function (index) {
         this.$emit('room-click', this.rooms[index].id);
       },
+      //ルームを削除
       deleteRoom: function(index){
         var self = this;
         axios.delete('remove-room', {data: {id: this.rooms[index].id}})
@@ -104,8 +111,9 @@ export default {
               alert(error);
             });
       },
+      //画面幅によってモーダルモードと通常モードの変更
       handleResize: function() {
-        if (window.innerWidth <= 800) { //画面幅800px以下でモーダルモード
+        if (window.innerWidth <= 770) {
             this.on_modal_mode = true;
             this.show_room_content = false;
             this.$emit('screen-type-change', this.on_modal_mode); //ルーム変更ボタンの有無を調整
