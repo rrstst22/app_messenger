@@ -3,7 +3,7 @@
 ブラウザを複数開くことでユーザー間でメッセージ送受信のテストが可能です。
 
 ## :globe_with_meridians:URL
-http://riupad-dev.com:8080
+非公開
 
 <br>
 
